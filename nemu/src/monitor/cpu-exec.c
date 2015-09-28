@@ -41,6 +41,7 @@ void cpu_exec(volatile uint32_t n) {
 		printf("Program execution has ended. To restart the program, exit NEMU and run again.\n");
 		return;
 	}
+	puts ("ppp");
 	nemu_state = RUNNING;
 
 #ifdef DEBUG
@@ -50,7 +51,6 @@ void cpu_exec(volatile uint32_t n) {
 	setjmp(jbuf);
 
 	for(; n > 0; n --) {
-		puts ("ppp");
 #ifdef DEBUG
 		swaddr_t eip_temp = cpu.eip;
 		if((n & 0xffff) == 0) {
