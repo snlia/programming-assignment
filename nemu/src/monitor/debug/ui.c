@@ -76,8 +76,6 @@ static struct {
 
 static int cmd_help(char *args) {
 	/* extract the first argument */
-	cpu_exec(-1);
-	return 0;
 	char *arg = strtok(NULL, " ");
 	int i;
 
@@ -108,7 +106,7 @@ static int cmd_si (char *args)
 	else 
 		if (!sscanf (arg, "%u", &i))
 		{
-			printf("invalid input of %s - %s\n", cmd_table[3].name, cmd_table[3].description);
+			printf("invalid input of %s --- %s\n", cmd_table[3].name, cmd_table[3].description);
 			return 0;
 		}
 	cpu_exec (i);
