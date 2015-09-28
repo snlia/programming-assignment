@@ -106,7 +106,7 @@ static int cmd_si (char *args)
 	else 
 		if (!sscanf (arg, "%u", &i))
 		{
-			cmd_help ("si");
+			printf("invalid input of %s - %s\n", cmd_table[3].name, cmd_table[3].description);
 			return 0;
 		}
 	cpu_exec (i);
