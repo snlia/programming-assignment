@@ -62,7 +62,7 @@ static struct {
 	{ "help", "Display informations about all supported commands", cmd_help },
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
-	{ "si", "si [N] : Execute N instructs and pause, the default value of N is 1; N should be an 32-bit number", cmd_si},
+	{ "si", "si [N] : Execute N instructs and pause, the default value of N is 1; N should be an positive 32-bit number", cmd_si},
 	{ "info", "info SUBCMD : r Print the informations about regs; w Print the informations about watchpoints", cmd_info},
 	{ "p", "p EXPR : Show the value of EXPR", cmd_p},
 	{ "w", "w EXPR : Seting watchpoint on EXPR", cmd_w},
@@ -106,7 +106,7 @@ static int cmd_si (char *args)
 	else 
 		if (!sscanf (arg, "%u", &i))
 		{
-			printf("invalid input of %s --- %s\n", cmd_table[3].name, cmd_table[3].description);
+			printf("Invalid input of %s --- %s\n", cmd_table[3].name, cmd_table[3].description);
 			return 0;
 		}
 	cpu_exec (i);
