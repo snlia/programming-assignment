@@ -90,6 +90,7 @@ void ui_mainloop() {
 		 */
 		char *args = cmd + strlen(cmd) + 1;
 		if(args >= str_end) {
+			puts ("ppp");
 			args = NULL;
 		}
 

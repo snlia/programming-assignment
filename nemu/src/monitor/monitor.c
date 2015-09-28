@@ -49,11 +49,11 @@ static void init_ramdisk() {
 	FILE *fp = fopen(exec_file, "rb");
 	Assert(fp, "Can not open '%s'", exec_file);
 
-	fseek(fp, 0, SEEK_END);
+	fseek(fp, 0L, SEEK_END);
 	size_t file_size = ftell(fp);
 	Assert(file_size < ramdisk_max_size, "file size(%zd) too large", file_size);
 
-	fseek(fp, 0, SEEK_SET);
+	fseek(fp, 0L, SEEK_SET);
 	ret = fread(hwa_to_va(0), file_size, 1, fp);
 	assert(ret == 1);
 	fclose(fp);
@@ -65,10 +65,10 @@ static void load_entry() {
 	FILE *fp = fopen("entry", "rb");
 	Assert(fp, "Can not open 'entry'");
 
-	fseek(fp, 0, SEEK_END);
+	fseek(fp, 0L, SEEK_END);
 	size_t file_size = ftell(fp);
 
-	fseek(fp, 0, SEEK_SET);
+	fseek(fp, 0L, SEEK_SET);
 	ret = fread(hwa_to_va(ENTRY_START), file_size, 1, fp);
 	assert(ret == 1);
 	fclose(fp);
