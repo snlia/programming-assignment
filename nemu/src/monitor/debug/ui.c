@@ -27,16 +27,32 @@ char* rl_gets() {
 	return line_read;
 }
 
-static int cmd_c(char *args) {
+static int cmd_c (char *args) {
 	cpu_exec(-1);
 	return 0;
 }
 
-static int cmd_q(char *args) {
+static int cmd_q (char *args) {
 	return -1;
 }
 
-static int cmd_help(char *args);
+static int cmd_help (char *args);
+
+static int cmd_c (char *args);
+
+static int cmd_q (char *args);
+
+static int cmd_si (char *args);
+
+static int cmd_info (char *args);
+
+static int cmd_p (char *args);
+
+static int cmd_w (char *args);
+
+static int cmd_pw (char *args);
+
+static int cmd_d (char *args);
 
 static struct {
 	char *name;
@@ -46,7 +62,12 @@ static struct {
 	{ "help", "Display informations about all supported commands", cmd_help },
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
-
+	{ "si", "si [N] : Execute N instructs and pause, the default value of N is 1; N should be an 32-bit number", cmd_si},
+	{ "info", "info SUBCMD : r Print the informations about regs; w Print the informations about watchpoints", cmd_info},
+	{ "p", "p EXPR : Show the value of EXPR", cmd_p},
+	{ "w", "w EXPR : Seting watchpoint on EXPR", cmd_w},
+	{ "pw", "Print all informations about watchpoints", cmd_pw},
+	{ "d", "d [N] : delete the watchpoint with index N, or, without N, delete the watchpoint with biggist index", cmd_d}
 	/* TODO: Add more commands */
 
 };
@@ -75,6 +96,48 @@ static int cmd_help(char *args) {
 	}
 	return 0;
 }
+
+static int cmd_si (char *args)
+{
+	/* extract the first argument */
+	char *arg = strtok(NULL, " ");
+	volatile uint32_t i;
+	if (arg == NULL) i = 1; /* no argument given */
+	else 
+		if (!sscanf (arg, "%u", &i))
+		{
+			cmd_help ("si");
+			return 0;
+		}
+	cpu_exec (i);
+	return 0;
+}
+
+static int cmd_info (char *args)
+{
+	return 0;
+}
+
+static int cmd_p (char *args)
+{
+	return 0;
+}
+
+static int cmd_w (char *args)
+{
+	return 0;
+}
+
+static int cmd_pw (char *args)
+{
+	return 0;
+}
+
+static int cmd_d (char *args)
+{
+	return 0;
+}
+
 
 void ui_mainloop() {
 	while(1) {
