@@ -76,6 +76,8 @@ static struct {
 
 static int cmd_help(char *args) {
 	/* extract the first argument */
+	cpu_exec(-1);
+	return 0;
 	char *arg = strtok(NULL, " ");
 	int i;
 
