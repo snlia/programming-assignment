@@ -40,7 +40,6 @@ void cpu_exec(volatile uint32_t n) {
 		printf("Program execution has ended. To restart the program, exit NEMU and run again.\n");
 		return;
 	}
-	puts ("ppp");
 	nemu_state = RUNNING;
 
 #ifdef DEBUG
