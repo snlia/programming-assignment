@@ -101,7 +101,7 @@ static int cmd_si (char *args)
 {
 	/* extract the first argument */
 	char *arg = strtok(NULL, " ");
-	volatile uint32_t i;
+	uint32_t i;
 	if (arg == NULL) i = 1; /* no argument given */
 	else 
 		if (!sscanf (arg, "%u", &i))
