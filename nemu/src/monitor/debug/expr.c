@@ -7,7 +7,7 @@
 #include <regex.h>
 
 enum {
-	NOTYPE = 256, EQ
+	NOTYPE = 256, EQ, UEQ, NOT, NUMBER_D, NUMBER_H
 
 	/* TODO: Add more token types */
 
@@ -24,7 +24,16 @@ static struct rule {
 
 	{" +",	NOTYPE},				// spaces
 	{"\\+", '+'},					// plus
-	{"==", EQ}						// equal
+	{"-", '-'},						// subtraction
+	{"\\*", '*'},					// multiplication
+	{"/", '/'},						// division
+	{"[0-9]+", NUMBER_D},				// decimal number
+	{"0x[0-9abcdef]+", NUMBER_H},		// hexadecimal number
+	{"\\(", '('},					// left parentheses
+	{"\\)", ')'},					// right parentheses
+	{"==", EQ},						// equal
+	{"!==", UEQ},					// unequal
+	{"!", NOT}						// equal to zero
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -40,7 +49,7 @@ void init_regex() {
 	int ret;
 
 	for(i = 0; i < NR_REGEX; i ++) {
-		ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED);
+		ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED | REG_ICASE); // change here : use REG_ICASE option to be case insensitive
 		if(ret != 0) {
 			regerror(ret, &re[i], error_msg, 128);
 			Assert(ret != 0, "regex compilation failed: %s\n%s", error_msg, rules[i].regex);
@@ -67,22 +76,25 @@ static bool make_token(char *e) {
 		/* Try all rules one by one. */
 		for(i = 0; i < NR_REGEX; i ++) {
 			if(regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
-				if (!i) puts ("ppppppp");
 				char *substr_start = e + position;
 				int substr_len = pmatch.rm_eo;
-				if (substr_len > 32) return false;
 
 				Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
 				position += substr_len;
-
+				if (!i) continue; // will not record token "spaces"
+				if (substr_len > 32) return false; //the maxize size of a token is 32
+				++nr_token;
+				tokens[nr_token].type = i;
+				strncpy (tokens[nr_token].str, e + position, substr_len);
+				printf ("%d %s\n", tokens[nr_token].type, tokens[nr_token].str);
 				/* TODO: Now a new token is recognized with rules[i]. Add codes
 				 * to record the token in the array ``tokens''. For certain 
 				 * types of tokens, some extra actions should be performed.
 				 */
 
-				switch(rules[i].token_type) {
-					default: panic("please implement me");
-				}
+//				switch(rules[i].token_type) {
+//					default: panic("please implement me");
+//				}
 
 				break;
 			}
