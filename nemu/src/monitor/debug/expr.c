@@ -67,8 +67,10 @@ static bool make_token(char *e) {
 		/* Try all rules one by one. */
 		for(i = 0; i < NR_REGEX; i ++) {
 			if(regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
+				if (!i) puts ("ppppppp");
 				char *substr_start = e + position;
 				int substr_len = pmatch.rm_eo;
+				if (substr_len > 32) return false;
 
 				Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
 				position += substr_len;
@@ -102,7 +104,7 @@ uint32_t expr(char *e, bool *success) {
 	}
 
 	/* TODO: Insert codes to evaluate the expression. */
-	panic("please implement me");
+//	panic("please implement me");
 	return 0;
 }
 

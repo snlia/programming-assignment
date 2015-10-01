@@ -38,15 +38,13 @@ static int cmd_q (char *args) {
 
 static int cmd_help (char *args);
 
-static int cmd_c (char *args);
-
-static int cmd_q (char *args);
-
 static int cmd_si (char *args);
 
 static int cmd_info (char *args);
 
 static int cmd_p (char *args);
+
+static int cmd_x (char *args);
 
 static int cmd_w (char *args);
 
@@ -65,6 +63,7 @@ static struct {
 	{ "si", "si [N] : Execute N instructs and pause, the default value of N is 1; N should be an positive 32-bit number", cmd_si},
 	{ "info", "info SUBCMD : r Print the informations about regs; w Print the informations about watchpoints", cmd_info},
 	{ "p", "p EXPR : Show the value of EXPR", cmd_p},
+	{ "x", "x N EXPR : Show 4N continious bytes begins at EXPR", cmd_x},
 	{ "w", "w EXPR : Seting watchpoint on EXPR", cmd_w},
 	{ "pw", "Print all informations about watchpoints", cmd_pw},
 	{ "d", "d [N] : delete the watchpoint with index N, or, without N, delete the watchpoint with biggist index", cmd_d}
@@ -106,7 +105,7 @@ static int cmd_si (char *args)
 	else 
 		if (!sscanf (arg, "%u", &i))
 		{
-			printf("Invalid input of %s --- %s\n", cmd_table[3].name, cmd_table[3].description);
+			printf("Invalid input --- %s\n", cmd_table[3].description);
 			return 0;
 		}
 	cpu_exec (i);
@@ -115,10 +114,27 @@ static int cmd_si (char *args)
 
 static int cmd_info (char *args)
 {
+	/* extract the first argument */
+	char *arg = strtok(NULL, " ");
+	int i;
+	if (!strcmp(arg, "r"))
+	{
+		for(i = R_EAX; i <= R_EDI; i ++) 
+			printf ("%s : %x\n", regsl[i], reg_l (i));
+		printf ("eip : %x\n", cpu.eip);
+	}
+	else if (!strcmp (arg, "w")) ;//will finish in stage 3
 	return 0;
 }
 
 static int cmd_p (char *args)
+{
+	bool flag;
+	expr (args, &flag);
+	return 0;
+}
+
+static int cmd_x (char *args)
 {
 	return 0;
 }
