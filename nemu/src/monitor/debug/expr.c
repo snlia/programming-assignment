@@ -27,8 +27,8 @@ static struct rule {
 	{"-", '-'},						// subtraction
 	{"\\*", '*'},					// multiplication
 	{"/", '/'},						// division
-	{"[0-9]+", NUMBER_D},				// decimal number
-	{"0x[0-9abcdef]+", NUMBER_H},		// hexadecimal number
+	{"[0-9]+", NUMBER_D},			// decimal number
+	{"0x[0-9abcdef]+", NUMBER_H},	// hexadecimal number
 	{"\\(", '('},					// left parentheses
 	{"\\)", ')'},					// right parentheses
 	{"==", EQ},						// equal
