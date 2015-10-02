@@ -85,7 +85,7 @@ static bool make_token(char *e) {
 				if (substr_len > 32) return false; //the maxize size of a token is 32
 				++nr_token;
 				tokens[nr_token].type = i;
-				strncpy (tokens[nr_token].str, e + position, substr_len);
+				strncpy (tokens[nr_token].str, substr_start, substr_len);
 				printf ("%d %s\n", tokens[nr_token].type, tokens[nr_token].str);
 				/* TODO: Now a new token is recognized with rules[i]. Add codes
 				 * to record the token in the array ``tokens''. For certain 
