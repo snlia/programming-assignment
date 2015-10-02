@@ -5,9 +5,10 @@
  */
 #include <sys/types.h>
 #include <regex.h>
+#define downcase(x) ((x) <= 'Z' && (x) >= 'A' ? (x) - 'A' + 'a' : (x))
 
 enum {
-	NOTYPE = 256, EQ, UEQ, NOT, NUMBER_D, NUMBER_H
+	NOTYPE = 256, EQ, UEQ, NOT, NUMBER_D, NUMBER_H, PRE_MUL, PRE_PLUS, PRE_SUBTRACT
 
 	/* TODO: Add more token types */
 
@@ -83,19 +84,27 @@ static bool make_token(char *e) {
 				position += substr_len;
 				if (!i) continue; // will not record token "spaces"
 				if (substr_len > 32) return false; //the maxize size of a token is 32
-				++nr_token;
-				tokens[nr_token].type = i;
+				tokens[nr_token].type = rule[i].token_type;
 				strncpy (tokens[nr_token].str, substr_start, substr_len);
-				printf ("%d %s\n", tokens[nr_token].type, tokens[nr_token].str);
 				/* TODO: Now a new token is recognized with rules[i]. Add codes
 				 * to record the token in the array ``tokens''. For certain 
 				 * types of tokens, some extra actions should be performed.
 				 */
-
-//				switch(rules[i].token_type) {
-//					default: panic("please implement me");
-//				}
-
+				if (!nr_token || (tokens[nr_token - 1].type != NUMBER_D && tokens[nr_token - 1].type != NUMBER_H && tokens[nr_token - 1].type != ')' ))
+				switch(rules[i].token_type)
+				{
+					case '+' :
+						tokens[nr_token] = PRE_PLUS;
+						break;
+					case '-' :
+						tokens[nr_token] = PRE_SUBTRACT;
+						break;
+					case '*' :
+						tokens[nr_token] = PRE_MUL;
+						break;
+					//default: panic("please implement me");
+				}
+				++nr_token;
 				break;
 			}
 		}
@@ -109,14 +118,72 @@ static bool make_token(char *e) {
 	return true; 
 }
 
+int eval (int p, int q, bool *success)
+{
+	int val1, val2, ans, i, len;
+	eval(p, q) 
+	{
+		if(p > q) 
+		{
+			puts ("Bad expression, please check it again.");
+			success = 0;
+			return 0;
+		}
+		else if(p == q) 
+		{ 
+			switch (tokens[p].type)
+			{
+				case NUMBER_D :
+					sscanf (tokens[p].str, "%d", &ans);
+					return ans;
+				case NUMBER_H :
+					len = strlen (tokens[p].str);
+					for (i = 0; i < len; ++i) tokens[p].str[i] = downcase (tokens[p].str[i]);
+					sscanf (tokens[p].str, "%x", &ans);
+
+				default : puts ("Bad expression, you may miss a number.");
+			}
+			/* Single token.
+			 * For now this token should be a number. 
+			 * Return the value of the number.
+			 */ 
+		}
+		else if(check_parentheses(p, q) == true) 
+		{
+			/* The expression is surrounded by a matched pair of parentheses. 
+			 * If that is the case, just throw away the parentheses.
+			 */
+			return eval(p + 1, q - 1); 
+		}
+		else 
+		{
+			op = the position of dominant operator in the token expression;
+			val1 = eval(p, op - 1, success);
+			if (!success) return 0;
+			val2 = eval(op + 1, q, success);
+			if (!success) return 0;
+
+			switch(op_type) 
+			{
+				case '+': return val1 + val2;
+				case '-': return val1 + val2;
+				case '*': return val1 * val2;
+				case '/': return val1 / val2;
+				default: assert(0);
+			}
+		}
+	}
+}
+
 uint32_t expr(char *e, bool *success) {
-	if(!make_token(e)) {
-		*success = false;
+	if(!make_token(e)) 
+	{
+		*success = 0;
 		return 0;
 	}
 
 	/* TODO: Insert codes to evaluate the expression. */
-//	panic("please implement me");
-	return 0;
+	//	panic("please implement me");
+	return eval(0, nr_token - 1, success);
 }
 

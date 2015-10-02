@@ -129,8 +129,9 @@ static int cmd_info (char *args)
 
 static int cmd_p (char *args)
 {
-	bool flag;
-	expr (args, &flag);
+	bool success;
+	int val = expr (args, &success);
+	if (success) printf ("int : %10d unsigned int %30d hexadecimal %50d\n", val, val, val);
 	return 0;
 }
 
