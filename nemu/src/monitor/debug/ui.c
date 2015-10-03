@@ -151,7 +151,7 @@ static int cmd_x (char *args)
 		return 0;
 	}
 	bool flag = 1;
-	printf ("%s\n", args + strlen (arg));
+	printf ("%s\n", args);
 	int adress = expr (args + strlen (arg), &flag);
 	if (!flag) 
 	{
