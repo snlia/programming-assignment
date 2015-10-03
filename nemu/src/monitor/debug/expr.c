@@ -282,6 +282,7 @@ int eval (int p, int q, bool *success)
 
 bool Check_Parentheses ()
 {
+	printf ("%d\n", nr_token);
 	int i, flag = 0;
 	for (i = 0; i < nr_token; ++i) 
 	{
@@ -298,7 +299,6 @@ uint32_t expr(char *e, bool *success) {
 		*success = false;
 		return 0;
 	}
-	puts ("pppp");
 	if (Check_Parentheses ()) // check if parentheses matched first
 	{
 		*success = false; 
