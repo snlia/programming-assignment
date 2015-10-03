@@ -210,7 +210,7 @@ int get_dominant (int l, int r)
 int eval (int p, int q, bool *success)
 {
 	int val1 = 0, val2, ans, i, len;
-	printf ("%d %d %d %d\n", p, tokens[p].type, NUMBER_D, NUMBER_H);
+	printf ("%d %d %d %d\n", p, tokens[p].type, EQ, NUMBER_H);
 	if(p > q) 
 	{
 		puts ("Bad expression, please check it.");
@@ -232,8 +232,10 @@ int eval (int p, int q, bool *success)
 				len = strlen (tokens[p].str);
 				for (i = 0; i < len; ++i) tokens[p].str[i] = downcase (tokens[p].str[i]);
 				sscanf (tokens[p].str, "%x", &ans);
+				return ans;
 				//Adress and Register here
-			default : puts ("Bad expression, you may miss a number.");
+			default : *success = false;
+					  puts ("Bad expression, you may miss a number.");
 		}
 		/* Single token.
 		 * For now this token should be a number. 
