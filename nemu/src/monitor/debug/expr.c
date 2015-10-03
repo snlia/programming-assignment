@@ -210,6 +210,7 @@ int get_dominant (int l, int r)
 int eval (int p, int q, bool *success)
 {
 	int val1 = 0, val2, ans, i, len;
+	printf ("%d %d\n", p, q);
 	if(p > q) 
 	{
 		puts ("Bad expression, please check it.");
@@ -304,7 +305,6 @@ uint32_t expr(char *e, bool *success) {
 		return 0;
 	}
 
-	printf ("%d\n", nr_token);
 	/* TODO: Insert codes to evaluate the expression. */
 	//	panic("please implement me");
 	return eval(0, nr_token - 1, success);
