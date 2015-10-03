@@ -282,15 +282,14 @@ int eval (int p, int q, bool *success)
 
 bool Check_Parentheses ()
 {
-	printf ("%d\n", nr_token);
 	int i, flag = 0;
 	for (i = 0; i < nr_token; ++i) 
 	{
 		if (tokens[i].type == '(' + Size_7) ++flag;
 		if (tokens[i].type == ')' + Size_7) --flag;
-		if (flag < 0) return false;
+		if (flag < 0) return true;
 	}
-	return true;
+	return false;
 }
 
 uint32_t expr(char *e, bool *success) {
