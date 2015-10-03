@@ -195,7 +195,7 @@ static bool make_token(char *e) {
 			return false;
 		}
 	}
-
+puts ("pppp");
 	return true; 
 }
 
@@ -299,7 +299,6 @@ uint32_t expr(char *e, bool *success) {
 		*success = false;
 		return 0;
 	}
-	puts ("ppp");
 	if (Check_Parentheses ()) // check if parentheses matched first
 	{
 		*success = false; 
