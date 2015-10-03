@@ -162,6 +162,7 @@ static bool make_token(char *e) {
 				int substr_len = pmatch.rm_eo;
 
 				Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
+				position += substr_len;
 				if (!i) continue; // will not record token "spaces"
 				if (substr_len > 32) return false; //the maxize size of a token is 32
 				tokens[nr_token].type = rules[i].token_type;
@@ -194,6 +195,7 @@ static bool make_token(char *e) {
 			return false;
 		}
 	}
+puts ("pppp");
 	return true; 
 }
 
@@ -303,7 +305,6 @@ uint32_t expr(char *e, bool *success) {
 		return 0;
 	}
 
-	puts ("ppp");
 	/* TODO: Insert codes to evaluate the expression. */
 	//	panic("please implement me");
 	return eval(0, nr_token - 1, success);
