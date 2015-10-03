@@ -137,6 +137,31 @@ static int cmd_p (char *args)
 
 static int cmd_x (char *args)
 {
+	/* extract the first argument */
+	char *arg = strtok(NULL, " ");
+	uint32_t i, j;
+	if (arg == NULL) 
+	{
+		puts ("Missing arguments."); 
+		return 0;
+	}
+	if (!sscanf (arg, "%u", &i))
+	{
+		puts ("The first argument should be a number.");
+		return 0;
+	}
+	bool flag = 1;
+	int adress = expr (args + strlen (arg), &flag);
+	if (!flag) 
+	{
+		puts ("Something wrong with expression, please check it.");
+		return 0;
+	}
+	for (j = 0; j <= i; ++j)
+	{
+		printf ("0x%x 0x%-10d		", adress + j, swaddr_read (adress + j, 4));
+		if (!(j % 5)) puts ("");
+	}
 	return 0;
 }
 
