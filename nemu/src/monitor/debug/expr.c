@@ -5,9 +5,8 @@
  */
 #include <sys/types.h>
 #include <regex.h>
-#define Size_7 128
 #define downcase(x) ((x) <= 'Z' && (x) >= 'A' ? (x) - 'A' + 'a' : (x))
-#define check_parentheses(l, r) (tokens[l].type == '(' + Size_7 && tokens[r].type == ')' + Size_7)
+#define check_parentheses(l, r) (tokens[l].type == '(' && tokens[r].type == ')')
 
 enum {
 	NOTYPE = 256, EQ, UEQ, NOT, NUMBER_D, NUMBER_H, PRE_MUL, PRE_PLUS, PRE_SUBTRACT, AND, OR, SHL, SHR, LEQ, REQ,
@@ -29,17 +28,17 @@ static struct rule {
 
 	//(flod) Caculate operator
 	{" +",	NOTYPE},					// spaces
-	{"\\+", '+' + Size_7},				// plus
-	{"\\-", '-' + Size_7},				// subtraction
-	{"\\*", '*' + Size_7},				// multiplication
-	{"\\%", '%' + Size_7},				// mod
-	{"\\/", '/' + Size_7},				// division
+	{"\\+", '+'},				// plus
+	{"\\-", '-'},				// subtraction
+	{"\\*", '*'},				// multiplication
+	{"\\%", '%'},				// mod
+	{"\\/", '/'},				// division
 	{"&&", AND},						// and
 	{"\\|\\|", OR},						// or
-	{"\\&", '&' + Size_7},				// &
-	{"\\|", '|' + Size_7},				// or
-	{"\\^", '^' + Size_7},				// xor
-	{"\\~", '~' + Size_7},				// not
+	{"\\&", '&'},				// &
+	{"\\|", '|'},				// or
+	{"\\^", '^'},				// xor
+	{"\\~", '~'},				// not
 	{"<<", SHL},						// shift_left
 	{">>", SHR},						// shift_right
 	//(flod end)
@@ -50,8 +49,8 @@ static struct rule {
 	//(flod end)
 
 	//(flod) Parentheses
-	{"\\(", '(' + Size_7},				// left parentheses
-	{"\\)", ')' + Size_7},				// right parentheses
+	{"\\(", '('},				// left parentheses
+	{"\\)", ')'},				// right parentheses
 	//(flod end)
 
 	//(flod) Judging operator
@@ -60,8 +59,8 @@ static struct rule {
 	{"!", NOT},							// equal to zero
 	{"<=", LEQ},						// leq
 	{">=", REQ},						// req
-	{"<", '<' + Size_7},				// <
-	{">", '>' + Size_7},				// >
+	{"<", '<'},				// <
+	{">", '>'},				// >
 	//(flod end)
 
 	//(flod) 32 bit Register
@@ -118,15 +117,15 @@ void init_regex() {
 
 	//Init Domination
 	memset (Domination, 0, sizeof (Domination));
-	Domination[PRE_MUL] = Domination[PRE_PLUS] = Domination[PRE_SUBTRACT] = Domination['~' + Size_7] = 1;
-	Domination['*' + Size_7] = Domination['/' + Size_7] = Domination['%' + Size_7] = 2;
-	Domination['+' + Size_7] = Domination['-' + Size_7] = 2;
+	Domination[PRE_MUL] = Domination[PRE_PLUS] = Domination[PRE_SUBTRACT] = Domination['~'] = 1;
+	Domination['*'] = Domination['/'] = Domination['%'] = 2;
+	Domination['+'] = Domination['-'] = 2;
 	Domination[SHL] = Domination[SHR] = 3;
-	Domination['<' + Size_7] = Domination['>' + Size_7] = Domination[LEQ] = Domination[REQ] = 4;
+	Domination['<'] = Domination['>'] = Domination[LEQ] = Domination[REQ] = 4;
 	Domination[UEQ] = Domination[EQ] = 5;
-	Domination['&' + Size_7] = 6;
-	Domination['^' + Size_7] = 7;
-	Domination['|' + Size_7] = 8;
+	Domination['&'] = 6;
+	Domination['^'] = 7;
+	Domination['|'] = 8;
 	Domination[AND] = 9;
 	Domination[OR] = 10;
 	//Compile Regex
@@ -171,16 +170,16 @@ static bool make_token(char *e) {
 				 * to record the token in the array ``tokens''. For certain 
 				 * types of tokens, some extra actions should be performed.
 				 */
-				if (!nr_token || (tokens[nr_token - 1].type != NUMBER_D && tokens[nr_token - 1].type != NUMBER_H && tokens[nr_token - 1].type != ')' + Size_7 ))
+				if (!nr_token || (tokens[nr_token - 1].type != NUMBER_D && tokens[nr_token - 1].type != NUMBER_H && tokens[nr_token - 1].type != ')' ))
 					switch(rules[i].token_type)
 					{
-						case '+' + Size_7 :
+						case '+' :
 							tokens[nr_token].type = PRE_PLUS;
 							break;
-						case '-' + Size_7 :
+						case '-' :
 							tokens[nr_token].type = PRE_SUBTRACT;
 							break;
-						case '*' + Size_7 :
+						case '*' :
 							tokens[nr_token].type = PRE_MUL;
 							break;
 							//default: panic("please implement me");
@@ -210,7 +209,6 @@ int get_dominant (int l, int r)
 int eval (int p, int q, bool *success)
 {
 	int val1 = 0, val2, ans, i, len;
-	printf ("%d %d %d %d\n", p, tokens[p].type, EQ, NUMBER_H);
 	if(p > q) 
 	{
 		puts ("Bad expression, please check it.");
@@ -259,17 +257,17 @@ int eval (int p, int q, bool *success)
 
 		switch(tokens[op].type) 
 		{
-			case '+' + Size_7: return val1 + val2;
-			case '-' + Size_7: return val1 + val2;
-			case '*' + Size_7: return val1 * val2;
-			case '/' + Size_7: return val1 / val2;
-			case '&' + Size_7: return val1 & val2;
-			case '%' + Size_7: return val1 % val2;
-			case '|' + Size_7: return val1 | val2;
-			case '^' + Size_7: return val1 ^ val2;
-			case '~' + Size_7: return ~val2;
-			case '<' + Size_7: return val1 < val2;
-			case '>' + Size_7: return val1 > val2;
+			case '+': return val1 + val2;
+			case '-': return val1 + val2;
+			case '*': return val1 * val2;
+			case '/': return val1 / val2;
+			case '&': return val1 & val2;
+			case '%': return val1 % val2;
+			case '|': return val1 | val2;
+			case '^': return val1 ^ val2;
+			case '~': return ~val2;
+			case '<': return val1 < val2;
+			case '>': return val1 > val2;
 			case LEQ: return val1 <= val2;
 			case REQ: return val1 >= val2;
 			case SHL : return val1 << val2;
@@ -288,8 +286,8 @@ bool Check_Parentheses ()
 	int i, flag = 0;
 	for (i = 0; i < nr_token; ++i) 
 	{
-		if (tokens[i].type == '(' + Size_7) ++flag;
-		if (tokens[i].type == ')' + Size_7) --flag;
+		if (tokens[i].type == '(') ++flag;
+		if (tokens[i].type == ')') --flag;
 		if (flag < 0) return true;
 	}
 	return false;
