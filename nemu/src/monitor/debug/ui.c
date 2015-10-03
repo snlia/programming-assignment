@@ -132,7 +132,6 @@ static int cmd_p (char *args)
 	bool success = 1;
 	int val = expr (args, &success);
 	if (success) printf ("int : %10d unsigned int %30d hexadecimal %50d\n", val, val, val);
-	else puts ("ppp");
 	return 0;
 }
 
