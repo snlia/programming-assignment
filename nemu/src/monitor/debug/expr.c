@@ -210,7 +210,7 @@ int get_dominant (int l, int r)
 int eval (int p, int q, bool *success)
 {
 	int val1 = 0, val2, ans, i, len;
-	printf ("%d %d\n", p, tokens[p].type);
+	printf ("%d %d %d %d\n", p, tokens[p].type, NUMBER_D, NUMBER_H);
 	if(p > q) 
 	{
 		puts ("Bad expression, please check it.");
