@@ -298,12 +298,12 @@ uint32_t expr(char *e, bool *success) {
 		*success = false;
 		return 0;
 	}
+	puts ("pppp");
 	if (Check_Parentheses ()) // check if parentheses matched first
 	{
 		*success = false; 
 		return 0;
 	}
-	puts ("pppp");
 
 	/* TODO: Insert codes to evaluate the expression. */
 	//	panic("please implement me");
