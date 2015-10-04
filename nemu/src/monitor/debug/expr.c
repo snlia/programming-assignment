@@ -302,52 +302,52 @@ int eval (int p, int q, bool *success)
 void warning ()
 {
 	int i; bool flag = 0;
-	for (int i = 1; i < Stack_top; ++i) 
+	for (i = 1; i < Stack_top; ++i) 
 	{
 		if (Stack_op[i] == '+' && Stack_op[i - 1] == SHL) flag = 1;
 		if (Stack_op[i - 1] == '+' && Stack_op[i] == SHL) flag = 1;
 	}
 	if (flag) puts ("warning : suggest parentheses around ‘+’ inside ‘<<’");
 	flag = 0;
-	for (int i = 1; i < Stack_top; ++i) 
+	for (i = 1; i < Stack_top; ++i) 
 	{
 		if (Stack_op[i] == '-' && Stack_op[i - 1] == SHL) flag = 1;
 		if (Stack_op[i - 1] == '-' && Stack_op[i] == SHL) flag = 1;
 	}
 	if (flag) puts ("warning : suggest parentheses around ‘-’ inside ‘<<’");
 	flag = 0;
-	for (int i = 1; i < Stack_top; ++i) 
+	for (i = 1; i < Stack_top; ++i) 
 	{
 		if (Stack_op[i] == '+' && Stack_op[i - 1] == SHR) flag = 1;
 		if (Stack_op[i - 1] == '+' && Stack_op[i] == SHR) flag = 1;
 	}
 	if (flag) puts ("warning : suggest parentheses around ‘+’ inside ‘>>’");
 	flag = 0;
-	for (int i = 1; i < Stack_top; ++i) 
+	for (i = 1; i < Stack_top; ++i) 
 	{
 		if (Stack_op[i] == '-' && Stack_op[i - 1] == SHR) flag = 1;
 		if (Stack_op[i - 1] == '-' && Stack_op[i] == SHR) flag = 1;
 	}
 	if (flag) puts ("warning : suggest parentheses around ‘-’ inside ‘>>’");
 	flag = 0;
-	for (int i = 1; i < Stack_top; ++i)
-		flag = ((Stack_op[i] == '<' || Stack_op[i] == '>' || Stack_op[i] == Leq || Stack_op[i] == Req)
-		&&(Stack_op[i - 1] == '<' || Stack_op[i - 1] == '>' || Stack_op[i - 1] == Leq || Stack_op[i - 1] == Req));
+	for (i = 1; i < Stack_top; ++i)
+		flag = ((Stack_op[i] == '<' || Stack_op[i] == '>' || Stack_op[i] == LEQ || Stack_op[i] == REQ)
+		&&(Stack_op[i - 1] == '<' || Stack_op[i - 1] == '>' || Stack_op[i - 1] == LEQ || Stack_op[i - 1] == REQ));
 	if (flag) puts ("warning : comparisons like ‘X<=Y<=Z’ do not have their mathematical meaning");
 	flag = 0;
-	for (int i = 1; i < Stack_top; ++i)
+	for (i = 1; i < Stack_top; ++i)
 	{
 		bool flag_x = (Stack_op[i] == UEQ || Stack_op[i] == EQ || Stack_op[i] == '<' || Stack_op[i] == '>' || Stack_op[i] == LEQ || Stack_op[i] == REQ);
 		bool flag_y = (Stack_op[i - 1] == UEQ || Stack_op[i - 1] == EQ || Stack_op[i - 1] == '<' || Stack_op[i - 1] == '>' || Stack_op[i - 1] == LEQ || Stack_op[i - 1] == REQ);
-		flag = ((flag_x && Stack_op[i - 1] == EQ) || (flag_y && Stack_op[i] == EQ))
+		flag = ((flag_x && Stack_op[i - 1] == EQ) || (flag_y && Stack_op[i] == EQ));
 	}
 	if (flag) puts ("warning: suggest parentheses around comparison in operand of ‘==’");
 	flag = 0;
-	for (int i = 1; i < Stack_top; ++i)
+	for (i = 1; i < Stack_top; ++i)
 	{
 		bool flag_x = (Stack_op[i] == UEQ || Stack_op[i] == '<' || Stack_op[i] == '>' || Stack_op[i] == LEQ || Stack_op[i] == REQ);
 		bool flag_y = (Stack_op[i - 1] == UEQ || Stack_op[i - 1] == '<' || Stack_op[i - 1] == '>' || Stack_op[i - 1] == LEQ || Stack_op[i - 1] == REQ);
-		flag = ((flag_x && Stack_op[i - 1] == UEQ) || (flag_y && Stack_op[i] == UEQ))
+		flag = ((flag_x && Stack_op[i - 1] == UEQ) || (flag_y && Stack_op[i] == UEQ));
 	}
 	puts ("warning: suggest parentheses around comparison in operand of ‘!=’");
 }
@@ -376,7 +376,7 @@ uint32_t expr(char *e, bool *success) {
 		return 0;
 	}
 
-	stact_top = 0;
+	Stack_top = 0;
 	/* TODO: Insert codes to evaluate the expression. */
 	//	panic("please implement me");
 	warning ();
