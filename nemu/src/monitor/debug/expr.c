@@ -302,7 +302,6 @@ int eval (int p, int q, bool *success)
 void warning ()
 {
 	int i; bool flag = 0;
-	printf ("%d\n", Stack_top);
 	for (i = 1; i < Stack_top; ++i) 
 	{
 		if (Stack_op[i] == '+' && Stack_op[i - 1] == SHL) flag = 1;
@@ -380,7 +379,8 @@ uint32_t expr(char *e, bool *success) {
 
 	/* TODO: Insert codes to evaluate the expression. */
 	//	panic("please implement me");
-	warning ();
-	return eval(0, nr_token - 1, success);
+	int ans = eval(0, nr_token - 1, success);
+	if (*success) warning ();
+	return ans;
 }
 
