@@ -267,8 +267,11 @@ int eval (int p, int q, bool *success)
 			case '|': return val1 | val2;
 			case '^': return val1 ^ val2;
 			case '~': return ~val2;
+			case '!': return !val2;
 			case '<': return val1 < val2;
 			case '>': return val1 > val2;
+			case EQ:  return val1 == val2;
+			case UEQ: return val1 != val2;
 			case LEQ: return val1 <= val2;
 			case REQ: return val1 >= val2;
 			case SHL : return val1 << val2;
