@@ -258,7 +258,6 @@ int eval (int p, int q, bool *success)
 
 		switch(tokens[op].type) 
 		{
-			printf ("%d %d %d %d\n", p, q, val1, val2);
 			case '+': return val1 + val2;
 			case '-': return val1 + val2;
 			case '*': return val1 * val2;
@@ -271,7 +270,7 @@ int eval (int p, int q, bool *success)
 			case '!': return !val2;
 			case '<': return val1 < val2;
 			case '>': return val1 > val2;
-			case EQ:  return val1 == val2;
+			case EQ:  printf ("%d %d\n", val1, val2); return val1 == val2;
 			case UEQ: return val1 != val2;
 			case LEQ: return val1 <= val2;
 			case REQ: return val1 >= val2;
