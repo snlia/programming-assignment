@@ -131,7 +131,7 @@ static int cmd_p (char *args)
 {
 	bool success = 1;
 	int val = expr (args, &success);
-	if (success) printf ("int : %-15d 	unsigned int : %-30u	hexadecimal : 0x%-45x\n", val, val, val);
+	if (success) printf ("int : %-15dunsigned int : %-30uhexadecimal : 0x%-45x\n", val, val, val);
 	return 0;
 }
 
