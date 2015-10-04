@@ -107,6 +107,8 @@ static struct rule {
 static regex_t re[NR_REGEX];
 
 int Domination [1024];
+int Stack_op [1024];
+int Stack_top = 0;
 
 /* Rules are used for many times.
  * Therefore we compile them only once before any usage.
@@ -234,7 +236,7 @@ int eval (int p, int q, bool *success)
 				return ans;
 				//Adress and Register here
 			default : *success = false;
-					  puts ("Bad expression, you may miss a number.");
+					  puts ("Error : you may miss a number.");
 		}
 		/* Single token.
 		 * For now this token should be a number. 
@@ -246,7 +248,9 @@ int eval (int p, int q, bool *success)
 		/* The expression is surrounded by a matched pair of parentheses. 
 		 * If that is the case, just throw away the parentheses.
 		 */
-		return eval(p + 1, q - 1, success); 
+		int ans = eval(p + 1, q - 1, success); 
+		Stack_op[Stack_top++] = '(';
+		return ans;
 	}
 	else 
 	{
@@ -256,33 +260,96 @@ int eval (int p, int q, bool *success)
 		val2 = eval (op + 1, q, success);
 		if (!success) return 0;
 
+		Stack_op[Stack_top++] = op;
+
+		if (op == p) 
+		{
+			switch (tokens[op].type)
+			{
+				case '~': return ~val2;
+				case '!': return !val2;
+				case PRE_PLUS : return val2;
+				case PRE_SUBTRACT : return -val2;
+				case PRE_MUL : return swaddr_read(val2, 4);
+				default : *success = false; puts ("Error : you may miss a number."); return 0;
+			}
+		}
+
 		switch(tokens[op].type) 
 		{
 			case '+': return val1 + val2;
-			case '-': return val1 + val2;
+			case '-': return val1 - val2;
 			case '*': return val1 * val2;
 			case '/': return val1 / val2;
 			case '&': return val1 & val2;
 			case '%': return val1 % val2;
 			case '|': return val1 | val2;
 			case '^': return val1 ^ val2;
-			case '~': return ~val2;
-			case '!': return !val2;
 			case '<': return val1 < val2;
 			case '>': return val1 > val2;
-			case EQ:  printf ("%d %d\n", val1, val2); return val1 == val2;
+			case EQ:  return val1 == val2;
 			case UEQ: return val1 != val2;
 			case LEQ: return val1 <= val2;
 			case REQ: return val1 >= val2;
 			case SHL : return val1 << val2;
 			case SHR : return val1 >> val2;
-			case PRE_PLUS : return val2;
-			case PRE_SUBTRACT : return -val2;
-			case PRE_MUL : return swaddr_read(val2, 4);
 			default: *success = true; return 0;
 		}
 	}
 	return 0;
+}
+
+void warning ()
+{
+	int i; bool flag = 0;
+	for (int i = 1; i < Stack_top; ++i) 
+	{
+		if (Stack_op[i] == '+' && Stack_op[i - 1] == SHL) flag = 1;
+		if (Stack_op[i - 1] == '+' && Stack_op[i] == SHL) flag = 1;
+	}
+	if (flag) puts ("warning : suggest parentheses around ‘+’ inside ‘<<’");
+	flag = 0;
+	for (int i = 1; i < Stack_top; ++i) 
+	{
+		if (Stack_op[i] == '-' && Stack_op[i - 1] == SHL) flag = 1;
+		if (Stack_op[i - 1] == '-' && Stack_op[i] == SHL) flag = 1;
+	}
+	if (flag) puts ("warning : suggest parentheses around ‘-’ inside ‘<<’");
+	flag = 0;
+	for (int i = 1; i < Stack_top; ++i) 
+	{
+		if (Stack_op[i] == '+' && Stack_op[i - 1] == SHR) flag = 1;
+		if (Stack_op[i - 1] == '+' && Stack_op[i] == SHR) flag = 1;
+	}
+	if (flag) puts ("warning : suggest parentheses around ‘+’ inside ‘>>’");
+	flag = 0;
+	for (int i = 1; i < Stack_top; ++i) 
+	{
+		if (Stack_op[i] == '-' && Stack_op[i - 1] == SHR) flag = 1;
+		if (Stack_op[i - 1] == '-' && Stack_op[i] == SHR) flag = 1;
+	}
+	if (flag) puts ("warning : suggest parentheses around ‘-’ inside ‘>>’");
+	flag = 0;
+	for (int i = 1; i < Stack_top; ++i)
+		flag = ((Stack_op[i] == '<' || Stack_op[i] == '>' || Stack_op[i] == Leq || Stack_op[i] == Req)
+		&&(Stack_op[i - 1] == '<' || Stack_op[i - 1] == '>' || Stack_op[i - 1] == Leq || Stack_op[i - 1] == Req));
+	if (flag) puts ("warning : comparisons like ‘X<=Y<=Z’ do not have their mathematical meaning");
+	flag = 0;
+	for (int i = 1; i < Stack_top; ++i)
+	{
+		bool flag_x = (Stack_op[i] == UEQ || Stack_op[i] == EQ || Stack_op[i] == '<' || Stack_op[i] == '>' || Stack_op[i] == LEQ || Stack_op[i] == REQ);
+		bool flag_y = (Stack_op[i - 1] == UEQ || Stack_op[i - 1] == EQ || Stack_op[i - 1] == '<' || Stack_op[i - 1] == '>' || Stack_op[i - 1] == LEQ || Stack_op[i - 1] == REQ);
+		flag = ((flag_x && Stack_op[i - 1] == EQ) || (flag_y && Stack_op[i] == EQ))
+	}
+	if (flag) puts ("warning: suggest parentheses around comparison in operand of ‘==’");
+	flag = 0;
+	for (int i = 1; i < Stack_top; ++i)
+	{
+		bool flag_x = (Stack_op[i] == UEQ || Stack_op[i] == '<' || Stack_op[i] == '>' || Stack_op[i] == LEQ || Stack_op[i] == REQ);
+		bool flag_y = (Stack_op[i - 1] == UEQ || Stack_op[i - 1] == '<' || Stack_op[i - 1] == '>' || Stack_op[i - 1] == LEQ || Stack_op[i - 1] == REQ);
+		flag = ((flag_x && Stack_op[i - 1] == UEQ) || (flag_y && Stack_op[i] == UEQ))
+	}
+	puts ("warning: suggest parentheses around comparison in operand of ‘!=’");
 }
 
 bool Check_Parentheses ()
@@ -309,8 +376,10 @@ uint32_t expr(char *e, bool *success) {
 		return 0;
 	}
 
+	stact_top = 0;
 	/* TODO: Insert codes to evaluate the expression. */
 	//	panic("please implement me");
+	warning ();
 	return eval(0, nr_token - 1, success);
 }
 
