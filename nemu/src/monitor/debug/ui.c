@@ -150,9 +150,11 @@ static int cmd_x (char *args)
 		puts ("The first argument should be a number.");
 		return 0;
 	}
+	char *Arg = args + strlen(arg) + 1;
+	printf ("%s\n", Arg);
 	bool flag = 1;
-	printf ("%s\n", args);
-	int adress = expr (args + strlen (arg), &flag);
+	int adress = 0;
+//	int adress = expr (args + strlen (arg), &flag);
 	if (!flag) 
 	{
 		puts ("Something wrong with expression, please check it.");
