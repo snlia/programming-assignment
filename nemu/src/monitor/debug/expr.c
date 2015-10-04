@@ -260,7 +260,7 @@ int eval (int p, int q, bool *success)
 		val2 = eval (op + 1, q, success);
 		if (!success) return 0;
 
-		Stack_op[Stack_top++] = op;
+		Stack_op[Stack_top++] = tokens[op].type;
 
 		if (op == p) 
 		{
