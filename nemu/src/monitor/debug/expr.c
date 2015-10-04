@@ -349,7 +349,7 @@ void warning ()
 		bool flag_y = (Stack_op[i - 1] == UEQ || Stack_op[i - 1] == '<' || Stack_op[i - 1] == '>' || Stack_op[i - 1] == LEQ || Stack_op[i - 1] == REQ);
 		flag = ((flag_x && Stack_op[i - 1] == UEQ) || (flag_y && Stack_op[i] == UEQ));
 	}
-	puts ("warning: suggest parentheses around comparison in operand of ‘!=’");
+	if (flag) puts ("warning: suggest parentheses around comparison in operand of ‘!=’");
 }
 
 bool Check_Parentheses ()
