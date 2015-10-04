@@ -251,6 +251,7 @@ int eval (int p, int q, bool *success)
 	else 
 	{
 		int op = get_dominant (p, q);
+		printf ("%d %d %d\n", p, q, op);
 		if (op != p) val1 = eval (p, op - 1, success);
 		if (!success) return 0;
 		val2 = eval (op + 1, q, success);
