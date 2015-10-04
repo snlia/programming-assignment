@@ -302,6 +302,8 @@ int eval (int p, int q, bool *success)
 void warning ()
 {
 	int i; bool flag = 0;
+	for (i = 1; i < Stack_top; ++i)
+		printf ("%d\n", Stack_op[i]);
 	for (i = 1; i < Stack_top; ++i) 
 	{
 		if (Stack_op[i] == '+' && Stack_op[i - 1] == SHL) flag = 1;
