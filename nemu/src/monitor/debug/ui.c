@@ -157,11 +157,12 @@ static int cmd_x (char *args)
 		puts ("Something wrong with expression, please check it.");
 		return 0;
 	}
-	for (j = 0; j <= i; ++j)
+	for (j = 0; j < i; ++j)
 	{
 		printf ("0x%x 0x%-10d		", adress + j, swaddr_read (adress + j, 4));
-		if (!(j % 5)) puts ("");
+		if (!((j + 1) % 5)) puts ("");
 	}
+	if ((i + 1) % 5)puts ("");
 	return 0;
 }
 
