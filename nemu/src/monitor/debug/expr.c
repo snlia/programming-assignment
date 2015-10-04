@@ -9,7 +9,8 @@
 #define check_parentheses(l, r) (tokens[l].type == '(' && tokens[r].type == ')')
 
 enum {
-	NOTYPE = 256, EQ, UEQ, NOT, NUMBER_D, NUMBER_H, PRE_MUL, PRE_PLUS, PRE_SUBTRACT, AND, OR, SHL, SHR, LEQ, REQ,
+	NOTYPE = 256, EQ, UEQ, NOT, PRE_MUL, PRE_PLUS, PRE_SUBTRACT, AND, OR, SHL, SHR, LEQ, REQ,
+	NUMBER_D, NUMBER_H, 
 		EAX, ECX, EDX, EBX, ESP, EBP, ESI, EDI, EIP,
 	AX, CX, DX, BX, SP, BP, SI, DI,
 	AL, CL, DL, BL, AH, CH, DH, BH
@@ -170,7 +171,7 @@ static bool make_token(char *e) {
 				 * to record the token in the array ``tokens''. For certain 
 				 * types of tokens, some extra actions should be performed.
 				 */
-				if (!nr_token || (tokens[nr_token - 1].type != NUMBER_D && tokens[nr_token - 1].type != NUMBER_H && tokens[nr_token - 1].type != ')' ))
+				if (!nr_token || (tokens[nr_token].type != ')' && tokens[nr_token].type < NUMBER_D))
 					switch(rules[i].token_type)
 					{
 						case '+' :
