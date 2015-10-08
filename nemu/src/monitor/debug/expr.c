@@ -108,6 +108,8 @@ static regex_t re[NR_REGEX];
 
 int Domination [1024];
 int Stack_op [1024];
+int Parentheses [1024];
+int match [1024];
 int Stack_top = 0;
 
 /* Rules are used for many times.
@@ -205,14 +207,16 @@ int get_dominant (int l, int r)
 {
 	int i, maxp = l;
 	for (i = l; i <= r; ++i)
-		if (Domination[tokens[i].type] > Domination[tokens[maxp].type])
-			maxp = i;
+	{
+		if (tokens[i].type == '(') i = match[i]; 
+		else 
+			if (Domination[tokens[i].type] > Domination[tokens[maxp].type]) maxp = i;
+	}
 	return maxp;
 }
 
 int eval (int p, int q, bool *success)
 {
-	printf ("%d %d\n", p, q);
 	int val1 = 0, val2, ans, i, len;
 	if(p > q) 
 	{
@@ -257,7 +261,6 @@ int eval (int p, int q, bool *success)
 	else 
 	{
 		int op = get_dominant (p, q);
-		printf ("%d\n", op);
 		if (op != p) val1 = eval (p, op - 1, success);
 		if (!success) return 0;
 		val2 = eval (op + 1, q, success);
@@ -335,7 +338,7 @@ void warning ()
 	flag = 0;
 	for (i = 1; i < Stack_top; ++i)
 		flag = ((Stack_op[i] == '<' || Stack_op[i] == '>' || Stack_op[i] == LEQ || Stack_op[i] == REQ)
-		&&(Stack_op[i - 1] == '<' || Stack_op[i - 1] == '>' || Stack_op[i - 1] == LEQ || Stack_op[i - 1] == REQ));
+				&&(Stack_op[i - 1] == '<' || Stack_op[i - 1] == '>' || Stack_op[i - 1] == LEQ || Stack_op[i - 1] == REQ));
 	if (flag) puts ("warning : comparisons like ‘X<=Y<=Z’ do not have their mathematical meaning");
 	flag = 0;
 	for (i = 1; i < Stack_top; ++i)
@@ -358,10 +361,16 @@ void warning ()
 bool Check_Parentheses ()
 {
 	int i, flag = 0;
+	memset (match, 0, sizeof (match));
+	memset (Parentheses, 0, sizeof (Parentheses));
 	for (i = 0; i < nr_token; ++i) 
 	{
-		if (tokens[i].type == '(') ++flag;
-		if (tokens[i].type == ')') --flag;
+		if (tokens[i].type == '(') Parentheses[++flag] = i;
+		if (tokens[i].type == ')') 
+		{
+			match[Parentheses[flag]] = i;
+			--flag;
+		}
 		if (flag < 0) return true;
 	}
 	return false;
@@ -379,9 +388,6 @@ uint32_t expr(char *e, bool *success) {
 		*success = false; 
 		return 0;
 	}
-	int i;
-	for (i = 0; i < nr_token; ++i) printf ("%d ", Domination[tokens[i].type]);
-	puts ("");
 
 	/* TODO: Insert codes to evaluate the expression. */
 	//	panic("please implement me");
