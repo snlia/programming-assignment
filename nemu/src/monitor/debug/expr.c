@@ -215,9 +215,9 @@ int get_dominant (int l, int r)
 	return maxp;
 }
 
-int eval (int p, int q, bool *success)
+uint32_t eval (int p, int q, bool *success)
 {
-	int val1 = 0, val2, ans, i, len;
+	uint32_t val1 = 0, val2, ans, i, len;
 	if(p > q) 
 	{
 		puts ("Bad expression, please check it.");
@@ -254,7 +254,7 @@ int eval (int p, int q, bool *success)
 		/* The expression is surrounded by a matched pair of parentheses. 
 		 * If that is the case, just throw away the parentheses.
 		 */
-		int ans = eval(p + 1, q - 1, success); 
+		uint32_t ans = eval(p + 1, q - 1, success); 
 		Stack_op[Stack_top++] = '(';
 		return ans;
 	}
@@ -391,7 +391,7 @@ uint32_t expr(char *e, bool *success) {
 
 	/* TODO: Insert codes to evaluate the expression. */
 	//	panic("please implement me");
-	int ans = eval(0, nr_token - 1, success);
+	uint32_t ans = eval(0, nr_token - 1, success);
 	if (*success) warning ();
 	return ans;
 }
