@@ -120,6 +120,7 @@ void init_regex() {
 
 	//Init Domination
 	memset (Domination, 0, sizeof (Domination));
+	Domination['('] = Domination[')'] = 0;
 	Domination[PRE_MUL] = Domination[PRE_PLUS] = Domination[PRE_SUBTRACT] = Domination['~'] = 1;
 	Domination['*'] = Domination['/'] = Domination['%'] = 2;
 	Domination['+'] = Domination['-'] = 2;
@@ -211,6 +212,7 @@ int get_dominant (int l, int r)
 
 int eval (int p, int q, bool *success)
 {
+	printf ("%d %d\n", p, q);
 	int val1 = 0, val2, ans, i, len;
 	if(p > q) 
 	{
