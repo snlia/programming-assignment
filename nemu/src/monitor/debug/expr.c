@@ -123,15 +123,15 @@ void init_regex() {
 	Domination['('] = Domination[')'] = 0;
 	Domination[PRE_MUL] = Domination[PRE_PLUS] = Domination[PRE_SUBTRACT] = Domination['~'] = 1;
 	Domination['*'] = Domination['/'] = Domination['%'] = 2;
-	Domination['+'] = Domination['-'] = 2;
-	Domination[SHL] = Domination[SHR] = 3;
-	Domination['<'] = Domination['>'] = Domination[LEQ] = Domination[REQ] = 4;
-	Domination[UEQ] = Domination[EQ] = 5;
-	Domination['&'] = 6;
-	Domination['^'] = 7;
-	Domination['|'] = 8;
-	Domination[AND] = 9;
-	Domination[OR] = 10;
+	Domination['+'] = Domination['-'] = 3;
+	Domination[SHL] = Domination[SHR] = 4;
+	Domination['<'] = Domination['>'] = Domination[LEQ] = Domination[REQ] = 5;
+	Domination[UEQ] = Domination[EQ] = 6;
+	Domination['&'] = 7;
+	Domination['^'] = 8;
+	Domination['|'] = 9;
+	Domination[AND] = 10;
+	Domination[OR] = 11;
 	//Compile Regex
 	for(i = 0; i < NR_REGEX; i ++) {
 		ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED | REG_ICASE); // change here : use REG_ICASE option to be case insensitive
