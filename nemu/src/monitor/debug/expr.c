@@ -11,7 +11,7 @@
 enum {
 	NOTYPE = 256, EQ, UEQ, NOT, PRE_MUL, PRE_PLUS, PRE_SUBTRACT, AND, OR, SHL, SHR, LEQ, REQ,
 	NUMBER_D, NUMBER_H, 
-		EAX, ECX, EDX, EBX, ESP, EBP, ESI, EDI, EIP,
+	EAX, ECX, EDX, EBX, ESP, EBP, ESI, EDI, EIP,
 	AX, CX, DX, BX, SP, BP, SI, DI,
 	AL, CL, DL, BL, AH, CH, DH, BH
 		/* TODO: Add more token types */
@@ -29,17 +29,17 @@ static struct rule {
 
 	//(flod) Caculate operator
 	{" +",	NOTYPE},					// spaces
-	{"\\+", '+'},				// plus
-	{"\\-", '-'},				// subtraction
-	{"\\*", '*'},				// multiplication
-	{"\\%", '%'},				// mod
-	{"\\/", '/'},				// division
+	//{"\\+", '+'},			`			// plus
+	{"\\-", '-'},						// subtraction
+	{"\\*", '*'},						// multiplication
+	{"\\%", '%'},						// mod
+	{"\\/", '/'},						// division
 	{"&&", AND},						// and
 	{"\\|\\|", OR},						// or
-	{"\\&", '&'},				// &
-	{"\\|", '|'},				// or
-	{"\\^", '^'},				// xor
-	{"\\~", '~'},				// not
+	{"\\&", '&'},						// &
+	{"\\|", '|'},						// or
+	{"\\^", '^'},						// xor
+	{"\\~", '~'},						// not
 	{"<<", SHL},						// shift_left
 	{">>", SHR},						// shift_right
 	//(flod end)
@@ -50,8 +50,8 @@ static struct rule {
 	//(flod end)
 
 	//(flod) Parentheses
-	{"\\(", '('},				// left parentheses
-	{"\\)", ')'},				// right parentheses
+	{"\\(", '('},						// left parentheses
+	{"\\)", ')'},						// right parentheses
 	//(flod end)
 
 	//(flod) Judging operator
@@ -60,8 +60,8 @@ static struct rule {
 	{"!", NOT},							// equal to zero
 	{"<=", LEQ},						// leq
 	{">=", REQ},						// req
-	{"<", '<'},				// <
-	{">", '>'},				// >
+	{"<", '<'},							// <
+	{">", '>'},							// >
 	//(flod end)
 
 	//(flod) 32 bit Register
