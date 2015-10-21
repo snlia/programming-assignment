@@ -29,7 +29,7 @@ static struct rule {
 
 	//(flod) Caculate operator
 	{" +",	NOTYPE},					// spaces
-	//{"\\+", '+'},			`			// plus
+	{"\\+", '+'},						// plus
 	{"\\-", '-'},						// subtraction
 	{"\\*", '*'},						// multiplication
 	{"\\%", '%'},						// mod
