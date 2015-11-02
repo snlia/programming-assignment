@@ -54,6 +54,7 @@ void free_wp (int Index)
 	for (;p->next; p = p->next)
 		if (p->next->NO == Index)
 		{
+			puts ("ppp");
 			flag = 1;
 			WP *pp = p->next->next;
 			p->next->next = free_;
