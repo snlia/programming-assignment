@@ -183,8 +183,7 @@ static int cmd_w (char *args)
 		puts ("Something wrong with expression, please check it.");
 		return 0;
 	}
-	WP * p = head;
-	printf ("%d\n", p->NO);
+	//new_wp ();
 	return 0;
 }
 
