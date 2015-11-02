@@ -169,20 +169,19 @@ static int cmd_x (char *args)
 static int cmd_w (char *args)
 {
 	/* extract the first argument */
-	char *arg = strtok(NULL, " ");
-	if (arg == NULL) 
+	if (args == NULL) 
 	{
 		puts ("Missing arguments."); 
 		return 0;
 	}
 	bool flag = 1;
-	int value = expr (args + strlen (arg) + 1, &flag);
+	int value = expr (args, &flag);
 	if (!flag) 
 	{
 		puts ("Something wrong with expression, please check it.");
 		return 0;
 	}
-	new_wp (args + strlen (arg) + 1, value);
+	printf ("Succes with index %d\n", new_wp (args, value));
 	return 0;
 }
 
