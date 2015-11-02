@@ -162,7 +162,7 @@ static int cmd_x (char *args)
 		printf ("0x%-10d	", swaddr_read (adress + j, 4));
 		if (!((j + 1) % 5)) puts ("");
 	}
-	if ((i + 1) % 5) puts ("");
+	if (i % 5) puts ("");
 	return 0;
 }
 
