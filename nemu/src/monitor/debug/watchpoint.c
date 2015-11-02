@@ -41,7 +41,7 @@ void free_wp (int Index)
 {
 	WP *p;
 	if (head == NULL) {puts ("No watchpoint exist."); return ;}
-	if (!~Index) 
+	if (!~Index || head->NO == Index) 
 	{
 		p = head->next;
 		head->next = free_;
@@ -51,18 +51,15 @@ void free_wp (int Index)
 	}
 	p = head;
 	bool flag = 0;
-	for (;p; p = p->next)
-	{
-		if (p->NO == Index) 
+	for (;p->next; p = p->next)
+		if (p->next->NO == Index)
 		{
 			flag = 1;
-			WP *pp = p->next;
-			p->next = free_;
-			free_ = p;
-			*p = *pp;
-			return ;
+			WP *pp = p->next->next;
+			p->next->next = free_;
+			free_ = p->next;
+			p->next = pp;
 		}
-	}
 	if (!flag) printf ("watchpoint with Index %d is not exist.", Index);
 }
 
