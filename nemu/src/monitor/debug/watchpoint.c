@@ -54,12 +54,12 @@ void free_wp (int Index)
 	for (;p->next; p = p->next)
 		if (p->next->NO == Index)
 		{
-			puts ("ppp");
 			flag = 1;
 			WP *pp = p->next->next;
 			p->next->next = free_;
 			free_ = p->next;
 			p->next = pp;
+			return ;
 		}
 	if (!flag) printf ("watchpoint with Index %d is not exist.", Index);
 }
