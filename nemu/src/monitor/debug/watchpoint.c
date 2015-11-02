@@ -18,6 +18,18 @@ void init_wp_list() {
 	free_ = wp_list;
 }
 
+int new_wp (char *s, uint32_t value)
+{
+	if (free_ == NULL) {assert(0); return -1;}
+	WP *p = free_->next;
+	free_->next = head;
+	free_->value = value;
+	memcpy (free_->str, s, strlen (s));
+	head = free_;
+	free_ = p;
+	return head->NO;
+}
+
 /* TODO: Implement the functionality of watchpoint */
 
 

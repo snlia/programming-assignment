@@ -170,20 +170,19 @@ static int cmd_w (char *args)
 {
 	/* extract the first argument */
 	char *arg = strtok(NULL, " ");
-//	uint32_t i, j;
 	if (arg == NULL) 
 	{
 		puts ("Missing arguments."); 
 		return 0;
 	}
 	bool flag = 1;
-	//int adress = expr (args + strlen (arg) + 1, &flag);
+	int value = expr (args + strlen (arg) + 1, &flag);
 	if (!flag) 
 	{
 		puts ("Something wrong with expression, please check it.");
 		return 0;
 	}
-	//new_wp ();
+	new_wp (args + strlen (arg) + 1, value);
 	return 0;
 }
 
