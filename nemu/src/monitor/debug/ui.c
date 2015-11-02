@@ -159,7 +159,7 @@ static int cmd_x (char *args)
 	}
 	for (j = 0; j < i; ++j)
 	{
-		printf ("0x%-10d	", swaddr_read (adress + j, 4));
+		printf ("0x%-10d	", swaddr_read (adress + j * 4, 4));
 		if (!((j + 1) % 5)) puts ("");
 	}
 	if (i % 5) puts ("");
@@ -168,28 +168,23 @@ static int cmd_x (char *args)
 
 static int cmd_w (char *args)
 {
-	/* extract the first argument 
+	/* extract the first argument */
 	char *arg = strtok(NULL, " ");
-	uint32_t i, j;
+//	uint32_t i, j;
 	if (arg == NULL) 
 	{
 		puts ("Missing arguments."); 
 		return 0;
 	}
 	bool flag = 1;
-	int adress = expr (args + strlen (arg) + 1, &flag);
+	//int adress = expr (args + strlen (arg) + 1, &flag);
 	if (!flag) 
 	{
 		puts ("Something wrong with expression, please check it.");
 		return 0;
 	}
-	for (j = 0; j < i; ++j)
-	{
-		printf ("0x%-10d	", swaddr_read (adress + j, 4));
-		if (!((j + 1) % 5)) puts ("");
-	}
-	if ((i + 1) % 5) puts ("");
-*/
+	WP * p = head;
+	printf ("%d\n", p->NO);
 	return 0;
 }
 
