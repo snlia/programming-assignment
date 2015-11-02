@@ -152,7 +152,6 @@ static int cmd_x (char *args)
 	}
 	bool flag = 1;
 	int adress = expr (args + strlen (arg) + 1, &flag);
-	printf ("ppp%s\n", args + strlen (arg) + 1);
 	if (!flag) 
 	{
 		puts ("Something wrong with expression, please check it.");
@@ -160,7 +159,7 @@ static int cmd_x (char *args)
 	}
 	for (j = 0; j < i; ++j)
 	{
-		printf ("0x%-10d	", swaddr_read (adress + j * 4, 4));
+		printf ("0x%010d	", swaddr_read (adress + j * 4, 4));
 		if (!((j + 1) % 5)) puts ("");
 	}
 	if (i % 5) puts ("");
