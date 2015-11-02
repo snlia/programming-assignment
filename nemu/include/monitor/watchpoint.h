@@ -15,4 +15,5 @@ typedef struct watchpoint {
 } WP;
 
 int new_wp (char *s, uint32_t value);
+void pt_wp ();
 #endif

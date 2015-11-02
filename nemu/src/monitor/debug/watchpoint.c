@@ -30,6 +30,14 @@ int new_wp (char *s, uint32_t value)
 	return head->NO;
 }
 
+void pt_wp ()
+{
+	WP *p = head;
+	for (; p; p = p->next)
+		printf ("Index : %d, expr : %s, value :0x%x\n", p->NO, p->str, p->value);
+}
+
+
 /* TODO: Implement the functionality of watchpoint */
 
 
