@@ -159,7 +159,7 @@ static int cmd_x (char *args)
 	}
 	for (j = 0; j < i; ++j)
 	{
-		printf ("0x%-10d	", swaddr_read (adress + j * 4, 4));
+		printf ("0x%010d	", swaddr_read (adress + j * 4, 4));
 		if (!((j + 1) % 5)) puts ("");
 	}
 	if (i % 5) puts ("");
