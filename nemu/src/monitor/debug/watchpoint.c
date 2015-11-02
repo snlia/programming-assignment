@@ -59,7 +59,7 @@ void free_wp (int Index)
 			WP *pp = p->next;
 			p->next = free_;
 			free_ = p;
-			p = pp;
+			*p = *pp;
 			return ;
 		}
 	}
