@@ -37,6 +37,35 @@ void pt_wp ()
 		printf ("Index : %d, expr : %s, value :0x%x\n", p->NO, p->str, p->value);
 }
 
+void free_wp (int Index)
+{
+	WP *p;
+	if (head == NULL) {puts ("No watchpoint exist."); return ;}
+	if (!~Index) 
+	{
+		p = head->next;
+		head->next = free_;
+		free_ = head;
+		head = p;
+		return ;
+	}
+	p = head;
+	bool flag = 0;
+	for (;p; p = p->next)
+	{
+		if (p->NO == Index) 
+		{
+			flag = 1;
+			WP *pp = p->next;
+			p->next = free_;
+			free_ = p;
+			p = pp;
+			return ;
+		}
+	}
+	if (!flag) printf ("watchpoint with Index %d is not exist.", Index);
+}
+
 
 /* TODO: Implement the functionality of watchpoint */
 

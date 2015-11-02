@@ -66,7 +66,7 @@ static struct {
 	{ "x", "x N EXPR : Show 4N continious bytes begins at EXPR", cmd_x},
 	{ "w", "w EXPR : Seting watchpoint on EXPR", cmd_w},
 	{ "pw", "Print all informations about watchpoints", cmd_pw},
-	{ "d", "d [N] : delete the watchpoint with index N, or, without N, delete the watchpoint with biggist index", cmd_d}
+	{ "d", "d [N] : delete the watchpoint with index N, or, without N, delete the last watchpoint.", cmd_d}
 	/* TODO: Add more commands */
 
 };
@@ -181,7 +181,7 @@ static int cmd_w (char *args)
 		puts ("Something wrong with expression, please check it.");
 		return 0;
 	}
-	printf ("Succes with index %d\n", new_wp (args, value));
+	printf ("Succes with index %d, value 0x%x\n", new_wp (args, value), value);
 	return 0;
 }
 
@@ -193,6 +193,17 @@ static int cmd_pw (char *args)
 
 static int cmd_d (char *args)
 {
+	/* extract the first argument */
+	char *arg = strtok(NULL, " ");
+	int i;
+	if (arg == NULL) i = -1; /* no argument given */
+	else 
+		if (!sscanf (arg, "%u", &i))
+		{
+			printf("Invalid input --- %s\n", cmd_table[9].description);
+			return 0;
+		}
+	free_wp (i);
 	return 0;
 }
 
