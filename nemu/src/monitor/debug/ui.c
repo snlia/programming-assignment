@@ -152,7 +152,7 @@ static int cmd_x (char *args)
 	}
 	bool flag = 1;
 	int adress = expr (args + strlen (arg) + 1, &flag);
-	printf ("%s", args + strlen (arg) + 1);
+	printf ("ppp%s\n", args + strlen (arg) + 1);
 	if (!flag) 
 	{
 		puts ("Something wrong with expression, please check it.");
