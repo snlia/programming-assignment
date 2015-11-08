@@ -67,19 +67,19 @@ void free_wp (int Index)
 bool ck_wp ()
 {
 	WP *p = head;
+	bool flag = 0;
 	for (; p; p = p->next)
 	{
 		bool success = 0;
 		uint32_t V = expr (p->str, &success);
-		printf ("%d\n", V);
 		if (V != p->value) 
 		{
 			printf ("breakpoint %d: %s value :0x%0x\n", p->NO, p->str, V);
 			p->value = V;
-			return 1;
+			flag = 1;
 		}
 	}
-	return 0;
+	return flag;
 }
 
 
