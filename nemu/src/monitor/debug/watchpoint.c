@@ -1,5 +1,5 @@
-#include "monitor/watchpoint.h"
 #include "monitor/expr.h"
+#include "monitor/watchpoint.h"
 
 #define NR_WP 32
 
@@ -69,8 +69,8 @@ bool ck_wp ()
 	WP *p = head;
 	for (; p; p = p->next)
 	{
-//		bool success = 0;
-		uint32_t V = 1;//expr (p->str, &success);
+		bool success = 0;
+		uint32_t V = expr (p->str, &success);
 		printf ("%d\n", V);
 		if (V != p->value) 
 		{
