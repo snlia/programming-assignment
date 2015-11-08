@@ -1,6 +1,6 @@
 #include "monitor/monitor.h"
-#include "monitor/expr.h"
 #include "monitor/watchpoint.h"
+#include "monitor/expr.h"
 #include "nemu.h"
 
 #include <stdlib.h>
@@ -128,6 +128,7 @@ static int cmd_info (char *args)
 static int cmd_p (char *args)
 {
 	bool success = 1;
+	printf ("%d\n", ck_wp ());
 	int val = expr (args, &success);
 	if (success) printf ("int : %-15dunsigned int : %-30uhexadecimal : 0x%-45x\n", val, val, val);
 	return 0;
