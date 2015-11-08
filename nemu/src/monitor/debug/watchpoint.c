@@ -69,8 +69,8 @@ bool ck_wp ()
 	WP *p = head;
 	for (; p; p = p->next)
 	{
-		bool success = 0;
-		uint32_t V = expr (p->str, &success);
+//		bool success = 0;
+		uint32_t V = 0;//expr (p->str, &success);
 		if (V != p->value) 
 		{
 			printf ("breakpoint %d: %s value :0x%0x\n", p->NO, p->str, V);
