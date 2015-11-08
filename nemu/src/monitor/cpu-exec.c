@@ -74,6 +74,7 @@ void cpu_exec(volatile uint32_t n) {
 #endif
 
 		/* TODO: check watchpoints here. */
+//		printf ("%d\n", ck_pw ());
 //		bool bk = ck_pw ();
 //		if (bk) nemu_state = STOP;
 
