@@ -70,7 +70,8 @@ bool ck_wp ()
 	for (; p; p = p->next)
 	{
 //		bool success = 0;
-		uint32_t V = 0;//expr (p->str, &success);
+		uint32_t V = 1;//expr (p->str, &success);
+		printf ("%d\n", V);
 		if (V != p->value) 
 		{
 			printf ("breakpoint %d: %s value :0x%0x\n", p->NO, p->str, V);
