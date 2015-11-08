@@ -129,7 +129,7 @@ static int cmd_p (char *args)
 {
 	bool success = 1;
 	bool pp = ck_wp ();
-	printf ("%x\n", pp);
+	printf ("%d\n", pp);
 	int val = expr (args, &success);
 	if (success) printf ("int : %-15dunsigned int : %-30uhexadecimal : 0x%-45x\n", val, val, val);
 	return 0;
