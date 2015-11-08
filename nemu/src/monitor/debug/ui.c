@@ -48,8 +48,6 @@ static int cmd_x (char *args);
 
 static int cmd_w (char *args);
 
-static int cmd_pw (char *args);
-
 static int cmd_d (char *args);
 
 static struct {
@@ -65,7 +63,6 @@ static struct {
 	{ "p", "p EXPR : Show the value of EXPR", cmd_p},
 	{ "x", "x N EXPR : Show 4N continious bytes begins at EXPR", cmd_x},
 	{ "w", "w EXPR : Seting watchpoint on EXPR", cmd_w},
-	{ "pw", "Print all informations about watchpoints", cmd_pw},
 	{ "d", "d [N] : delete the watchpoint with index N, or, without N, delete the last watchpoint.", cmd_d}
 	/* TODO: Add more commands */
 
@@ -123,7 +120,8 @@ static int cmd_info (char *args)
 			printf ("%s : %x\n", regsl[i], reg_l (i));
 		printf ("eip : %x\n", cpu.eip);
 	}
-	else if (!strcmp (arg, "w")) ;//will finish in stage 3
+	else if (!strcmp (arg, "w")) 
+		pt_wp ();
 	return 0;
 }
 
@@ -182,12 +180,6 @@ static int cmd_w (char *args)
 		return 0;
 	}
 	printf ("Succes with index %d, value 0x%x\n", new_wp (args, value), value);
-	return 0;
-}
-
-static int cmd_pw (char *args)
-{
-	pt_wp ();
 	return 0;
 }
 

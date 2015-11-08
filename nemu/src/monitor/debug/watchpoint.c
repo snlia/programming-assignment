@@ -64,6 +64,23 @@ void free_wp (int Index)
 	if (!flag) printf ("watchpoint with Index %d is not exist.", Index);
 }
 
+bool ck_wp ()
+{
+	WP *p = head;
+	for (; p; p = p->next)
+	{
+		bool success = 0;
+		uint32_t V = expr (p->str, &success);
+		if (V != p->value) 
+		{
+			printf ("breakpoint %d: %s value :0x%0x\n", p->NO, p->str, V);
+			p->value = V;
+			return 1;
+		}
+	}
+	return 0;
+}
+
 
 /* TODO: Implement the functionality of watchpoint */
 
