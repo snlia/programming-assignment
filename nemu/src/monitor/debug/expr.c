@@ -217,6 +217,7 @@ int get_dominant (int l, int r)
 
 uint32_t eval (int p, int q, bool *success)
 {
+	if (!(*success)) return 0;
 	uint32_t val1 = 0, val2, ans, i, len;
 	if(p > q) 
 	{
@@ -262,9 +263,9 @@ uint32_t eval (int p, int q, bool *success)
 	{
 		int op = get_dominant (p, q);
 		if (op != p) val1 = eval (p, op - 1, success);
-		if (!success) return 0;
+		if (!(*success)) return 0;
 		val2 = eval (op + 1, q, success);
-		if (!success) return 0;
+		if (!(*success)) return 0;
 
 		Stack_op[Stack_top++] = tokens[op].type;
 
@@ -286,9 +287,29 @@ uint32_t eval (int p, int q, bool *success)
 			case '+': return val1 + val2;
 			case '-': return val1 - val2;
 			case '*': return val1 * val2;
-			case '/': return val1 / val2;
+			case '/': 
+					  {
+						  if (val2)
+							  return val1 / val2;
+						  else 
+						  {
+							  *success = false; 
+							  puts ("Error : division by zero.");
+							  return 0;
+						  }
+					  }
 			case '&': return val1 & val2;
-			case '%': return val1 % val2;
+			case '%': 
+					  {
+						  if (val2)
+							  return val1 % val2;
+						  else 
+						  {
+							  *success = false; 
+							  puts ("Error : modular by zero.");
+							  return 0;
+						  }
+					  }
 			case '|': return val1 | val2;
 			case '^': return val1 ^ val2;
 			case '<': return val1 < val2;
@@ -299,7 +320,7 @@ uint32_t eval (int p, int q, bool *success)
 			case REQ: return val1 >= val2;
 			case SHL : return val1 << val2;
 			case SHR : return val1 >> val2;
-			default: *success = true; return 0;
+			default: *success = false; return 0;
 		}
 	}
 	return 0;

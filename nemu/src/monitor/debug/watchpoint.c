@@ -74,7 +74,9 @@ bool ck_wp ()
 		uint32_t V = expr (p->str, &success);
 		if (V != p->value) 
 		{
-			printf ("breakpoint %d: %s value :0x%0x\n", p->NO, p->str, V);
+			printf ("Watchpoint %d: %s\n\n", p->NO, p->str);
+			printf ("Old value = 0x%08x\n", p->value);
+			printf ("New value = 0x%08x\n", V);
 			p->value = V;
 			flag = 1;
 		}
