@@ -72,7 +72,6 @@ bool ck_wp ()
 	{
 		bool success = 1;
 		uint32_t V = expr (p->str, &success);
-		printf ("ppp%d\n", V);
 		if (V != p->value) 
 		{
 			printf ("Watchpoint %d: %s\n\n", p->NO, p->str);
