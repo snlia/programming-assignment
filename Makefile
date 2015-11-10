@@ -72,7 +72,7 @@ submit:
 	cd .. && tar cvj $(shell pwd | grep -o '[^/]*$$') > $(STU_ID).tar.bz2
 
 count:
-	@find . -type f \( -name "*.c" -or -name "*.h" \) -exec cat '{}' + | wc -l
+	@find ./nemu -type f \( -name "*.c" -or -name "*.h" \) -exec cat '{}' + | wc -l
 
 Count:
-	@find . -type f \( -name "*.c" -or -name "*.h" \) -exec cat '{}' + | sed '/^\s*$$/d' | wc -l
+	@find ./nemu -type f \( -name "*.c" -or -name "*.h" \) -exec cat '{}' + | sed '/^\s*$$/d' | wc -l
