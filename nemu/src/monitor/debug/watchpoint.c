@@ -70,7 +70,7 @@ bool ck_wp ()
 	bool flag = 0;
 	for (; p; p = p->next)
 	{
-		bool success = 0;
+		bool success = 1;
 		uint32_t V = expr (p->str, &success);
 		printf ("ppp%d\n", V);
 		if (V != p->value) 
