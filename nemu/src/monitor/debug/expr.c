@@ -217,6 +217,7 @@ int get_dominant (int l, int r)
 
 uint32_t eval (int p, int q, bool *success)
 {
+	printf ("%d %d\n", p, q);
 	if (!(*success)) return 0;
 	uint32_t val1 = 0, val2, ans, i, len;
 	if(p > q) 
