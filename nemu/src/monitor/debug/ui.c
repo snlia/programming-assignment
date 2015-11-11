@@ -7,7 +7,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-void cpu_exec(uint32_t);
+void cpu_exec(uint32_t);//exec x instructions given in the first argument
 
 /* We use the ``readline'' library to provide more flexibility to read from stdin. */
 char* rl_gets() {

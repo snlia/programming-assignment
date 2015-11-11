@@ -14,8 +14,15 @@ typedef struct watchpoint {
 
 } WP;
 
+/*return the index of new watchpoint with expression s and value*/
 int new_wp (char *s, uint32_t value);
-void pt_wp ();
-void free_wp (int Index);
-bool ck_wp ();
+
+/*print the informations about applied watchpoint*/
+void pt_wp (); 
+
+/*delete the watchpoint with index Index, Index set -1 means delete lastest watchpoint*/
+void free_wp (int Index); 
+
+/*check if the value of watchpoint change, return true means change*/
+bool ck_wp (); 
 #endif

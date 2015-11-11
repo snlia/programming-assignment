@@ -45,7 +45,7 @@ static struct rule {
 	//(flod end)
 
 	//(flod) Number (decimal & hexadecimal)
-	{"0x[0-9abcdef]+", NUMBER_H},		// hexadecimal number
+	{"0[xX][0-9abcdefABCDEF]+", NUMBER_H},		// hexadecimal number
 	{"[0-9]+", NUMBER_D},				// decimal number
 	//(flod end)
 

@@ -72,7 +72,7 @@ bool ck_wp ()
 	{
 		bool success = 1;
 		uint32_t V = expr (p->str, &success);
-		if (V != p->value) 
+		if (V != p->value || !success) 
 		{
 			printf ("Watchpoint %d: %s\n\n", p->NO, p->str);
 			printf ("Old value = 0x%08x\n", p->value);
