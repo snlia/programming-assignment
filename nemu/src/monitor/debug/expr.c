@@ -6,7 +6,7 @@
 #include <sys/types.h>
 #include <regex.h>
 #define downcase(x) ((x) <= 'Z' && (x) >= 'A' ? (x) - 'A' + 'a' : (x))
-#define check_parentheses(l, r) (tokens[l].type == '(' && tokens[r].type == ')')
+#define check_parentheses(l, r) (tokens[l].type == '(' && tokens[r].type == ')' && match[l] == r)
 
 enum {
 	NOTYPE = 256, EQ, UEQ, NOT, PRE_MUL, PRE_PLUS, PRE_SUBTRACT, AND, OR, SHL, SHR, LEQ, REQ,
