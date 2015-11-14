@@ -11,7 +11,7 @@
 enum {
 	NOTYPE = 256, EQ, UEQ, NOT, PRE_MUL, PRE_PLUS, PRE_SUBTRACT, AND, OR, SHL, SHR, LEQ, REQ,
 	NUMBER_D, NUMBER_H, 
-	EAX, ECX, EDX, EBX, ESP, EBP, ESI, EDI, EIP,
+	EAX, ECX, EDX, EBX, ESP, EBP, ESI, EDI, EIP, EFLAGS,
 	AX, CX, DX, BX, SP, BP, SI, DI,
 	AL, CL, DL, BL, AH, CH, DH, BH
 		/* TODO: Add more token types */
@@ -76,6 +76,7 @@ static struct rule {
 	//(flod end)
 
 	{"\\$eip", EIP},					//eip
+	{"\\$eflags", EFLAGS},					//eflags
 
 	//(flod) 16 bit Register
 	{"\\$ax", AX},						//ax
@@ -228,6 +229,7 @@ uint32_t eval (int p, int q, bool *success)
 	else if(p == q) 
 	{ 
 		if (tokens[p].type == EIP) return cpu.eip;
+		if (tokens[p].type == EFLAGS) return cpu.eflags;
 		if (tokens[p].type >= EAX && tokens[p].type <= EDI) return reg_l (tokens[p].type - EAX);
 		if (tokens[p].type >= AX && tokens[p].type <= DI) return reg_w (tokens[p].type - AX);
 		if (tokens[p].type >= AL && tokens[p].type <= BH) return reg_b (tokens[p].type - AL);
