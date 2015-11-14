@@ -25,6 +25,7 @@ typedef union {
 	struct {
 		uint32_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
 		swaddr_t eip;
+		uint32_t eflags;
 	};
 
 
