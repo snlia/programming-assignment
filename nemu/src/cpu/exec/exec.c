@@ -6,6 +6,16 @@
 typedef int (*helper_fun)(swaddr_t);
 static make_helper(_2byte_esc);
 
+/* make_group will creat a array contain 8 exec function, which is named 'item0' to 'item7'
+ * The array will be named as 'opcode_table_name'
+ *
+ * Then an exec function named as 'name' will be created, the function will collect the ModR_M and 
+ * call fucntion opcode_table_name[m.opcode]
+ *
+ * An exec fucntion is defined by make_helper, in the format like:
+ * int name(swaddr_t eip)
+ */
+
 #define make_group(name, item0, item1, item2, item3, item4, item5, item6, item7) \
 	static helper_fun concat(opcode_table_, name) [8] = { \
 	/* 0x00 */	item0, item1, item2, item3, \
