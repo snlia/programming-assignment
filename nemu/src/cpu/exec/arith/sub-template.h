@@ -8,7 +8,7 @@ static void do_execute () {
 
 	/* TODO: Update EFLAGS. */
 //	panic("please implement me");
-	puts ("110");
+	printf ("%d - %d = %d\n", op_dest->val, op_src->val, result);
 
 	print_asm_template1();
 }
