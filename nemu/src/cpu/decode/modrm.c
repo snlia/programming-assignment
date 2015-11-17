@@ -92,13 +92,13 @@ int read_ModR_M(swaddr_t eip, Operand *rm, Operand *reg) {
 	if(m.mod == 3) {
 		rm->type = OP_TYPE_REG;
 		rm->reg = m.R_M;
-        printf ("%ld\n", rm->size);
 		switch(rm->size) {
 			case 1: rm->val = reg_b(m.R_M); break;
 			case 2: rm->val = reg_w(m.R_M); break;
 			case 4: rm->val = reg_l(m.R_M); break;
 			default: assert(0);
 		}
+        printf ("%d\n", rm->val);
 #ifdef DEBUG
 		switch(rm->size) {
 			case 1: sprintf(rm->str, "%%%s", regsb[m.R_M]); break;
