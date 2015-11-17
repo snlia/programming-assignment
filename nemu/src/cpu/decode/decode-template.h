@@ -60,6 +60,7 @@ static int concat(decode_a_, SUFFIX) (swaddr_t eip, Operand *op) {
 static int concat3(decode_r_, SUFFIX, _internal) (swaddr_t eip, Operand *op) {
 	op->type = OP_TYPE_REG;
 	op->reg = ops_decoded.opcode & 0x7;
+	printf ("のんの%d\n", op->reg);
 	op->val = REG(op->reg);
 
 #ifdef DEBUG
