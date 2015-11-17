@@ -91,8 +91,8 @@ int read_ModR_M(swaddr_t eip, Operand *rm, Operand *reg) {
 
 	if(m.mod == 3) {
 		rm->type = OP_TYPE_REG;
-        printf ("%d\n", rm->type);
 		rm->reg = m.R_M;
+        printf ("%d\n", rm->reg);
 		switch(rm->size) {
 			case 1: rm->val = reg_b(m.R_M); break;
 			case 2: rm->val = reg_w(m.R_M); break;
