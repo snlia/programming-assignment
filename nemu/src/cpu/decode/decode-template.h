@@ -183,6 +183,7 @@ make_helper(concat(decode_rm_imm_, SUFFIX)) {
 
 make_helper(concat(decode_r_ib_, SUFFIX)) {
 	decode_r_internal(eip, op_dest);
+	printf ("のんの%d\n", op_dest->val);
 	return decode_i_b(eip);
 }
 
