@@ -182,7 +182,7 @@ make_helper(concat(decode_rm_imm_, SUFFIX)) {
 }
 
 make_helper(concat(decode_r_ib_, SUFFIX)) {
-	int len = decode_rm_internal(eip, op_dest, op_src2);	/* op_src2 not use here */
+	int len = decode_rm_internal(eip, op_src2, op_dest);	/* op_src2 not use here */
 	printf ("のんの%d\n", op_dest->val);
 	len += decode_i_b(eip + len);
 	return len;
