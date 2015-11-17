@@ -60,7 +60,6 @@ static int concat(decode_a_, SUFFIX) (swaddr_t eip, Operand *op) {
 static int concat3(decode_r_, SUFFIX, _internal) (swaddr_t eip, Operand *op) {
 	op->type = OP_TYPE_REG;
 	op->reg = ops_decoded.opcode & 0x7;
-	printf ("のんの%d\n", op->reg);
 	op->val = REG(op->reg);
 
 #ifdef DEBUG
@@ -183,9 +182,10 @@ make_helper(concat(decode_rm_imm_, SUFFIX)) {
 }
 
 make_helper(concat(decode_r_ib_, SUFFIX)) {
-	decode_r_internal(eip, op_dest);
+	int len = decode_rm_internal(eip, op_dest, op_src2);	/* op_src2 not use here */
 	printf ("のんの%d\n", op_dest->val);
-	return decode_i_b(eip);
+	len += decode_i_b(eip + len);
+	return len;
 }
 
 void concat(write_operand_, SUFFIX) (Operand *op, DATA_TYPE src) {
