@@ -3,8 +3,9 @@
 #define instr call
 
 static void do_execute () {
-	DATA_TYPE result = op_src;
 	cpu.esp -= DATA_TYPE;
+	swaddr_write(cpu.esp, DATA_BYTE, cpu.eip);
+	cpu.eip += op_src.val;
 	/* TODO: Update EFLAGS. */
 	panic("please implement me");
 
