@@ -4,7 +4,7 @@
 
 static void do_execute () {
 	DATA_TYPE result = op_src;
-
+	cpu.esp -= DATA_TYPE;
 	/* TODO: Update EFLAGS. */
 	panic("please implement me");
 
