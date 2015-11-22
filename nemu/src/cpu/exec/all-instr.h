@@ -20,6 +20,8 @@
 
 #include "jcc/jcc.h"
 
+#include "cmp/cmp.h"
+
 #include "logic/and.h"
 #include "logic/or.h"
 #include "logic/not.h"

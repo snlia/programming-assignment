@@ -12,7 +12,7 @@ static void do_execute () {
 	result = result & 0xff;
 	result = (result ^ result) & 0xf;
 	result = (result ^ result) & 0x3;
-	cpu.PF = (result ^ result) & 1;
+	cpu.PF = (1 ^ result ^ result) & 1;
 	print_asm_template1();
 }
 
