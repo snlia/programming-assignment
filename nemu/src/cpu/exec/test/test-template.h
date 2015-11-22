@@ -8,7 +8,7 @@ static void do_execute () {
 //	panic("please implement me");
 	cpu.CF = cpu.OF = 0;
 	cpu.SF = result >> 31;
-	cpu.ZF = result ? 1 : 0;
+	cpu.ZF = result ? 0 : 1;
 	result = result & 0xff;
 	result = (result ^ result) & 0xf;
 	result = (result ^ result) & 0x3;

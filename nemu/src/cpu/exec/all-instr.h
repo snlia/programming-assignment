@@ -18,6 +18,8 @@
 
 #include "test/test.h"
 
+#include "jcc/jcc.h"
+
 #include "logic/and.h"
 #include "logic/or.h"
 #include "logic/not.h"
