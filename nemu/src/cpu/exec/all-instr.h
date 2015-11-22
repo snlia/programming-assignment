@@ -16,6 +16,8 @@
 
 #include "push/push.h"
 
+#include "test/test.h"
+
 #include "logic/and.h"
 #include "logic/or.h"
 #include "logic/not.h"

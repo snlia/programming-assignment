@@ -117,9 +117,9 @@ static int cmd_info (char *args)
 	if (!strcmp(arg, "r"))
 	{
 		for(i = R_EAX; i <= R_EDI; i ++) 
-			printf ("%s : %x\n", regsl[i], reg_l (i));
-		printf ("eip : %x\n", cpu.eip);
-		printf ("eflags : %x\n", cpu.eflags);
+			printf ("%s : 0x%x\n", regsl[i], reg_l (i));
+		printf ("eip : 0x%x\n", cpu.eip);
+		printf ("eflags : 0x%x\n", cpu.eflags);
 	}
 	else if (!strcmp (arg, "w")) 
 		pt_wp ();
