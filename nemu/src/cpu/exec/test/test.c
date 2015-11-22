@@ -14,6 +14,6 @@
 
 /* for instruction encoding overloading */
 
-make_helper_v (test_r)
+make_helper_v (test_rm2r)
 
 

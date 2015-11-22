@@ -3,7 +3,7 @@
 #define instr test
 
 static void do_execute () {
-	uint32_t result = op_src->val & op_src2->val;
+	uint32_t result = op_src->val & op_dest->val;
 	/* TODO: Update EFLAGS. */
 //	panic("please implement me");
 	cpu.CF = cpu.OF = 0;
@@ -16,6 +16,6 @@ static void do_execute () {
 	print_asm_template1();
 }
 
-make_instr_helper(r)
+make_instr_helper(rm2r)
 
 #include "cpu/exec/template-end.h"
