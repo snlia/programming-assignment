@@ -13,7 +13,7 @@ static void do_execute () {
 	result = (result ^ result) & 0xf;
 	result = (result ^ result) & 0x3;
 	cpu.PF = (1 ^ result ^ result) & 1;
-	print_asm_template1();
+	print_asm_template2();
 }
 
 make_instr_helper(rm2r)
