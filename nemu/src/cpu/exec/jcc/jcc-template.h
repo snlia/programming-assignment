@@ -19,7 +19,7 @@
 
 static void do_execute () {
 	bool flag = 0;
-	uint32_t tx = ops_decoded.opcode + (DATA_BYTE > 1 ? 10 : 0);
+	uint32_t tx = ops_decoded.opcode - (DATA_BYTE > 1 ? 10 : 0);
 	switch (tx)
 	{
 		case 0x70 : flag =  OF; break; 
