@@ -7,7 +7,7 @@ start:
 	movl $0, %ebx
 	movl $0, %ecx
 	movl $0, %edx
-	je start
+	jne start
 
 	movl $32768, %ecx
 	movw $0, %bx
