@@ -20,7 +20,7 @@
 static void do_execute () {
 	bool flag = 0;
 	uint32_t tx = ops_decoded.opcode - (DATA_BYTE > 1 ? 110 : 0);
-	printf ("%d %d\n", tx, ZF);
+	printf ("%d %d\n", ops_decoded.opcode, ZF);
 	switch (tx)
 	{
 		case 0x70 : flag =  OF; break; 
