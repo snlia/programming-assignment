@@ -4,7 +4,7 @@
 
 static void do_execute () {
 	if (cpu.ZF)
-		cpu.eip += op_src->val;
+		cpu.eip += (DATA_TYPE_S) op_src->val;
 	/* TODO: Update EFLAGS. */
 //	panic("please implement me");
 
