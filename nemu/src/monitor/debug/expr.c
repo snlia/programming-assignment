@@ -167,7 +167,7 @@ static bool make_token(char *e) {
 				char *substr_start = e + position;
 				int substr_len = pmatch.rm_eo;
 
-				Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
+//				Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
 				position += substr_len;
 				if (!i) continue; // will not record token "spaces"
 				if (substr_len > 32) return false; //the maxize size of a token is 32
@@ -236,7 +236,7 @@ uint32_t eval (int p, int q, bool *success)
 		switch (tokens[p].type)
 		{
 			case NUMBER_D :
-				sscanf (tokens[p].str, "%d", &ans);
+				sscanf (tokens[p].str, "%u", &ans);
 				return ans;
 			case NUMBER_H :
 				len = strlen (tokens[p].str);
@@ -268,6 +268,7 @@ uint32_t eval (int p, int q, bool *success)
 		if (!(*success)) return 0;
 		val2 = eval (op + 1, q, success);
 		if (!(*success)) return 0;
+		printf ("%x %x\n", p, q);
 
 		Stack_op[Stack_top++] = tokens[op].type;
 
