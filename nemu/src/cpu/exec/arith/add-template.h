@@ -8,7 +8,7 @@ static void do_execute () {
 
 	/* TODO: Update EFLAGS. */
 //	panic("please implement me");
-	cpu.CF = ((uint64_t) op_src->val - (uint64_t) op_dest->val) != (result & 0xffffffff);
+	cpu.CF = ((int64_t) op_src->val + (int64_t) op_dest->val) != (result & 0xffffffff);
 	cpu.OF = cpu.CF ^ cpu.SF;
 	cpu.SF = (result >> 31) & 1;
 	cpu.ZF = !result;
@@ -21,7 +21,9 @@ static void do_execute () {
 	print_asm_template2();
 }
 
-make_instr_helper(rm_ib)
+#if DATA_BYTE == 2 || DATA_BYTE == 4
+make_instr_helper(si2rm)
+#endif
 make_instr_helper(i2a)
 make_instr_helper(i2rm)
 make_instr_helper(r2rm)
