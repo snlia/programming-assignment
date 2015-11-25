@@ -268,7 +268,7 @@ uint32_t eval (int p, int q, bool *success)
 		if (!(*success)) return 0;
 		val2 = eval (op + 1, q, success);
 		if (!(*success)) return 0;
-		printf ("%x %x\n", p, q);
+		printf ("%x %x\n", val1, val2);
 
 		Stack_op[Stack_top++] = tokens[op].type;
 
