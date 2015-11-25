@@ -27,6 +27,7 @@ make_helper (leave_l)
 	cpu.esp += DATA_BYTE;
 	printf ("%x\n", result);
 	MEM_W(R_EBP, result);
+	printf ("%x\n", cpu.ebp);
 
 	print_asm("leave");
 
