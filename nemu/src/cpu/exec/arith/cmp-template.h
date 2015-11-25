@@ -3,13 +3,13 @@
 #define instr cmp
 
 static void do_execute() {
-	DATA_TYPE result = op_src->val + (DATA_TYPE_S) (-op_dest->val);
+	DATA_TYPE result = op_dest->val + (DATA_TYPE_S) (-op_src->val);
 	printf ("%d\n", result);
-	cpu.CF = (((uint64_t) op_src->val + (uint64_t) (DATA_TYPE_S) (-op_dest->val)) & ((1 << DATA_BYTE) - 1)) != result;
+	cpu.CF = (((uint64_t) op_dest->val + (uint64_t) (DATA_TYPE_S) (-op_src->val)) & ((1 << DATA_BYTE) - 1)) != result;
 	cpu.OF = cpu.CF ^ cpu.SF;
 	cpu.SF = (result >> (DATA_BYTE * 8 - 1)) & 1;
 	cpu.ZF = !result;
-	cpu.AF = ((op_src->val & 0x7) - (op_dest->val & 0x7)) < 0x8;
+	cpu.AF = ((op_dest->val & 0x7) + ((-op_src->val) & 0x7)) < 0x8;
 	result = result & 0xff;
 	result = (result ^ result) & 0xf;
 	result = (result ^ result) & 0x3;
