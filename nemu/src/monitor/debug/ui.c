@@ -120,6 +120,20 @@ static int cmd_info (char *args)
 			printf ("%s : 0x%x\n", regsl[i], reg_l (i));
 		printf ("eip : 0x%x\n", cpu.eip);
 		printf ("eflags : 0x%x\n", cpu.eflags);
+		printf ("VM : %x\n", cpu.VM);
+		printf ("RF : %x\n", cpu.RF);
+		printf ("NT : %x\n", cpu.NT);
+		printf ("IOPL : %x\n", cpu.IOPL);
+		printf ("OF : %x\n", cpu.OF);
+		printf ("DF : %x\n", cpu.DF);
+		printf ("IF : %x\n", cpu.IF);
+		printf ("TF : %x\n", cpu.TF);
+		printf ("SF : %x\n", cpu.SF);
+		printf ("ZF : %x\n", cpu.ZF);
+		printf ("AF : %x\n", cpu.AF);
+		printf ("PF : %x\n", cpu.PF);
+		printf ("CF : %x\n", cpu.CF);
+
 	}
 	else if (!strcmp (arg, "w")) 
 		pt_wp ();
