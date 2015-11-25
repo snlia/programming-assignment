@@ -10,9 +10,8 @@
 make_helper (ret)
 {
 	DATA_TYPE result = swaddr_read(cpu.esp, DATA_BYTE);
-	printf ("%x\n", result);
 	cpu.esp += DATA_BYTE;
-	cpu.eip = result;
+	cpu.eip = result - 1;
 
 	print_asm("ret");
 

@@ -5,7 +5,7 @@
 static void do_execute () {
 	uint32_t result = swaddr_read(cpu.esp, 4);
 	cpu.esp += 4;
-	cpu.eip = result;
+	cpu.eip = result - 1 - DATA_BYTE;
 
 	cpu.esp += op_src->val;
 
