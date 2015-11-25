@@ -4,6 +4,7 @@
 
 static void do_execute() {
 	DATA_TYPE result = op_dest->val + (DATA_TYPE_S) (-op_src->val);
+	printf ("%x\n", result);
 	cpu.CF = ((uint64_t) (DATA_TYPE) op_dest->val + (uint64_t) (DATA_TYPE) (-op_src->val))  != result;
 	cpu.OF = cpu.CF ^ cpu.SF;
 	cpu.SF = (result >> (DATA_BYTE * 8 - 1)) & 1;
