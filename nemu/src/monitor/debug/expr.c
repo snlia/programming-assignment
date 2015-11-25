@@ -242,7 +242,6 @@ uint32_t eval (int p, int q, bool *success)
 			case NUMBER_H :
 				len = strlen (tokens[p].str);
 				for (i = 0; i < len; ++i) tokens[p].str[i] = downcase (tokens[p].str[i]);
-				printf ("%s\n", tokens[p].str);
 				sscanf (tokens[p].str, "%x", &ans);
 				return ans;
 				//Adress and Register here
@@ -270,7 +269,6 @@ uint32_t eval (int p, int q, bool *success)
 		if (!(*success)) return 0;
 		val2 = eval (op + 1, q, success);
 		if (!(*success)) return 0;
-		printf ("%x %x\n", val1, val2);
 
 		Stack_op[Stack_top++] = tokens[op].type;
 
