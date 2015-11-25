@@ -1,9 +1,9 @@
 #ifndef __SUB_H__
 #define __SUB_H__
 
-make_helper(sub_r_ib_b);
-make_helper(sub_r_ib_w);
-make_helper(sub_r_ib_l);
+make_helper(sub_rm_ib_b);
+make_helper(sub_rm_ib_w);
+make_helper(sub_rm_ib_l);
 
 make_helper(sub_i2a_b);
 make_helper(sub_i2a_w);
@@ -21,7 +21,7 @@ make_helper(sub_rm2r_b);
 make_helper(sub_rm2r_w);
 make_helper(sub_rm2r_l);
 
-make_helper(sub_r_ib_v);
+make_helper(sub_rm_ib_v);
 make_helper(sub_i2a_v);
 make_helper(sub_i2rm_v);
 make_helper(sub_r2rm_v);

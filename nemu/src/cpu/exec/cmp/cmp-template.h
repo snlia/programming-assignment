@@ -3,8 +3,8 @@
 #define instr cmp
 
 static void do_execute() {
-	uint32_t result = op_src->val - op_dest->val;
-	cpu.CF = ((uint64_t) op_src->val - (uint64_t) op_dest->val) != (result & 0xffffffff);
+	uint32_t result = op_src->val - (DATA_TYPE_S) op_dest->val;
+	cpu.CF = ((uint64_t) op_src->val - (uint64_t) (DATA_TYPE_S) op_dest->val) != (result & 0xffffffff);
 	cpu.OF = cpu.CF ^ cpu.SF;
 	cpu.SF = (result >> 31) & 1;
 	cpu.ZF = !result;
@@ -16,6 +16,10 @@ static void do_execute() {
 	print_asm_template2();
 }
 
-make_instr_helper(r_ib)
+make_instr_helper(rm_ib)
+make_instr_helper(i2a)
+make_instr_helper(i2rm)
+make_instr_helper(r2rm)
+make_instr_helper(rm2r)
 
 #include "cpu/exec/template-end.h"

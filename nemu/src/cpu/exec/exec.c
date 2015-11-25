@@ -39,8 +39,8 @@ make_group(group1_v,
 
 /* 0x83 */
 make_group(group1_sx_v,
-	sub_r_ib_v, inv, inv, inv, 
-	inv, sub_r_ib_v, inv, cmp_r_ib_v)
+	sub_rm_ib_v, inv, inv, inv, 
+	inv, sub_rm_ib_v, inv, cmp_rm_ib_v)
 
 /* 0xc0 */
 make_group(group2_i_b,

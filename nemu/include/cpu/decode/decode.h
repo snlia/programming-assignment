@@ -40,9 +40,9 @@ make_helper(decode_rm2a_b);
 make_helper(decode_rm2a_w);
 make_helper(decode_rm2a_l);
 
-make_helper(decode_r_ib_b);
-make_helper(decode_r_ib_w);
-make_helper(decode_r_ib_l);
+make_helper(decode_rm_ib_b);
+make_helper(decode_rm_ib_w);
+make_helper(decode_rm_ib_l);
 
 make_helper(decode_rm_1_b);
 make_helper(decode_rm_1_w);

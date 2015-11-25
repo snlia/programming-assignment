@@ -19,9 +19,8 @@
 
 static void do_execute () {
 	bool flag = 0;
-	uint32_t tx = ops_decoded.opcode - (DATA_BYTE > 1 ? 0x110 : 0);
-	printf ("%d %d\n", ops_decoded.opcode, ZF);
-	switch (tx)
+	uint32_t tx = ops_decoded.opcode - (DATA_BYTE > 1 ? 0x10 : 0);
+	switch (tx & 0xff)
 	{
 		case 0x70 : flag =  OF; break; 
 		case 0x71 : flag = !OF; break; 
