@@ -4,6 +4,7 @@
 
 static void do_execute () {
 	DATA_TYPE result = op_dest->val + op_src->val;
+	printf ("%x\n", result);
 	OPERAND_W(op_dest, result);
 
 	/* TODO: Update EFLAGS. */
@@ -12,7 +13,7 @@ static void do_execute () {
 	cpu.OF = cpu.CF ^ cpu.SF;
 	cpu.SF = (result >> (DATA_BYTE * 8 - 1)) & 1;
 	cpu.ZF = !result;
-	cpu.AF = ((op_src->val & 0x7) - (op_dest->val & 0x7)) < 0x8;
+	cpu.AF = ((op_src->val & 0x7) + (op_dest->val & 0x7)) < 0x8;
 	result = result & 0xff;
 	result = (result ^ result) & 0xf;
 	result = (result ^ result) & 0x3;
