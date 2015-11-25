@@ -8,9 +8,9 @@ static void do_execute () {
 
 	/* TODO: Update EFLAGS. */
 //	panic("please implement me");
-	cpu.CF = ((uint64_t) op_src->val - (uint64_t) op_dest->val) != (result & 0xffffffff);
+	cpu.CF = ((uint64_t) op_src->val + (uint64_t) (DATA_TYPE) (-op_dest->val)) != result;
 	cpu.OF = cpu.CF ^ cpu.SF;
-	cpu.SF = (result >> 31) & 1;
+	cpu.SF = (result >> (DATA_BYTE * 8 - 1)) & 1;
 	cpu.ZF = !result;
 	cpu.AF = ((op_src->val & 0x7) - (op_dest->val & 0x7)) < 0x8;
 	result = result & 0xff;

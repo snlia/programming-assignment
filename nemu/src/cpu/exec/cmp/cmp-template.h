@@ -3,8 +3,8 @@
 #define instr cmp
 
 static void do_execute() {
-	int32_t result = op_src->val - (DATA_TYPE_S) op_dest->val;
-	cpu.CF = ((int64_t) op_src->val - (int64_t) (DATA_TYPE_S) op_dest->val) != (result & 0xffffffff);
+	DATA_TYPE result = op_src->val - (DATA_TYPE_S) op_dest->val;
+	cpu.CF = (((uint64_t) op_src->val + (uint64_t) (DATA_TYPE_S) (-op_dest->val)) & ((1 << DATA_BYTE) - 1)) != result;
 	cpu.OF = cpu.CF ^ cpu.SF;
 	cpu.SF = (result >> (DATA_BYTE * 8 - 1)) & 1;
 	cpu.ZF = !result;
