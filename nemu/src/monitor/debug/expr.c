@@ -241,6 +241,7 @@ uint32_t eval (int p, int q, bool *success)
 			case NUMBER_H :
 				len = strlen (tokens[p].str);
 				for (i = 0; i < len; ++i) tokens[p].str[i] = downcase (tokens[p].str[i]);
+				printf ("%s\n", tokens[p].str);
 				sscanf (tokens[p].str, "%x", &ans);
 				return ans;
 				//Adress and Register here
