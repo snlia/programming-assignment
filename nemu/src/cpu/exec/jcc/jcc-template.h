@@ -43,8 +43,10 @@ static void do_execute () {
 	}
 	if (flag)
 	{
-		printf ("%x %x\n", cpu.eip, op_src->val);
 		cpu.eip += (DATA_TYPE_S) op_src->val;
+#if DATE_BYTE == 2
+		cpu.eip &= 0x0000ffff;
+#endif
 	}
 	/* TODO: Update EFLAGS. */
 	//	panic("please implement me");

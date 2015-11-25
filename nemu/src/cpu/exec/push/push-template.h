@@ -3,8 +3,8 @@
 #define instr push
 
 static void do_execute () {
-	cpu.esp -= ops_decoded.is_data_size_16 ? 2 : 4;
-	swaddr_write(cpu.esp, ops_decoded.is_data_size_16 ? 2 : 4, op_src->val);
+	cpu.esp -= DATA_BYTE;
+	swaddr_write(cpu.esp, DATA_BYTE, (DATA_TYPE) op_src->val);
 	/* TODO: Update EFLAGS. */
 //	panic("please implement me");
 
