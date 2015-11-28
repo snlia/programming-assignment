@@ -172,7 +172,7 @@ static int cmd_x (char *args)
 		puts ("Something wrong with expression, please check it.");
 		return 0;
 	}
-	int32_t head = min (adress, adress + i * 4), tail = min (adress, adress + i * 4);
+	int32_t head = min (adress, adress + i * 4), tail = max (adress, adress + i * 4);
 	printf ("0x%x :", head);
 	for (j = head; j < tail; j += 4)
 	{
