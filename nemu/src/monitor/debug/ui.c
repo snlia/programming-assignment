@@ -175,11 +175,11 @@ static int cmd_x (char *args)
 	int32_t head = min (adress, adress + i * 4), tail = max (adress, adress + i * 4);
 	for (j = head; j < tail; j += 4)
 	{
-		if (!((j - head) % 16)) printf ("0x%x :", j);
+		if (!((j - head) & 0xf)) printf ("0x%x :", j);
 		printf ("0x%010x	", swaddr_read (j, 4));
-		if (!(j - head + 4) % 16) puts ("");
+		if (!((j - head + 4) & 0xf)) puts ("");
 	}
-	if (tail % 16) puts ("");
+	if (tail & 0xf) puts ("");
 	return 0;
 }
 
