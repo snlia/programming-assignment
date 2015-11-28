@@ -10,7 +10,7 @@ static void do_execute () {
 //	panic("please implement me");
 	cpu.CF = (((uint64_t) (DATA_TYPE) op_dest->val + (uint64_t) (DATA_TYPE) (-op_src->val)) == result);
 	cpu.SF = (result >> (DATA_BYTE * 8 - 1)) & 1;
-	cpu.OF = 1 ^ cpu.CF ^ cpu.SF ^ ((op_dest->val >> (DATA_BYTE * 8 - 1)) & 1) ^ (((-op_src->val) >> (DATA_BYTE * 8 - 1)) & 1);
+	cpu.OF = cpu.CF ^ cpu.SF ^ ((op_dest->val >> (DATA_BYTE * 8 - 1)) & 1) ^ (((-op_src->val) >> (DATA_BYTE * 8 - 1)) & 1);
 	cpu.ZF = !result;
 	cpu.AF = ((op_dest->val & 0x7) - (op_src->val & 0x7)) < 0x8;
 	result = result & 0xff;
