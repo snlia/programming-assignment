@@ -179,7 +179,7 @@ static int cmd_x (char *args)
 		printf ("0x%010x	", swaddr_read (j, 4));
 		if (!((j - head + 4) & 0xf)) puts ("");
 	}
-	if (tail & 0xf) puts ("");
+	if ((tail - head) & 0xf) puts ("");
 	return 0;
 }
 
