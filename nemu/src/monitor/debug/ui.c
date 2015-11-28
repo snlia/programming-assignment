@@ -170,12 +170,13 @@ static int cmd_x (char *args)
 		puts ("Something wrong with expression, please check it.");
 		return 0;
 	}
+	printf ("0x%x :", adress);
 	for (j = 0; j < i; ++j)
 	{
 		printf ("0x%010x	", swaddr_read (adress + j * 4, 4));
-		if (!((j + 1) % 5)) puts ("");
+		if (!((j + 1) % 8)) printf ("\n0x%x :", adress + j * 4 + 4);
 	}
-	if (i % 5) puts ("");
+	if (i % 8) puts ("");
 	return 0;
 }
 
