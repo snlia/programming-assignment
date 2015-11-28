@@ -176,7 +176,7 @@ static int cmd_x (char *args)
 	for (j = head; j < tail; j += 4)
 	{
 		if (!((j - head) & 0xf)) printf ("0x%08x :", j);
-		printf ("0x%010x	", swaddr_read (j, 4));
+		printf ("0x%08x	", swaddr_read (j, 4));
 		if (!((j - head + 4) & 0xf)) puts ("");
 	}
 	if ((tail - head) & 0xf) puts ("");

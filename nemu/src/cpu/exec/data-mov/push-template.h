@@ -3,8 +3,13 @@
 #define instr push
 
 static void do_execute () {
-	cpu.esp -= DATA_BYTE;
-	swaddr_write(cpu.esp, DATA_BYTE, (DATA_TYPE) op_src->val);
+#if DATA_BYTE == 2
+	cpu.esp -= 2;
+	swaddr_write(cpu.esp, 2, (DATA_TYPE) op_src->val);
+#else
+	cpu.esp -= 2;
+	swaddr_write(cpu.esp, 4, (DATA_TYPE) op_src->val);
+#endif
 	/* TODO: Update EFLAGS. */
 //	panic("please implement me");
 
