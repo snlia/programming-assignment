@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#define max(a,b) ((a) > (b) ? (a) : (b))
+#define min(a,b) ((a) < (b) ? (a) : (b))
 
 void cpu_exec(uint32_t);//exec x instructions given in the first argument
 
@@ -152,13 +154,13 @@ static int cmd_x (char *args)
 {
 	/* extract the first argument */
 	char *arg = strtok(NULL, " ");
-	uint32_t i, j;
+	int32_t i, j;
 	if (arg == NULL) 
 	{
 		puts ("Missing arguments."); 
 		return 0;
 	}
-	if (!sscanf (arg, "%u", &i))
+	if (!sscanf (arg, "%d", &i))
 	{
 		puts ("The first argument should be a number.");
 		return 0;
@@ -170,11 +172,12 @@ static int cmd_x (char *args)
 		puts ("Something wrong with expression, please check it.");
 		return 0;
 	}
-	printf ("0x%x :", adress);
-	for (j = 0; j < i; ++j)
+	int32_t head = min (adress, adress + i * 4), tail = min (adress, adress + i * 4);
+	printf ("0x%x :", head);
+	for (j = head; j < tail; j += 4)
 	{
-		printf ("0x%010x	", swaddr_read (adress + j * 4, 4));
-		if (!((j + 1) % 8)) printf ("\n0x%x :", adress + j * 4 + 4);
+		printf ("0x%010x	", swaddr_read (j, 4));
+		if (!((j + 1) % 8)) printf ("\n0x%x :", j + 4);
 	}
 	if (i % 8) puts ("");
 	return 0;
