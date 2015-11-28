@@ -177,7 +177,7 @@ static int cmd_x (char *args)
 	for (j = head; j < tail; j += 4)
 	{
 		printf ("0x%010x	", swaddr_read (j, 4));
-		if (!((j - head) % 16)) printf ("\n0x%x :", j + 4);
+		if (!((j - head + 4) % 16)) printf ("\n0x%x :", j + 4);
 	}
 	if (tail % 16) puts ("");
 	return 0;
