@@ -15,3 +15,9 @@
 /* for instruction encoding overloading */
 
 make_helper_v(mul_rm)
+
+make_helper(mul_rm2a_b) {return mul_rm_b (eip);}
+make_helper(mul_rm2a_w) {return mul_rm_w (eip);}
+make_helper(mul_rm2a_l) {return mul_rm_l (eip);}
+
+make_helper_v(mul_rm2a)
