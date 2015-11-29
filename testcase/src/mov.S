@@ -2,11 +2,11 @@
 
 .globl start
 start:
+	add $0xef, %al
 	movl $0, %eax
 	movl $0, %ebx
 	movl $0, %ecx
 	movl $0, %edx
-	jne start
 
 	movl $32768, %ecx
 	movw $0, %bx
