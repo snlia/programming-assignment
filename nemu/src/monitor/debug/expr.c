@@ -1,4 +1,5 @@
 #include "nemu.h"
+#include "monitor/elf.h"
 
 /* We use the POSIX regex functions to process regular expressions.
  * Type 'man regex' for more information about POSIX regex functions.
@@ -10,7 +11,7 @@
 
 enum {
 	NOTYPE = 256, EQ, UEQ, NOT, PRE_MUL, PRE_PLUS, PRE_SUBTRACT, AND, OR, SHL, SHR, LEQ, REQ,
-	NUMBER_D, NUMBER_H, 
+	NUMBER_D, NUMBER_H, VARIABLE,
 	EAX, ECX, EDX, EBX, ESP, EBP, ESI, EDI, EIP, EFLAGS,
 	AX, CX, DX, BX, SP, BP, SI, DI,
 	AL, CL, DL, BL, AH, CH, DH, BH
@@ -99,8 +100,8 @@ static struct rule {
 	{"\\$dh", DH},						//dh
 	{"\\$bh", BH},						//bh
 	//(flod end)
-
 	//Add more Register here
+	{"[a-zA-Z_][0-9a-zA-Z_]+", VARIABLE}
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -221,6 +222,7 @@ uint32_t eval (int p, int q, bool *success)
 {
 	if (!(*success)) return 0;
 	uint32_t val1 = 0, val2, ans, i, len;
+	bool Flag;
 	if(p > q) 
 	{
 		puts ("Bad expression, please check it.");
@@ -234,6 +236,7 @@ uint32_t eval (int p, int q, bool *success)
 		if (tokens[p].type >= EAX && tokens[p].type <= EDI) return reg_l (tokens[p].type - EAX);
 		if (tokens[p].type >= AX && tokens[p].type <= DI) return reg_w (tokens[p].type - AX);
 		if (tokens[p].type >= AL && tokens[p].type <= BH) return reg_b (tokens[p].type - AL);
+		//Adress and Register here
 		switch (tokens[p].type)
 		{
 			case NUMBER_D :
@@ -244,7 +247,10 @@ uint32_t eval (int p, int q, bool *success)
 				for (i = 0; i < len; ++i) tokens[p].str[i] = downcase (tokens[p].str[i]);
 				sscanf (tokens[p].str, "%x", &ans);
 				return ans;
-				//Adress and Register here
+			case VARIABLE :
+				Flag = 1;
+				ans = get_value (tokens[p].str, &Flag);
+				if (Flag) return ans;
 			default : *success = false;
 					  puts ("Error : you may miss a number.");
 		}

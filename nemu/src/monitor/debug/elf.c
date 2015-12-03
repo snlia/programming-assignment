@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <elf.h>
 #define FUNC 0x12
+//#define GLOBAL 0x
 
 char *exec_file = NULL;
 
@@ -102,4 +103,13 @@ void print_asm_template5(swaddr_t eip, char * S)
 			Assert(snprintf(assembly, 80, "%s %x <%s+0x%x>", S, eip, strtab + symtab[i].st_name, eip - symtab[i].st_value) < 80, "buffer overflow!");
 			break;
 		}
+}
+
+uint32_t get_value (char *s, bool * Flag)
+{
+	int i;
+	for (i = 0; i < nr_symtab_entry; ++i)
+		if (symtab[i].st_name)
+			printf ("%s %x\n", strtab + symtab[i].st_name, symtab[i].st_value);
+	return 0;
 }
