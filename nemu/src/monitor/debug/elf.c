@@ -85,6 +85,7 @@ void load_elf_tables(int argc, char *argv[]) {
 void print_asm_template4(swaddr_t eip)
 {
 	int i;
+	printf ("%x", STT_FUNC);
 	extern char assembly[];
 	for (i = 0; i < nr_symtab_entry; ++i)
 		if (symtab[i].st_name && symtab[i].st_info == STT_FUNC && symtab[i].st_value == eip)
