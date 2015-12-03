@@ -1,4 +1,5 @@
 #include "cpu/exec/template-start.h"
+#include "monitor/elf.h"
 
 #define instr jcc
 
@@ -41,6 +42,7 @@ static void do_execute () {
 		case 0xe3 : flag = ops_decoded.is_data_size_16 ? !reg_w(R_CX) : !reg_l(R_ECX); break; 
 		default : assert ("missing instr");
 	}
+	print_asm_template5(cpu.eip + (DATA_TYPE_S) op_src->val);
 	if (flag)
 	{
 		cpu.eip += (DATA_TYPE_S) op_src->val;
@@ -51,7 +53,6 @@ static void do_execute () {
 	/* TODO: Update EFLAGS. */
 	//	panic("please implement me");
 
-	print_asm_template1();
 }
 
 make_instr_helper(i)

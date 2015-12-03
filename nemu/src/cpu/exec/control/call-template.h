@@ -11,7 +11,6 @@ static void do_execute () {
 	/* TODO: Update EFLAGS. */
 //	panic("please implement me");
 
-	puts ("ppp");
 	print_asm_template4 (cpu.eip);
 }
 
