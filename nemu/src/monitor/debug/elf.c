@@ -109,6 +109,7 @@ uint32_t get_value (char *s, bool * Flag)
 {
 	int i;
 	for (i = 0; i < nr_symtab_entry; ++i)
+		if (symtab[i].st_name)
 			printf ("%s %x\n", strtab + symtab[i].st_name, symtab[i].st_size);
 	return 0;
 }
