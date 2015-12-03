@@ -10,8 +10,10 @@ static void do_execute () {
 	if (ops_decoded.is_data_size_16) cpu.eip &= 0x0000ffff;
 	/* TODO: Update EFLAGS. */
 //	panic("please implement me");
+#ifdef DEBUG
 	char s [] = "call";
 	print_asm_template4 (cpu.eip, s);
+#endif
 }
 
 make_instr_helper(i)

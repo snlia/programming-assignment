@@ -42,8 +42,10 @@ static void do_execute () {
 		case 0xe3 : flag = ops_decoded.is_data_size_16 ? !reg_w(R_CX) : !reg_l(R_ECX); break; 
 		default : assert ("missing instr");
 	}
+#ifdef DEBUG
 	char s [] = "jcc";
 	print_asm_template5(cpu.eip + (DATA_TYPE_S) op_src->val, s);
+#endif 
 	if (flag)
 	{
 		cpu.eip += (DATA_TYPE_S) op_src->val;

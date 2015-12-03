@@ -9,8 +9,10 @@ static void do_execute () {
 	else 
 		cpu.eip = op_src->val;
 
+#ifdef DEBUG
 	char s[] = "jmp";
 	print_asm_template5(cpu.eip, s);
+#endif
 }
 
 make_instr_helper(i)
