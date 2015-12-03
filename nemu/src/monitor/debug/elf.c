@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <elf.h>
 #define FUNC 0x12
-//#define GLOBAL 0x
+#define GLOBAL 0x11
 
 char *exec_file = NULL;
 
@@ -109,7 +109,6 @@ uint32_t get_value (char *s, bool * Flag)
 {
 	int i;
 	for (i = 0; i < nr_symtab_entry; ++i)
-		if (symtab[i].st_name)
-			printf ("%s %x\n", strtab + symtab[i].st_name, symtab[i].st_info);
+			printf ("%s %x\n", strtab + symtab[i].st_name, symtab[i].st_size);
 	return 0;
 }
