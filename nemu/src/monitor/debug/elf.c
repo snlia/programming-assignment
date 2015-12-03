@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <elf.h>
 #define FUNC 0x12
-#define GLOBAL 0x11
+#define VARIABLE 0x11
 
 char *exec_file = NULL;
 
@@ -105,11 +105,16 @@ void print_asm_template5(swaddr_t eip, char * S)
 		}
 }
 
-uint32_t get_value (char *s, bool * Flag)
+uint32_t get_value (char *s, char * Flag)
 {
 	int i;
 	for (i = 0; i < nr_symtab_entry; ++i)
+	{
 		if (symtab[i].st_name)
-			printf ("%s %x\n", strtab + symtab[i].st_name, symtab[i].st_value);
+			printf ("%s %x", strtab + symtab[i].st_name, symtab[i].st_size);
+		if (symtab[i].st_name && !strcmp (s, strtab + symtab[i].st_name) && (symtab[i].st_info == FUNC || symtab[i].st_info == VARIABLE))
+		{
+		}
+	}
 	return 0;
 }
