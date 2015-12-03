@@ -74,9 +74,6 @@ void load_elf_tables(int argc, char *argv[]) {
 			assert(ret == 1);
 		}
 	}
-	for (i = 0; i < nr_symtab_entry; ++i)
-		if (symtab[i].st_name)
-			printf ("0x%x !!pp!! %d !!pp!! %s\n", symtab[i].st_value, symtab[i].st_info, strtab + symtab[i].st_name);
 	free(sh);
 	free(shstrtab);
 
@@ -85,3 +82,11 @@ void load_elf_tables(int argc, char *argv[]) {
 	fclose(fp);
 }
 
+void print_asm_template4(swaddr_t eip)
+{
+	int i;
+	extern char assembly[];
+	for (i = 0; i < nr_symtab_entry; ++i)
+		if (symtab[i].st_name && symtab[i].st_info == STT_FUNC && symtab[i].st_value == eip)
+			Assert(snprintf(assembly, 80, "<%s>", strtab + symtab[i].st_name) < 80, "buffer overflow!");
+}

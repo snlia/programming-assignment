@@ -1,4 +1,5 @@
 #include "cpu/exec/template-start.h"
+#include "monitor/elf.h"
 
 #define instr call
 
@@ -10,7 +11,7 @@ static void do_execute () {
 	/* TODO: Update EFLAGS. */
 //	panic("please implement me");
 
-	print_asm_template1();
+	print_asm_template4 (cpu.eip);
 }
 
 make_instr_helper(i)
