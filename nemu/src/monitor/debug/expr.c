@@ -101,7 +101,7 @@ static struct rule {
 	{"\\$bh", BH},						//bh
 	//(flod end)
 	//Add more Register here
-	{"[a-zA-Z_][0-9a-zA-Z_]+", VARIABLE}
+	{"[a-zA-Z_][0-9a-zA-Z_]*", VARIABLE}
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
