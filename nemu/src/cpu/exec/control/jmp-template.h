@@ -1,4 +1,5 @@
 #include "cpu/exec/template-start.h"
+#include "monitor/elf.h"
 
 #define instr jmp
 
@@ -8,7 +9,8 @@ static void do_execute () {
 	else 
 		cpu.eip = op_src->val;
 
-	print_asm_template1();
+	char s[] = "jmp";
+	print_asm_template5(cpu.eip, s);
 }
 
 make_instr_helper(i)
