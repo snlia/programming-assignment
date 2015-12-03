@@ -111,7 +111,7 @@ uint32_t get_value (char *s, char * Flag)
 	for (i = 0; i < nr_symtab_entry; ++i)
 	{
 		if (symtab[i].st_name)
-			printf ("%s %x", strtab + symtab[i].st_name, symtab[i].st_size);
+			printf ("%s %x\n", strtab + symtab[i].st_name, symtab[i].st_size);
 		if (symtab[i].st_name && !strcmp (s, strtab + symtab[i].st_name) && (symtab[i].st_info == FUNC || symtab[i].st_info == VARIABLE))
 		{
 		}
