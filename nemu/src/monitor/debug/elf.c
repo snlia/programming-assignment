@@ -89,7 +89,7 @@ void print_asm_template4(swaddr_t eip)
 	extern char assembly[];
 	for (i = 0; i < nr_symtab_entry; ++i)
 		if (symtab[i].st_name && symtab[i].st_info == FUNC && symtab[i].st_value == eip)
-			Assert(snprintf(assembly, 80, "call <%s>", strtab + symtab[i].st_name) < 80, "buffer overflow!");
+			Assert(snprintf(assembly, 80, "call %x <%s>", eip, strtab + symtab[i].st_name) < 80, "buffer overflow!");
 }
 
 void print_asm_template5(swaddr_t eip)
@@ -97,9 +97,9 @@ void print_asm_template5(swaddr_t eip)
 	int i;
 	extern char assembly[];
 	for (i = 0; i < nr_symtab_entry; ++i)
-		if (symtab[i].st_name && symtab[i].st_info == FUNC && symtab[i].st_value < eip)
+		if (symtab[i].st_name && symtab[i].st_info == FUNC && symtab[i].st_value <= eip)
 		{
-			Assert(snprintf(assembly, 80, "jcc <%s>", strtab + symtab[i].st_name) < 80, "buffer overflow!");
+			Assert(snprintf(assembly, 80, "jcc %x <%s+0x%x>", eip, strtab + symtab[i].st_name, eip - symtab[i].st_value) < 80, "buffer overflow!");
 			break;
 		}
 }
