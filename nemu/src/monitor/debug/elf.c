@@ -74,7 +74,8 @@ void load_elf_tables(int argc, char *argv[]) {
 			assert(ret == 1);
 		}
 	}
-
+	for (i = 0; i < nr_symtab_entry; ++i)
+		printf ("%s", strtab + symtab[i].st_name);
 	free(sh);
 	free(shstrtab);
 
