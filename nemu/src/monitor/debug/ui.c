@@ -54,6 +54,8 @@ static int cmd_d (char *args);
 
 static int cmd_b (char *args);
 
+static int cmd_bt (char *args);
+
 static struct {
 	char *name;
 	char *description;
@@ -68,7 +70,8 @@ static struct {
 	{ "x", "x N EXPR : Show 4N continious bytes begins at EXPR", cmd_x},
 	{ "w", "w EXPR : Seting watchpoint on EXPR", cmd_w},
 	{ "d", "d [N] : delete the watchpoint with index N, or, without N, delete the last watchpoint.", cmd_d},
-	{ "b", "b EXPR : set watchpoint at EIP == EXPR", cmd_b}
+	{ "b", "b EXPR : set watchpoint at EIP == EXPR", cmd_b},
+	{ "bt", "bt: Print backtrace of all stack frames", cmd_bt}
 	/* TODO: Add more commands */
 
 };
@@ -237,6 +240,18 @@ static int cmd_d (char *args)
 			return 0;
 		}
 	free_wp (i);
+	return 0;
+}
+
+static int cmd_bt (char *args)
+{
+	int now = 0;
+	uint32_t Ebp = cpu.ebp;
+	while (Ebp)
+	{
+		printf ("#%d 0x%08x 0x%08x\n", now++, swaddr_read (Ebp, 4), swaddr_read (Ebp + 4, 4));
+		Ebp = swaddr_read (Ebp, 4);
+	}
 	return 0;
 }
 
