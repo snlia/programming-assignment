@@ -124,6 +124,9 @@ char* find_FUNC (swaddr_t eip)
 	extern char assembly[];
 	for (i = 0; i < nr_symtab_entry; ++i)
 		if (symtab[i].st_name && symtab[i].st_info == FUNC && symtab[i].st_value == eip)
+		{
+			printf ("pppp%spppp", strtab + symtab[i].st_name);
 			return strtab + symtab[i].st_name;
+		}
 	return strtab + symtab[i].st_name;
 }
