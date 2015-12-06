@@ -121,9 +121,16 @@ uint32_t get_value (char *s, char * Flag)
 char* find_FUNC (swaddr_t eip)
 {
 	int i;
-	extern char assembly[];
 	for (i = 0; i < nr_symtab_entry; ++i)
 		if (symtab[i].st_name && symtab[i].st_info == FUNC && symtab[i].st_value <= eip)
 			return strtab + symtab[i].st_name;
 	return strtab + symtab[i].st_name;
+}
+
+void print_elf ()
+{
+	int i;
+	for (i = 0; i < nr_symtab_entry; ++i)
+		if (symtab[i].st_name)
+			printf ("%s %x %x\n", symtab[i].st_name + strtab, symtab[i].st_value, symtab[i].st_info);
 }
