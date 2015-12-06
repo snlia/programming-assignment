@@ -52,6 +52,8 @@ static int cmd_w (char *args);
 
 static int cmd_d (char *args);
 
+static int cmd_b (char *args);
+
 static struct {
 	char *name;
 	char *description;
@@ -65,7 +67,8 @@ static struct {
 	{ "p", "p EXPR : Show the value of EXPR", cmd_p},
 	{ "x", "x N EXPR : Show 4N continious bytes begins at EXPR", cmd_x},
 	{ "w", "w EXPR : Seting watchpoint on EXPR", cmd_w},
-	{ "d", "d [N] : delete the watchpoint with index N, or, without N, delete the last watchpoint.", cmd_d}
+	{ "d", "d [N] : delete the watchpoint with index N, or, without N, delete the last watchpoint.", cmd_d},
+	{ "b", "b EXPR : set watchpoint at EIP == EXPR", cmd_b}
 	/* TODO: Add more commands */
 
 };
@@ -202,6 +205,25 @@ static int cmd_w (char *args)
 	return 0;
 }
 
+static int cmd_b (char *args)
+{
+	/* extract the first argument */
+	if (args == NULL) 
+	{
+		puts ("Missing arguments."); 
+		return 0;
+	}
+	bool flag = 1;
+	args = strcat (args, "== $eip");
+	int value = expr (args, &flag);
+	if (!flag) 
+	{
+		puts ("Something wrong with expression, please check it.");
+		return 0;
+	}
+	printf ("Succes with index %d, value 0x%x\n", new_wp (args, value), value);
+	return 0;
+}
 static int cmd_d (char *args)
 {
 	/* extract the first argument */
