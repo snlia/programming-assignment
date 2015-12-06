@@ -43,6 +43,8 @@ static int cmd_help (char *args);
 
 static int cmd_si (char *args);
 
+static int cmd_elf (char *args);
+
 static int cmd_info (char *args);
 
 static int cmd_p (char *args);
@@ -72,7 +74,8 @@ static struct {
 	{ "w", "w EXPR : Seting watchpoint on EXPR", cmd_w},
 	{ "d", "d [N] : delete the watchpoint with index N, or, without N, delete the last watchpoint.", cmd_d},
 	{ "b", "b EXPR : set watchpoint at EIP == EXPR", cmd_b},
-	{ "bt", "bt: Print backtrace of all stack frames", cmd_bt}
+	{ "bt", "bt: Print backtrace of all stack frames", cmd_bt},
+	{ "elf", "elf: Print symtab", cmd_elf}
 	/* TODO: Add more commands */
 
 };
@@ -99,6 +102,12 @@ static int cmd_help(char *args) {
 		}
 		printf("Unknown command '%s'\n", arg);
 	}
+	return 0;
+}
+
+static int cmd_elf (char *args)
+{
+	print_elf ();
 	return 0;
 }
 
