@@ -108,8 +108,12 @@ void print_asm_template5(swaddr_t eip, char * S)
 uint32_t get_value (char *s, char * Flag)
 {
 	int i;
+	*Flag = 0;
 	for (i = 0; i < nr_symtab_entry; ++i)
 		if (symtab[i].st_name && !strcmp (s, strtab + symtab[i].st_name) && (symtab[i].st_info == FUNC || symtab[i].st_info == VARIABLE))
+		{
+			*Flag = 1;
 			return symtab[i].st_value;
+		}
 	return 0;
 }
