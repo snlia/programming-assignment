@@ -21,29 +21,100 @@
 static void do_execute () {
 	bool flag = 0;
 	uint32_t tx = ops_decoded.opcode - (DATA_BYTE > 1 ? 0x10 : 0);
+#ifdef DEBUG
+	char s [5];
+	memset (s, 0, sizeof (s));
+#endif 
 	switch (tx & 0xff)
 	{
-		case 0x70 : flag =  OF; break; 
-		case 0x71 : flag = !OF; break; 
-		case 0x72 : flag = CF; break; 
-		case 0x73 : flag = !CF; break; 
-		case 0x74 : flag = ZF; break; 
-		case 0x75 : flag = !ZF; break; 
-		case 0x76 : flag = CF || ZF; break; 
-		case 0x77 : flag = !CF && !ZF; break; 
-		case 0x78 : flag =  SF; break; 
-		case 0x79 : flag = !SF; break; 
-		case 0x7a : flag =  PF; break; 
-		case 0x7b : flag = !PF; break; 
-		case 0x7c : flag = SF != OF; break; 
-		case 0x7d : flag = SF == OF; break; 
-		case 0x7e : flag = ZF || (SF != OF); break; 
-		case 0x7f : flag = !ZF && (SF == OF); break; 
-		case 0xe3 : flag = ops_decoded.is_data_size_16 ? !reg_w(R_CX) : !reg_l(R_ECX); break; 
+		case 0x70 : flag =  OF; 
+#ifdef DEBUG
+					strcpy (s, "jo");
+#endif
+					break; 
+		case 0x71 : flag = !OF;
+#ifdef DEBUG
+					strcpy (s, "jno");
+#endif
+					break; 
+		case 0x72 : flag = CF;
+#ifdef DEBUG
+					strcpy (s, "jnae");
+#endif
+					break; 
+		case 0x73 : flag = !CF;
+#ifdef DEBUG
+					strcpy (s, "jnb");
+#endif
+					break; 
+		case 0x74 : flag = ZF;
+#ifdef DEBUG
+					strcpy (s, "je");
+#endif
+					break; 
+		case 0x75 : flag = !ZF;
+#ifdef DEBUG
+					strcpy (s, "jne");
+#endif
+					break; 
+		case 0x76 : flag = CF || ZF;
+#ifdef DEBUG
+					strcpy (s, "jna");
+#endif
+					break; 
+		case 0x77 : flag = !CF && !ZF;
+#ifdef DEBUG
+					strcpy (s, "jnbe");
+#endif
+					break; 
+		case 0x78 : flag =  SF;
+#ifdef DEBUG
+					strcpy (s, "js");
+#endif
+					break; 
+		case 0x79 : flag = !SF;
+#ifdef DEBUG
+					strcpy (s, "jns");
+#endif
+					break; 
+		case 0x7a : flag =  PF;
+#ifdef DEBUG
+					strcpy (s, "jpe");
+#endif
+					break; 
+		case 0x7b : flag = !PF;
+#ifdef DEBUG
+					strcpy (s, "jnp");
+#endif
+					break; 
+		case 0x7c : flag = SF != OF;
+#ifdef DEBUG
+					strcpy (s, "jnge");
+#endif
+					break; 
+		case 0x7d : flag = SF == OF;
+#ifdef DEBUG
+					strcpy (s, "jge");
+#endif
+					break; 
+		case 0x7e : flag = ZF || (SF != OF);
+#ifdef DEBUG
+					strcpy (s, "jng");
+#endif
+					break; 
+		case 0x7f : flag = !ZF && (SF == OF);
+#ifdef DEBUG
+					strcpy (s, "jg");
+#endif
+					break; 
+		case 0xe3 : flag = ops_decoded.is_data_size_16 ? !reg_w(R_CX) : !reg_l(R_ECX);
+#ifdef DEBUG
+					strcpy (s, "jcxz");
+#endif
+					break;
 		default : assert ("missing instr");
 	}
 #ifdef DEBUG
-	char s [] = "jcc";
 	print_asm_template5(cpu.eip + (DATA_TYPE_S) op_src->val, s);
 #endif 
 	if (flag)
