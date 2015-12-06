@@ -1,6 +1,7 @@
 #include "monitor/monitor.h"
 #include "monitor/watchpoint.h"
 #include "monitor/expr.h"
+#include "monitor/elf.h"
 #include "nemu.h"
 
 #include <stdlib.h>
@@ -247,9 +248,11 @@ static int cmd_bt (char *args)
 {
 	int now = 0;
 	uint32_t Ebp = cpu.ebp;
+	swaddr_t Eip = cpu.eip;
 	while (Ebp)
 	{
-		printf ("#%d 0x%08x 0x%08x\n", now++, swaddr_read (Ebp, 4), swaddr_read (Ebp + 4, 4));
+		printf ("#%d 0x%08x in %s ()\n", now++, Eip, find_FUNC (Eip));
+		Eip = swaddr_read (Ebp + 4, 4);
 		Ebp = swaddr_read (Ebp, 4);
 	}
 	return 0;
