@@ -24,7 +24,7 @@ int new_wp (char *s, uint32_t value)
 	WP *p = free_->next;
 	free_->next = head;
 	free_->value = value;
-	memcpy (free_->str, s, strlen (s));
+	strcpy (free_->str, s);
 	head = free_;
 	free_ = p;
 	return head->NO;
