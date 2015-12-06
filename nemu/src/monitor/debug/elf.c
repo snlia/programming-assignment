@@ -97,7 +97,7 @@ void print_asm_template5(swaddr_t eip, char * S)
 {
 	int i;
 	extern char assembly[];
-	for (i = 0; i < nr_symtab_entry; ++i)
+	for (i = nr_symtab_entry - 1; ~i; --i)
 		if (symtab[i].st_name && symtab[i].st_info == FUNC && symtab[i].st_value <= eip)
 		{
 			Assert(snprintf(assembly, 80, "%s %x <%s+0x%x>", S, eip, strtab + symtab[i].st_name, eip - symtab[i].st_value) < 80, "buffer overflow!");
@@ -121,7 +121,7 @@ uint32_t get_value (char *s, char * Flag)
 char* find_FUNC (swaddr_t eip)
 {
 	int i;
-	for (i = 0; i < nr_symtab_entry; ++i)
+	for (i = nr_symtab_entry - 1; ~i; --i)
 		if (symtab[i].st_name && symtab[i].st_info == FUNC && symtab[i].st_value <= eip)
 			return strtab + symtab[i].st_name;
 	return strtab + symtab[i].st_name;
