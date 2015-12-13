@@ -1,10 +1,12 @@
 #include "trap.h"
 
-struct data
+typedef struct data
 {
 	int x, y;
 	char z [2];
-} a [10];
+} A;
+
+A a [10];
 
 int main ()
 {
