@@ -134,3 +134,5 @@ void print_elf ()
 		if (symtab[i].st_name)
 			printf ("%s %x %x\n", symtab[i].st_name + strtab, symtab[i].st_value, symtab[i].st_info);
 }
+#undef FUNC 
+#undef VARIABLE 
