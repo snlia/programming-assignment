@@ -107,7 +107,12 @@ static void do_execute () {
 					strcpy (s, "jg");
 #endif
 					break; 
-		case 0xe3 : flag = ops_decoded.is_data_size_16 ? !reg_w(R_CX) : !reg_l(R_ECX);
+		case 0xe3 : 
+#if DATA_BYTE == 2
+				flag = !reg_w(R_CX);
+#else
+				flag = reg_l(R_ECX);
+#endif
 #ifdef DEBUG
 					strcpy (s, "jcxz");
 #endif
