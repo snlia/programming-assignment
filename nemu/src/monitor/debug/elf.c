@@ -1,6 +1,8 @@
 #include "common.h"
 #include <stdlib.h>
 #include <elf.h>
+#define FUNC 0x12
+#define VARIABLE 0x11
 
 char *exec_file = NULL;
 
@@ -74,7 +76,6 @@ void load_elf_tables(int argc, char *argv[]) {
 			assert(ret == 1);
 		}
 	}
-
 	free(sh);
 	free(shstrtab);
 
@@ -83,3 +84,53 @@ void load_elf_tables(int argc, char *argv[]) {
 	fclose(fp);
 }
 
+void print_asm_template4(swaddr_t eip, char * S)
+{
+	int i;
+	extern char assembly[];
+	for (i = 0; i < nr_symtab_entry; ++i)
+		if (symtab[i].st_name && symtab[i].st_info == FUNC && symtab[i].st_value == eip)
+			Assert(snprintf(assembly, 80, "%s %x <%s>", S, eip, strtab + symtab[i].st_name) < 80, "buffer overflow!");
+}
+
+void print_asm_template5(swaddr_t eip, char * S)
+{
+	int i;
+	extern char assembly[];
+	for (i = nr_symtab_entry - 1; ~i; --i)
+		if (symtab[i].st_name && symtab[i].st_info == FUNC && symtab[i].st_value <= eip)
+		{
+			Assert(snprintf(assembly, 80, "%s %x <%s+0x%x>", S, eip, strtab + symtab[i].st_name, eip - symtab[i].st_value) < 80, "buffer overflow!");
+			break;
+		}
+}
+
+uint32_t get_value (char *s, char * Flag)
+{
+	int i;
+	*Flag = 0;
+	for (i = 0; i < nr_symtab_entry; ++i)
+		if (symtab[i].st_name && !strcmp (s, strtab + symtab[i].st_name) && (symtab[i].st_info == FUNC || symtab[i].st_info == VARIABLE))
+		{
+			*Flag = 1;
+			return symtab[i].st_value;
+		}
+	return 0;
+}
+
+char* find_FUNC (swaddr_t eip)
+{
+	int i;
+	for (i = nr_symtab_entry - 1; ~i; --i)
+		if (symtab[i].st_name && symtab[i].st_info == FUNC && symtab[i].st_value <= eip)
+			return strtab + symtab[i].st_name;
+	return strtab + symtab[i].st_name;
+}
+
+void print_elf ()
+{
+	int i;
+	for (i = 0; i < nr_symtab_entry; ++i)
+		if (symtab[i].st_name)
+			printf ("%s %x %x\n", symtab[i].st_name + strtab, symtab[i].st_value, symtab[i].st_info);
+}

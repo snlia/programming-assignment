@@ -1,4 +1,5 @@
 #include "nemu.h"
+#include "monitor/elf.h"
 
 /* We use the POSIX regex functions to process regular expressions.
  * Type 'man regex' for more information about POSIX regex functions.
@@ -6,12 +7,12 @@
 #include <sys/types.h>
 #include <regex.h>
 #define downcase(x) ((x) <= 'Z' && (x) >= 'A' ? (x) - 'A' + 'a' : (x))
-#define check_parentheses(l, r) (tokens[l].type == '(' && tokens[r].type == ')')
+#define check_parentheses(l, r) (tokens[l].type == '(' && tokens[r].type == ')' && match[l] == r)
 
 enum {
 	NOTYPE = 256, EQ, UEQ, NOT, PRE_MUL, PRE_PLUS, PRE_SUBTRACT, AND, OR, SHL, SHR, LEQ, REQ,
-	NUMBER_D, NUMBER_H, 
-		EAX, ECX, EDX, EBX, ESP, EBP, ESI, EDI, EIP,
+	NUMBER_D, NUMBER_H, VARIABLE,
+	EAX, ECX, EDX, EBX, ESP, EBP, ESI, EDI, EIP, EFLAGS,
 	AX, CX, DX, BX, SP, BP, SI, DI,
 	AL, CL, DL, BL, AH, CH, DH, BH
 		/* TODO: Add more token types */
@@ -29,29 +30,29 @@ static struct rule {
 
 	//(flod) Caculate operator
 	{" +",	NOTYPE},					// spaces
-	{"\\+", '+'},				// plus
-	{"\\-", '-'},				// subtraction
-	{"\\*", '*'},				// multiplication
-	{"\\%", '%'},				// mod
-	{"\\/", '/'},				// division
+	{"\\+", '+'},						// plus
+	{"\\-", '-'},						// subtraction
+	{"\\*", '*'},						// multiplication
+	{"\\%", '%'},						// mod
+	{"\\/", '/'},						// division
 	{"&&", AND},						// and
 	{"\\|\\|", OR},						// or
-	{"\\&", '&'},				// &
-	{"\\|", '|'},				// or
-	{"\\^", '^'},				// xor
-	{"\\~", '~'},				// not
+	{"\\&", '&'},						// &
+	{"\\|", '|'},						// or
+	{"\\^", '^'},						// xor
+	{"\\~", '~'},						// not
 	{"<<", SHL},						// shift_left
 	{">>", SHR},						// shift_right
 	//(flod end)
 
 	//(flod) Number (decimal & hexadecimal)
-	{"0x[0-9abcdef]+", NUMBER_H},		// hexadecimal number
+	{"0[xX][0-9abcdefABCDEF]+", NUMBER_H},		// hexadecimal number
 	{"[0-9]+", NUMBER_D},				// decimal number
 	//(flod end)
 
 	//(flod) Parentheses
-	{"\\(", '('},				// left parentheses
-	{"\\)", ')'},				// right parentheses
+	{"\\(", '('},						// left parentheses
+	{"\\)", ')'},						// right parentheses
 	//(flod end)
 
 	//(flod) Judging operator
@@ -60,8 +61,8 @@ static struct rule {
 	{"!", NOT},							// equal to zero
 	{"<=", LEQ},						// leq
 	{">=", REQ},						// req
-	{"<", '<'},				// <
-	{">", '>'},				// >
+	{"<", '<'},							// <
+	{">", '>'},							// >
 	//(flod end)
 
 	//(flod) 32 bit Register
@@ -76,6 +77,7 @@ static struct rule {
 	//(flod end)
 
 	{"\\$eip", EIP},					//eip
+	{"\\$eflags", EFLAGS},					//eflags
 
 	//(flod) 16 bit Register
 	{"\\$ax", AX},						//ax
@@ -98,8 +100,8 @@ static struct rule {
 	{"\\$dh", DH},						//dh
 	{"\\$bh", BH},						//bh
 	//(flod end)
-
 	//Add more Register here
+	{"[a-zA-Z_][0-9a-zA-Z_]*", VARIABLE}
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -108,6 +110,8 @@ static regex_t re[NR_REGEX];
 
 int Domination [1024];
 int Stack_op [1024];
+int Parentheses [1024];
+int match [1024];
 int Stack_top = 0;
 
 /* Rules are used for many times.
@@ -120,17 +124,18 @@ void init_regex() {
 
 	//Init Domination
 	memset (Domination, 0, sizeof (Domination));
+	Domination['('] = Domination[')'] = 0;
 	Domination[PRE_MUL] = Domination[PRE_PLUS] = Domination[PRE_SUBTRACT] = Domination['~'] = 1;
 	Domination['*'] = Domination['/'] = Domination['%'] = 2;
-	Domination['+'] = Domination['-'] = 2;
-	Domination[SHL] = Domination[SHR] = 3;
-	Domination['<'] = Domination['>'] = Domination[LEQ] = Domination[REQ] = 4;
-	Domination[UEQ] = Domination[EQ] = 5;
-	Domination['&'] = 6;
-	Domination['^'] = 7;
-	Domination['|'] = 8;
-	Domination[AND] = 9;
-	Domination[OR] = 10;
+	Domination['+'] = Domination['-'] = 3;
+	Domination[SHL] = Domination[SHR] = 4;
+	Domination['<'] = Domination['>'] = Domination[LEQ] = Domination[REQ] = 5;
+	Domination[UEQ] = Domination[EQ] = 6;
+	Domination['&'] = 7;
+	Domination['^'] = 8;
+	Domination['|'] = 9;
+	Domination[AND] = 10;
+	Domination[OR] = 11;
 	//Compile Regex
 	for(i = 0; i < NR_REGEX; i ++) {
 		ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED | REG_ICASE); // change here : use REG_ICASE option to be case insensitive
@@ -163,12 +168,13 @@ static bool make_token(char *e) {
 				char *substr_start = e + position;
 				int substr_len = pmatch.rm_eo;
 
-				Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
+//				Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
 				position += substr_len;
 				if (!i) continue; // will not record token "spaces"
 				if (substr_len > 32) return false; //the maxize size of a token is 32
 				tokens[nr_token].type = rules[i].token_type;
 				strncpy (tokens[nr_token].str, substr_start, substr_len);
+				tokens[nr_token].str[substr_len] = '\0';
 				/* TODO: Now a new token is recognized with rules[i]. Add codes
 				 * to record the token in the array ``tokens''. For certain 
 				 * types of tokens, some extra actions should be performed.
@@ -204,14 +210,19 @@ int get_dominant (int l, int r)
 {
 	int i, maxp = l;
 	for (i = l; i <= r; ++i)
-		if (Domination[tokens[i].type] > Domination[tokens[maxp].type])
-			maxp = i;
+	{
+		if (tokens[i].type == '(') i = match[i]; 
+		else 
+			if (Domination[tokens[i].type] > Domination[tokens[maxp].type]) maxp = i;
+	}
 	return maxp;
 }
 
-int eval (int p, int q, bool *success)
+uint32_t eval (int p, int q, bool *success)
 {
-	int val1 = 0, val2, ans, i, len;
+	if (!(*success)) return 0;
+	uint32_t val1 = 0, val2, ans, i, len;
+	bool Flag;
 	if(p > q) 
 	{
 		puts ("Bad expression, please check it.");
@@ -221,20 +232,25 @@ int eval (int p, int q, bool *success)
 	else if(p == q) 
 	{ 
 		if (tokens[p].type == EIP) return cpu.eip;
+		if (tokens[p].type == EFLAGS) return cpu.eflags;
 		if (tokens[p].type >= EAX && tokens[p].type <= EDI) return reg_l (tokens[p].type - EAX);
 		if (tokens[p].type >= AX && tokens[p].type <= DI) return reg_w (tokens[p].type - AX);
 		if (tokens[p].type >= AL && tokens[p].type <= BH) return reg_b (tokens[p].type - AL);
+		//Adress and Register here
 		switch (tokens[p].type)
 		{
 			case NUMBER_D :
-				sscanf (tokens[p].str, "%d", &ans);
+				sscanf (tokens[p].str, "%u", &ans);
 				return ans;
 			case NUMBER_H :
 				len = strlen (tokens[p].str);
 				for (i = 0; i < len; ++i) tokens[p].str[i] = downcase (tokens[p].str[i]);
 				sscanf (tokens[p].str, "%x", &ans);
 				return ans;
-				//Adress and Register here
+			case VARIABLE :
+				Flag = 1;
+				ans = get_value (tokens[p].str, &Flag);
+				if (Flag) return ans;
 			default : *success = false;
 					  puts ("Error : you may miss a number.");
 		}
@@ -248,7 +264,7 @@ int eval (int p, int q, bool *success)
 		/* The expression is surrounded by a matched pair of parentheses. 
 		 * If that is the case, just throw away the parentheses.
 		 */
-		int ans = eval(p + 1, q - 1, success); 
+		uint32_t ans = eval(p + 1, q - 1, success); 
 		Stack_op[Stack_top++] = '(';
 		return ans;
 	}
@@ -256,9 +272,9 @@ int eval (int p, int q, bool *success)
 	{
 		int op = get_dominant (p, q);
 		if (op != p) val1 = eval (p, op - 1, success);
-		if (!success) return 0;
+		if (!(*success)) return 0;
 		val2 = eval (op + 1, q, success);
-		if (!success) return 0;
+		if (!(*success)) return 0;
 
 		Stack_op[Stack_top++] = tokens[op].type;
 
@@ -280,9 +296,29 @@ int eval (int p, int q, bool *success)
 			case '+': return val1 + val2;
 			case '-': return val1 - val2;
 			case '*': return val1 * val2;
-			case '/': return val1 / val2;
+			case '/': 
+					  {
+						  if (val2)
+							  return val1 / val2;
+						  else 
+						  {
+							  *success = false; 
+							  puts ("Error : division by zero.");
+							  return 0;
+						  }
+					  }
 			case '&': return val1 & val2;
-			case '%': return val1 % val2;
+			case '%': 
+					  {
+						  if (val2)
+							  return val1 % val2;
+						  else 
+						  {
+							  *success = false; 
+							  puts ("Error : modular by zero.");
+							  return 0;
+						  }
+					  }
 			case '|': return val1 | val2;
 			case '^': return val1 ^ val2;
 			case '<': return val1 < val2;
@@ -293,7 +329,7 @@ int eval (int p, int q, bool *success)
 			case REQ: return val1 >= val2;
 			case SHL : return val1 << val2;
 			case SHR : return val1 >> val2;
-			default: *success = true; return 0;
+			default: *success = false; return 0;
 		}
 	}
 	return 0;
@@ -332,7 +368,7 @@ void warning ()
 	flag = 0;
 	for (i = 1; i < Stack_top; ++i)
 		flag = ((Stack_op[i] == '<' || Stack_op[i] == '>' || Stack_op[i] == LEQ || Stack_op[i] == REQ)
-		&&(Stack_op[i - 1] == '<' || Stack_op[i - 1] == '>' || Stack_op[i - 1] == LEQ || Stack_op[i - 1] == REQ));
+				&&(Stack_op[i - 1] == '<' || Stack_op[i - 1] == '>' || Stack_op[i - 1] == LEQ || Stack_op[i - 1] == REQ));
 	if (flag) puts ("warning : comparisons like ‘X<=Y<=Z’ do not have their mathematical meaning");
 	flag = 0;
 	for (i = 1; i < Stack_top; ++i)
@@ -355,10 +391,16 @@ void warning ()
 bool Check_Parentheses ()
 {
 	int i, flag = 0;
+	memset (match, 0, sizeof (match));
+	memset (Parentheses, 0, sizeof (Parentheses));
 	for (i = 0; i < nr_token; ++i) 
 	{
-		if (tokens[i].type == '(') ++flag;
-		if (tokens[i].type == ')') --flag;
+		if (tokens[i].type == '(') Parentheses[++flag] = i;
+		if (tokens[i].type == ')') 
+		{
+			match[Parentheses[flag]] = i;
+			--flag;
+		}
 		if (flag < 0) return true;
 	}
 	return false;
@@ -379,7 +421,7 @@ uint32_t expr(char *e, bool *success) {
 
 	/* TODO: Insert codes to evaluate the expression. */
 	//	panic("please implement me");
-	int ans = eval(0, nr_token - 1, success);
+	uint32_t ans = eval(0, nr_token - 1, success);
 	if (*success) warning ();
 	return ans;
 }

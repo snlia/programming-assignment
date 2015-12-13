@@ -1,6 +1,6 @@
 ##### global settings #####
 
-.PHONY: nemu entry all_testcase kernel run gdb test submit clean
+.PHONY: nemu entry all_testcase kernel run gdb test submit clean count Count
 
 CC := gcc
 LD := ld
@@ -53,6 +53,7 @@ clean: clean-cpp
 ##### some convinient rules #####
 
 USERPROG := obj/testcase/bubble-sort
+
 ENTRY := $(USERPROG)
 
 entry: $(ENTRY)
@@ -68,5 +69,11 @@ gdb: $(nemu_BIN) $(USERPROG) entry
 test: $(nemu_BIN) $(testcase_BIN) entry
 	bash test.sh $(testcase_BIN)
 
-submit: clean
+submit: 
 	cd .. && tar cvj $(shell pwd | grep -o '[^/]*$$') > $(STU_ID).tar.bz2
+
+count:
+	@find ./nemu -type f \( -name "*.c" -or -name "*.h" \) -exec cat '{}' + | wc -l
+
+Count:
+	@find ./nemu -type f \( -name "*.c" -or -name "*.h" \) -exec cat '{}' + | sed '/^\s*$$/d' | wc -l

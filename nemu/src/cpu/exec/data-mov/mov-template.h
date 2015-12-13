@@ -2,8 +2,10 @@
 
 #define instr mov
 
+/*do_mov_[bwl]*/
 static void do_execute() {
 	OPERAND_W(op_dest, op_src->val);
+	/*write_operand_[bwd] (op, src)*/
 	print_asm_template2();
 }
 

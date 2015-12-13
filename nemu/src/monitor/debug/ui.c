@@ -1,13 +1,16 @@
 #include "monitor/monitor.h"
-#include "monitor/expr.h"
 #include "monitor/watchpoint.h"
+#include "monitor/expr.h"
+#include "monitor/elf.h"
 #include "nemu.h"
 
 #include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#define max(a,b) ((a) > (b) ? (a) : (b))
+#define min(a,b) ((a) < (b) ? (a) : (b))
 
-void cpu_exec(uint32_t);
+void cpu_exec(uint32_t);//exec x instructions given in the first argument
 
 /* We use the ``readline'' library to provide more flexibility to read from stdin. */
 char* rl_gets() {
@@ -40,6 +43,8 @@ static int cmd_help (char *args);
 
 static int cmd_si (char *args);
 
+static int cmd_elf (char *args);
+
 static int cmd_info (char *args);
 
 static int cmd_p (char *args);
@@ -48,9 +53,11 @@ static int cmd_x (char *args);
 
 static int cmd_w (char *args);
 
-static int cmd_pw (char *args);
-
 static int cmd_d (char *args);
+
+static int cmd_b (char *args);
+
+static int cmd_bt (char *args);
 
 static struct {
 	char *name;
@@ -65,8 +72,10 @@ static struct {
 	{ "p", "p EXPR : Show the value of EXPR", cmd_p},
 	{ "x", "x N EXPR : Show 4N continious bytes begins at EXPR", cmd_x},
 	{ "w", "w EXPR : Seting watchpoint on EXPR", cmd_w},
-	{ "pw", "Print all informations about watchpoints", cmd_pw},
-	{ "d", "d [N] : delete the watchpoint with index N, or, without N, delete the watchpoint with biggist index", cmd_d}
+	{ "d", "d [N] : delete the watchpoint with index N, or, without N, delete the last watchpoint.", cmd_d},
+	{ "b", "b EXPR : set watchpoint at EIP == EXPR", cmd_b},
+	{ "bt", "bt: Print backtrace of all stack frames", cmd_bt},
+	{ "elf", "elf: Print symtab", cmd_elf}
 	/* TODO: Add more commands */
 
 };
@@ -96,6 +105,12 @@ static int cmd_help(char *args) {
 	return 0;
 }
 
+static int cmd_elf (char *args)
+{
+	print_elf ();
+	return 0;
+}
+
 static int cmd_si (char *args)
 {
 	/* extract the first argument */
@@ -120,10 +135,26 @@ static int cmd_info (char *args)
 	if (!strcmp(arg, "r"))
 	{
 		for(i = R_EAX; i <= R_EDI; i ++) 
-			printf ("%s : %x\n", regsl[i], reg_l (i));
-		printf ("eip : %x\n", cpu.eip);
+			printf ("%s : 0x%x\n", regsl[i], reg_l (i));
+		printf ("eip : 0x%x\n", cpu.eip);
+		printf ("eflags : 0x%x\n", cpu.eflags);
+		printf ("VM : %x\n", cpu.VM);
+		printf ("RF : %x\n", cpu.RF);
+		printf ("NT : %x\n", cpu.NT);
+		printf ("IOPL : %x\n", cpu.IOPL);
+		printf ("OF : %x\n", cpu.OF);
+		printf ("DF : %x\n", cpu.DF);
+		printf ("IF : %x\n", cpu.IF);
+		printf ("TF : %x\n", cpu.TF);
+		printf ("SF : %x\n", cpu.SF);
+		printf ("ZF : %x\n", cpu.ZF);
+		printf ("AF : %x\n", cpu.AF);
+		printf ("PF : %x\n", cpu.PF);
+		printf ("CF : %x\n", cpu.CF);
+
 	}
-	else if (!strcmp (arg, "w")) ;//will finish in stage 3
+	else if (!strcmp (arg, "w")) 
+		pt_wp ();
 	return 0;
 }
 
@@ -139,13 +170,13 @@ static int cmd_x (char *args)
 {
 	/* extract the first argument */
 	char *arg = strtok(NULL, " ");
-	uint32_t i, j;
+	int32_t i, j;
 	if (arg == NULL) 
 	{
 		puts ("Missing arguments."); 
 		return 0;
 	}
-	if (!sscanf (arg, "%u", &i))
+	if (!sscanf (arg, "%d", &i))
 	{
 		puts ("The first argument should be a number.");
 		return 0;
@@ -157,28 +188,82 @@ static int cmd_x (char *args)
 		puts ("Something wrong with expression, please check it.");
 		return 0;
 	}
-	for (j = 0; j < i; ++j)
+	int32_t head = min (adress, adress + i * 4), tail = max (adress, adress + i * 4);
+	for (j = head; j < tail; j += 4)
 	{
-		printf ("0x%x 0x%-10d	", adress + j, swaddr_read (adress + j, 4));
-		if (!((j + 1) % 5)) puts ("");
+		if (!((j - head) & 0xf)) printf ("0x%08x :", j);
+		printf ("0x%08x	", swaddr_read (j, 4));
+		if (!((j - head + 4) & 0xf)) puts ("");
 	}
-	if ((i + 1) % 5) puts ("");
+	if ((tail - head) & 0xf) puts ("");
 	return 0;
 }
 
 static int cmd_w (char *args)
 {
-
+	/* extract the first argument */
+	if (args == NULL) 
+	{
+		puts ("Missing arguments."); 
+		return 0;
+	}
+	bool flag = 1;
+	int value = expr (args, &flag);
+	if (!flag) 
+	{
+		puts ("Something wrong with expression, please check it.");
+		return 0;
+	}
+	printf ("Succes with index %d, value 0x%x\n", new_wp (args, value), value);
 	return 0;
 }
 
-static int cmd_pw (char *args)
+static int cmd_b (char *args)
 {
+	/* extract the first argument */
+	if (args == NULL) 
+	{
+		puts ("Missing arguments."); 
+		return 0;
+	}
+	bool flag = 1;
+	args = strcat (args, "== $eip");
+	int value = expr (args, &flag);
+	if (!flag) 
+	{
+		puts ("Something wrong with expression, please check it.");
+		return 0;
+	}
+	printf ("Succes with index %d, value 0x%x\n", new_wp (args, value), value);
 	return 0;
 }
-
 static int cmd_d (char *args)
 {
+	/* extract the first argument */
+	char *arg = strtok(NULL, " ");
+	int i;
+	if (arg == NULL) i = -1; /* no argument given */
+	else 
+		if (!sscanf (arg, "%u", &i))
+		{
+			printf("Invalid input --- %s\n", cmd_table[9].description);
+			return 0;
+		}
+	free_wp (i);
+	return 0;
+}
+
+static int cmd_bt (char *args)
+{
+	int now = 0;
+	uint32_t Ebp = cpu.ebp;
+	swaddr_t Eip = cpu.eip;
+	while (Ebp)
+	{
+		printf ("#%d 0x%08x in %s ()\n", now++, Eip, find_FUNC (Eip));
+		Eip = swaddr_read (Ebp + 4, 4);
+		Ebp = swaddr_read (Ebp, 4);
+	}
 	return 0;
 }
 

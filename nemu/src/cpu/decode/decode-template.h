@@ -30,10 +30,8 @@ make_helper(concat(decode_si_, SUFFIX)) {
 	 * by ``eip''. Interpret the result as an signed immediate, and assign
 	 * it to op_src->simm.
 	 *
-	op_src->simm = ???
 	 */
-	panic("please implement me");
-
+	op_src->simm = (DATA_TYPE_S) instr_fetch(eip, DATA_BYTE);
 	op_src->val = op_src->simm;
 
 #ifdef DEBUG
@@ -56,6 +54,7 @@ static int concat(decode_a_, SUFFIX) (swaddr_t eip, Operand *op) {
 }
 
 /* eXX: eAX, eCX, eDX, eBX, eSP, eBP, eSI, eDI */
+/*decode_r_SUFFIX_internal*/
 static int concat3(decode_r_, SUFFIX, _internal) (swaddr_t eip, Operand *op) {
 	op->type = OP_TYPE_REG;
 	op->reg = ops_decoded.opcode & 0x7;
@@ -67,6 +66,7 @@ static int concat3(decode_r_, SUFFIX, _internal) (swaddr_t eip, Operand *op) {
 	return 0;
 }
 
+/*decode_rm_SUFFIX_internal*/
 static int concat3(decode_rm_, SUFFIX, _internal) (swaddr_t eip, Operand *rm, Operand *reg) {
 	rm->size = DATA_BYTE;
 	int len = read_ModR_M(eip, rm, reg);
