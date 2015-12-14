@@ -1,6 +1,7 @@
 #include "trap.h"
 
 char a [10];
+int b;
 
 int main ()
 {
@@ -9,6 +10,7 @@ int main ()
 	a[2] = 3;
 	a[3] = 4;
 	a[4] = 5;
+	b = 0x01020304;
 	nemu_assert(a[1] == 0x1);
 	nemu_assert(a[2] == 0x2);
 	nemu_assert(a[3] == 0x3);
