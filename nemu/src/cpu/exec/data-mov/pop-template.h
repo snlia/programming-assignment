@@ -3,10 +3,10 @@
 
 static void do_execute () {
 #if DATA_BYTE == 2
-	OPERAND_W(op_dest, swaddr_read (cpu.esp, 2));
+	OPERAND_W(op_src, swaddr_read (cpu.esp, 2));
 	cpu.esp += 2;
 #else
-	OPERAND_W(op_dest, swaddr_read (cpu.esp, 4));
+	OPERAND_W(op_src, swaddr_read (cpu.esp, 4));
 	cpu.esp += 4;
 #endif
 	print_asm_template1();
