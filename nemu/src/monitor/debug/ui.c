@@ -260,7 +260,7 @@ static int cmd_bt (char *args)
 	swaddr_t Eip = cpu.eip;
 	while (Ebp)
 	{
-		printf ("#%d 0x%08x in %s ()\n", now++, Eip, find_FUNC (Eip));
+		printf ("#%d 0x%08x in %s (%x %x %x %x)\n", now++, Eip, find_FUNC (Eip), swaddr_read (Ebp + 8, 4), swaddr_read (Ebp + 12, 4), swaddr_read (Ebp + 16, 4), swaddr_read (Ebp + 20, 4));
 		Eip = swaddr_read (Ebp + 4, 4);
 		Ebp = swaddr_read (Ebp, 4);
 	}
