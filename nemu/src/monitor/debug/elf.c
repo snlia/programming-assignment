@@ -95,14 +95,12 @@ void print_asm_template4(swaddr_t eip, char * S)
 
 void print_asm_template5(swaddr_t eip, char * S)
 {
-	int i;
+	int i, ansp = -1;
 	extern char assembly[];
 	for (i = nr_symtab_entry - 1; ~i; --i)
 		if (symtab[i].st_name && symtab[i].st_info == FUNC && symtab[i].st_value <= eip)
-		{
-			Assert(snprintf(assembly, 80, "%s %x <%s+0x%x>", S, eip, strtab + symtab[i].st_name, eip - symtab[i].st_value) < 80, "buffer overflow!");
-			break;
-		}
+			if (!~ansp || symtab[ansp].st_value < symtab[i].st_value) ansp = i;
+	Assert(snprintf(assembly, 80, "%s %x <%s+0x%x>", S, eip, strtab + symtab[ansp].st_name, eip - symtab[ansp].st_value) < 80, "buffer overflow!");
 }
 
 uint32_t get_value (char *s, char * Flag)
@@ -120,11 +118,11 @@ uint32_t get_value (char *s, char * Flag)
 
 char* find_FUNC (swaddr_t eip)
 {
-	int i;
-	for (i = nr_symtab_entry - 1; ~i; --i)
+	int i, ansp = -1;
+	for (i = 0; i < nr_symtab_entry; ++i)
 		if (symtab[i].st_name && symtab[i].st_info == FUNC && symtab[i].st_value <= eip)
-			return strtab + symtab[i].st_name;
-	return strtab + symtab[i].st_name;
+			if (!~ansp || symtab[ansp].st_value < symtab[i].st_value) ansp = i;
+	return strtab + symtab[ansp].st_name;
 }
 
 void print_elf ()
