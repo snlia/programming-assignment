@@ -15,6 +15,10 @@ make_helper(decode_i_l);
 make_helper(decode_si_b);
 make_helper(decode_si_l);
 
+make_helper(decode_rm2rx_w);
+make_helper(decode_rm2rx_l);
+make_helper(decode_rm2rX_l);
+
 make_helper(decode_i2rm_b);
 make_helper(decode_i2rm_w);
 make_helper(decode_i2rm_l);

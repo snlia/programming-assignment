@@ -4,6 +4,7 @@
 
 #define decode_r_internal concat3(decode_r_, SUFFIX, _internal)
 #define decode_rm_internal concat3(decode_rm_, SUFFIX, _internal)
+#define decode_rmx_internal concat3(decode_rmx_, SUFFIX, _internal)
 #define decode_i concat(decode_i_, SUFFIX)
 #define decode_a concat(decode_a_, SUFFIX)
 #define decode_r2rm concat(decode_r2rm_, SUFFIX)
@@ -78,6 +79,19 @@ static int concat3(decode_rm_, SUFFIX, _internal) (swaddr_t eip, Operand *rm, Op
 	return len;
 }
 
+#if DATA_BYTE == 2 || DATA_BYTE == 4
+static int concat3(decode_rmx_, SUFFIX, _internal) (swaddr_t eip, Operand *rm, Operand *reg, size_t x) {
+	rm->size = x;
+	int len = read_ModR_M(eip, rm, reg);
+	reg->val = REG(reg->reg);
+
+#ifdef DEBUG
+	snprintf(reg->str, OP_STR_SIZE, "%%%s", REG_NAME(reg->reg));
+#endif
+	return len;
+}
+#endif
+
 /* Eb <- Gb
  * Ev <- Gv
  */
@@ -92,97 +106,110 @@ make_helper(concat(decode_rm2r_, SUFFIX)) {
 	return decode_rm_internal(eip, op_src, op_dest);
 }
 
+#if DATA_BYTE == 2 || DATA_BYTE == 4
+make_helper (concat (decode_rm2rx_, SUFFIX)) {
+	return decode_rmx_internal(eip, op_src, op_dest, 1);
+}
+#endif
+
+#if DATA_BYTE == 4
+make_helper (concat (decode_rm2rX_, SUFFIX)) {
+	return decode_rmx_internal(eip, op_src, op_dest, 2);
+}
+#endif
+
+
 
 /* AL <- Ib
  * eAX <- Iv
  */
 make_helper(concat(decode_i2a_, SUFFIX)) {
-	decode_a(eip, op_dest);
-	return decode_i(eip);
+    decode_a(eip, op_dest);
+    return decode_i(eip);
 }
 
 /* Gv <- EvIb
  * Gv <- EvIv
  * use for imul */
 make_helper(concat(decode_i_rm2r_, SUFFIX)) {
-	int len = decode_rm_internal(eip, op_src2, op_dest);
-	len += decode_i(eip + len);
-	return len;
+    int len = decode_rm_internal(eip, op_src2, op_dest);
+    len += decode_i(eip + len);
+    return len;
 }
 
 /* Eb <- Ib
  * Ev <- Iv
  */
 make_helper(concat(decode_i2rm_, SUFFIX)) {
-	int len = decode_rm_internal(eip, op_dest, op_src2);		/* op_src2 not use here */
-	len += decode_i(eip + len);
-	return len;
+    int len = decode_rm_internal(eip, op_dest, op_src2);		/* op_src2 not use here */
+    len += decode_i(eip + len);
+    return len;
 }
 
 /* XX <- Ib 
  * eXX <- Iv 
  */
 make_helper(concat(decode_i2r_, SUFFIX)) {
-	decode_r_internal(eip, op_dest);
-	return decode_i(eip);
+    decode_r_internal(eip, op_dest);
+    return decode_i(eip);
 }
 
 /* used by unary operations */
 make_helper(concat(decode_rm_, SUFFIX)) {
-	return decode_rm_internal(eip, op_src, op_src2);		/* op_src2 not use here */
+    return decode_rm_internal(eip, op_src, op_src2);		/* op_src2 not use here */
 }
 
 make_helper(concat(decode_r_, SUFFIX)) {
-	return decode_r_internal(eip, op_src);
+    return decode_r_internal(eip, op_src);
 }
 
 #if DATA_BYTE == 2 || DATA_BYTE == 4
 make_helper(concat(decode_si2rm_, SUFFIX)) {
-	int len = decode_rm_internal(eip, op_dest, op_src2);	/* op_src2 not use here */
-	len += decode_si_b(eip + len);
-	return len;
+    int len = decode_rm_internal(eip, op_dest, op_src2);	/* op_src2 not use here */
+    len += decode_si_b(eip + len);
+    return len;
 }
 
 make_helper(concat(decode_si_rm2r_, SUFFIX)) {
-	int len = decode_rm_internal(eip, op_src2, op_dest);
-	len += decode_si_b(eip + len);
-	return len;
+    int len = decode_rm_internal(eip, op_src2, op_dest);
+    len += decode_si_b(eip + len);
+    return len;
 }
 #endif
 
 /* used by shift instructions */
 make_helper(concat(decode_rm_1_, SUFFIX)) {
-	int len = decode_r2rm(eip);
-	op_src->type = OP_TYPE_IMM;
-	op_src->imm = 1;
-	op_src->val = 1;
+    int len = decode_r2rm(eip);
+    op_src->type = OP_TYPE_IMM;
+    op_src->imm = 1;
+    op_src->val = 1;
 #ifdef DEBUG
-	sprintf(op_src->str, "$1");
+    sprintf(op_src->str, "$1");
 #endif
-	return len;
+    return len;
 }
 
 make_helper(concat(decode_rm_cl_, SUFFIX)) {
-	int len = decode_r2rm(eip);
-	op_src->type = OP_TYPE_REG;
-	op_src->reg = R_CL;
-	op_src->val = reg_b(R_CL);
+    int len = decode_r2rm(eip);
+    op_src->type = OP_TYPE_REG;
+    op_src->reg = R_CL;
+    op_src->val = reg_b(R_CL);
 #ifdef DEBUG
-	sprintf(op_src->str, "%%cl");
+    sprintf(op_src->str, "%%cl");
 #endif
-	return len;
+    return len;
 }
 
 make_helper(concat(decode_rm_imm_, SUFFIX)) {
-	int len = decode_r2rm(eip);
-	len += decode_i_b(eip + len);
-	return len;
+    int len = decode_r2rm(eip);
+    len += decode_i_b(eip + len);
+    return len;
 }
 
 void concat(write_operand_, SUFFIX) (Operand *op, DATA_TYPE src) {
-	if(op->type == OP_TYPE_REG) { REG(op->reg) = src; }
-	else if(op->type == OP_TYPE_MEM) { swaddr_write(op->addr, op->size, src); }
-	else { assert(0); }
+    if(op->type == OP_TYPE_REG) { REG(op->reg) = src; }
+    else if(op->type == OP_TYPE_MEM) { swaddr_write(op->addr, op->size, src); }
+    else { assert(0); }
 }
 
 #include "cpu/exec/template-end.h"
