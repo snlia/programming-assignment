@@ -8,8 +8,8 @@ static void do_execute () {
 //	panic("please implement me");
 	cpu.CF = cpu.OF = 0;
 	cpu.SF = (result >> (DATA_BYTE * 8 - 1)) & 1;
-    printf ("%x\n", result);
 	cpu.ZF = !result;
+    printf ("%x\n", cpu.ZF);
 	result = result & 0xff;
 	result = (result ^ result) & 0xf;
 	result = (result ^ result) & 0x3;
