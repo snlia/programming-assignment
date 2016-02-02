@@ -86,9 +86,9 @@ void load_elf_tables(int argc, char *argv[]) {
 
 void print_asm_template4(swaddr_t eip, char * S)
 {
-    puts ("ppp");
 	int i;
 	extern char assembly[];
+    printf ("%s\n", assembly);
 	for (i = 0; i < nr_symtab_entry; ++i)
 		if (symtab[i].st_name && symtab[i].st_info == FUNC && symtab[i].st_value == eip)
 			Assert(snprintf(assembly, 80, "%s %x <%s>", S, eip, strtab + symtab[i].st_name) < 80, "buffer overflow!");
