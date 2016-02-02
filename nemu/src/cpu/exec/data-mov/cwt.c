@@ -1,5 +1,5 @@
 #include "cpu/exec/helper.h"
-#include "leave.h"
+#include "cwt.h"
 
 make_helper (cwt_w)
 {

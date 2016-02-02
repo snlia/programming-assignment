@@ -37,6 +37,7 @@
 #include "logic/shrd.h"
 #include "logic/test.h"
 #include "logic/setcc.h"
+#include "logic/clt.h"
 
 #include "string/rep.h"
 #include "string/movs.h"
