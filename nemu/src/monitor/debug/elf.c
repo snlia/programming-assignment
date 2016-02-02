@@ -86,6 +86,7 @@ void load_elf_tables(int argc, char *argv[]) {
 
 void print_asm_template4(swaddr_t eip, char * S)
 {
+    puts ("ppp");
 	int i;
 	extern char assembly[];
 	for (i = 0; i < nr_symtab_entry; ++i)
