@@ -9,11 +9,10 @@ static void do_execute () {
 	cpu.CF = cpu.OF = 0;
 	cpu.SF = (result >> (DATA_BYTE * 8 - 1)) & 1;
 	cpu.ZF = !result;
-    printf ("%x\n", cpu.ZF);
 	result = result & 0xff;
-	result = (result ^ result) & 0xf;
-	result = (result ^ result) & 0x3;
-	cpu.PF = (1 ^ result ^ result) & 1;
+	result = (result ^ (result >> 4)) & 0xf;
+	result = (result ^ (result >> 2)) & 0x3;
+	cpu.PF = (1 ^ result ^ (result >> 1)) & 1;
 	print_asm_template2();
 }
 
