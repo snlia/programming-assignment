@@ -13,10 +13,9 @@ static void do_execute () {
 	cpu.ZF = !result;
 	cpu.AF = ((op_src->val & 0x7) + (op_dest->val & 0x7)) < 0x8;
 	result = result & 0xff;
-	result = (result ^ result) & 0xf;
-	result = (result ^ result) & 0x3;
-	cpu.PF = (1 ^ result ^ result) & 1;
-
+	result = (result ^ (result >> 4)) & 0xf;
+	result = (result ^ (result >> 2)) & 0x3;
+	cpu.PF = (1 ^ result ^ (result >> 1)) & 1;
 
 	print_asm_template1();
 }
