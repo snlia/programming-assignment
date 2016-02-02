@@ -89,10 +89,8 @@ void print_asm_template4(swaddr_t eip, char * S)
 	int i;
 	extern char assembly[];
 	for (i = 0; i < nr_symtab_entry; ++i)
-		if (symtab[i].st_name /*&& symtab[i].st_info == FUNC*/ && symtab[i].st_value == eip)
-        {
+		if (symtab[i].st_name && symtab[i].st_info == FUNC && symtab[i].st_value == eip)
 			Assert(snprintf(assembly, 80, "%s %x <%s>", S, eip, strtab + symtab[i].st_name) < 80, "buffer overflow!");
-        }
 }
 
 void print_asm_template5(swaddr_t eip, char * S)
