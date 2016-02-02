@@ -23,7 +23,6 @@
 
 #include "control/call.h"
 #include "control/jcc.h"
-#include "control/setcc.h"
 #include "control/jmp.h"
 #include "control/ret.h"
 
@@ -36,6 +35,7 @@
 #include "logic/shr.h"
 #include "logic/shrd.h"
 #include "logic/test.h"
+#include "logic/setcc.h"
 
 #include "string/rep.h"
 
