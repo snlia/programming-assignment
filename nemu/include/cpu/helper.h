@@ -15,8 +15,8 @@ static inline uint32_t instr_fetch(swaddr_t addr, size_t len) {
 static inline int idex(swaddr_t eip, int (*decode)(swaddr_t), void (*execute) (void)) {
 	/* eip is pointing to the opcode */
 	int len = decode(eip + 1);
-    printf ("%d\n", len + 1);
 	cpu.eip += len + 1;
+    printf ("%x\n", cpu.eip);
 	execute();
 	return 0;	// "1" for opcode
 }
