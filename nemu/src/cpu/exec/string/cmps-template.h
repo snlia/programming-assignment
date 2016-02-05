@@ -17,7 +17,6 @@ make_helper (concat (cmps_, SUFFIX))
     result = (result ^ (result >> 4)) & 0xf;
     result = (result ^ (result >> 2)) & 0x3;
     cpu.PF = (1 ^ result ^ (result >> 1)) & 1;
-    printf ("%x\n", DESTindex);
     if (cpu.DF)
     {
         DESTindex -= DATA_BYTE;
@@ -28,7 +27,6 @@ make_helper (concat (cmps_, SUFFIX))
         DESTindex += DATA_BYTE;
         SRCindex += DATA_BYTE;
     }
-    printf ("%x\n", DESTindex);
     print_asm("cmps");
     return 1;
 }
