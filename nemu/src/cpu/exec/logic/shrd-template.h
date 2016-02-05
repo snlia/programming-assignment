@@ -8,6 +8,7 @@ static void do_execute () {
 	DATA_TYPE out = op_src2->val;
 	uint8_t count = op_src->val;
 	count &= 0x1f;
+    printf ("%x\n", count);
     cpu.CF = (out >> (count - 1)) & 1;
 	while(count != 0) {
 		out >>= 1;
