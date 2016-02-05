@@ -15,6 +15,7 @@ static void do_execute () {
 		out |= (in & 1) << ((DATA_BYTE << 3) - 1);
 		in >>= 1;
 		count --;
+        printf ("!!!%x\n", out);
 	}
 
 	OPERAND_W(op_src2, out);
