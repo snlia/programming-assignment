@@ -27,8 +27,8 @@ make_helper(rep) {
                   );
             if (ops_decoded.opcode == 0xa6 || ops_decoded.opcode == 0xa7 || ops_decoded.opcode == 0xae || ops_decoded.opcode == 0xaf)
             {
-                if (INSTR == 0xf3 && cpu.ZF) break;
-                if (INSTR == 0xf2 && !cpu.ZF) break;
+                if (INSTR == 0xf3 && !cpu.ZF) break;
+                if (INSTR == 0xf2 && cpu.ZF) break;
             }
             /* TODO: Jump out of the while loop if necessary. */
 
