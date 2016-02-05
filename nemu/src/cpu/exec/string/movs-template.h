@@ -1,10 +1,5 @@
-#if DATA_TYPE == 2
-#define DESTindex (reg_w(R_DI))
-#define SRCindex (reg_w(R_SI))
-#else
 #define DESTindex (reg_l(R_EDI))
 #define SRCindex (reg_l(R_ESI))
-#endif
 
 make_helper (concat (movs_, SUFFIX))
 {

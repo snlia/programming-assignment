@@ -1,8 +1,4 @@
-#if DATA_TYPE == 2
-#define DESTREG (reg_w(R_DI))
-#else
 #define DESTREG (reg_l(R_EDI))
-#endif
 
 make_helper (concat (stos_, SUFFIX))
 {
