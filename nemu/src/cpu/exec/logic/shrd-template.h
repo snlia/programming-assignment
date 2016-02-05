@@ -37,7 +37,7 @@ make_helper(concat(shrdi_, SUFFIX)) {
 }
 
 make_helper(concat(shrdc_, SUFFIX)) {
-	int len = concat(decode_rm2r_, SUFFIX) (eip + 1);  /* use decode_si_rm2r to read 1 byte immediate */
+	int len = concat(decode_cl_rm2r_, SUFFIX) (eip + 1);  /* use decode_si_rm2r to read 1 byte immediate */
 	op_dest->val = REG(op_dest->reg);
 	do_execute();
 	return len + 1;
