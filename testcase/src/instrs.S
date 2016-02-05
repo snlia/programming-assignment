@@ -15,7 +15,7 @@ loop_main:
   call ctrl_trans_test
   call data_trans_test
   call logic_test
-  call string_test
+//  call string_test
   mov 0x10000, %eax
   sub $1, %eax
 loop_test:
