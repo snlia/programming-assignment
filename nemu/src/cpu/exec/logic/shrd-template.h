@@ -8,7 +8,7 @@ static void do_execute () {
 	DATA_TYPE out = op_src2->val;
 	uint8_t count = op_src->val;
 	count &= 0x1f;
-    printf ("%x\n", count);
+    printf ("in :%x out : %x count :%x\n", in, out, count);
     cpu.CF = (out >> (count - 1)) & 1;
 	while(count != 0) {
 		out >>= 1;
@@ -18,6 +18,7 @@ static void do_execute () {
 	}
 
 	OPERAND_W(op_src2, out);
+    printf ("out : %x\n", out);
     cpu.SF = (out >> (DATA_BYTE * 8 - 1)) & 1;
 	cpu.ZF = !out;
 	out = out & 0xff;
