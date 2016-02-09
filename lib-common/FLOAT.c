@@ -16,8 +16,7 @@ FLOAT f2F(float a) {
 }
 
 FLOAT Fabs(FLOAT a) {
-	nemu_assert(0);
-	return 0;
+	return ((a & 0x80000000) ? (-(a)) : (a));
 }
 
 FLOAT sqrt(FLOAT x) {
