@@ -6,13 +6,11 @@ FLOAT F_mul_F(FLOAT a, FLOAT b) {
 }
 
 FLOAT F_div_F(FLOAT a, FLOAT b) {
-	nemu_assert(0);
-	return 0;
+	return (((long long) a) << 16LL) / b;
 }
 
 FLOAT f2F(float a) {
-	nemu_assert(0);
-	return 0;
+	return (FLOAT) ((double) a) * 0x10000;
 }
 
 FLOAT Fabs(FLOAT a) {
