@@ -19,7 +19,7 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 }
 
 FLOAT f2F(float a) {
-	return (FLOAT) ((double) a) * 0x10000;
+	return (FLOAT) a * 0x10000;
 }
 
 FLOAT Fabs(FLOAT a) {
