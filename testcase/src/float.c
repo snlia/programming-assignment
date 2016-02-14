@@ -1,7 +1,11 @@
 #include "trap.h"
 
+void f (float a)
+{
+}
+
 int main() {
-    float a = 1.1;
+    f (1.1);
 	HIT_GOOD_TRAP;
 	return 0;
 }
