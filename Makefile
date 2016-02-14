@@ -4,7 +4,7 @@
 
 CC := gcc
 LD := ld
-CFLAGS := -MMD -Wall -Werror -c -mfloat-abi=softfp
+CFLAGS := -MMD -Wall -Werror -c #-mfloat-abi=soft
 
 LIB_COMMON_DIR := lib-common
 NEWLIBC_DIR := $(LIB_COMMON_DIR)/newlib
