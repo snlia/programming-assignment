@@ -8,7 +8,7 @@ $(FLOAT): $(FLOAT_OBJ)
 
 $(FLOAT_OBJ): $(LIB_COMMON_DIR)/FLOAT.c
 	@mkdir -p obj/$(LIB_COMMON_DIR)
-	$(call make_command, $(CC), $(FLOAT_CFLAGS), cc $<, $^)
+	$(call make_command, $(CC), $(FLOAT_CFLAGS), cc $<, $<)
 
 # TODO: write a rule for generating $(FLOAT_OBJ)
 

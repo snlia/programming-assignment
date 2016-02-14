@@ -8,7 +8,6 @@ static void do_execute () {
 
 	/* TODO: Update EFLAGS. */
 //	panic("please implement me");
-    printf ("%lld\n", 100000000LL / op_dest->val);
 	cpu.CF = ((uint64_t) (DATA_TYPE) op_src->val + (uint64_t) (DATA_TYPE) op_dest->val + (uint64_t) (DATA_TYPE) cpu.CF) != result;
 	uint32_t off = (DATA_BYTE * 8 - 1);
 	cpu.SF = (result >> off) & 1;
