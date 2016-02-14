@@ -6,7 +6,8 @@ FLOAT F_mul_F(FLOAT a, FLOAT b) {
 }
 
 FLOAT F_div_F(FLOAT a, FLOAT b) {
-	return (((long long) a) << 16LL) / b;
+    return 0;
+//	return (((long long) a) << 16LL) / b;
 }
 
 FLOAT f2F(float a) {
