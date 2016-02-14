@@ -6,9 +6,16 @@ FLOAT F_mul_F(FLOAT a, FLOAT b) {
 }
 
 FLOAT F_div_F(FLOAT a, FLOAT b) {
-    return 0;
-//    return 100000000LL / ((long long) a);
-//	return (((long long) a) << 16LL) / b;
+//    if (b == 1) return a << 16;
+    FLOAT res = a / b;
+    a %= b;
+    for (int i = 0; i < 16; ++i)
+    {
+        res <<= 1;
+        a <<= 1; 
+        if (a >= b) {res |= 1; a -= b;}
+    }
+    return res;
 }
 
 FLOAT f2F(float a) {
