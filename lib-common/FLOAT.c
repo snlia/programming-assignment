@@ -1,13 +1,11 @@
 #include "FLOAT.h"
 
 FLOAT F_mul_F(FLOAT a, FLOAT b) {
-    return 0;
     long long result = a * b;
 	return result >> 16;
 }
 
 FLOAT F_div_F(FLOAT a, FLOAT b) {
-    return 0;
 //    if (b == 1) return a << 16;
     FLOAT res = a / b;
     a %= b;
@@ -21,12 +19,10 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 }
 
 FLOAT f2F(float a) {
-    return 0;
-//	return (FLOAT) a * 0x10000;
+	return (FLOAT) a * 0x10000;
 }
 
 FLOAT Fabs(FLOAT a) {
-    return 0;
 	return ((a & 0x80000000) ? (-(a)) : (a));
 }
 
