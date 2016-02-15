@@ -19,7 +19,23 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 }
 
 FLOAT f2F(float a) {
-	return (FLOAT) a * 0x10000;
+    unsigned int x = *((unsigned int *) &a); // change point type to unsigned int to get the compute code of a
+    if (x == 0xc7000000) return 0x80000000; // return if x = -0x8000
+    unsigned int Significand = x & 0x7fffff;
+    x >>= 23;
+    int Exponent = x & 0xff - 0x7f;
+    x >>= 8;
+    unsigned int Sign = x & 1;
+    //pick up Sign, Exponent and Significand...
+    //now we have float a = (Sign) 1.Significand * 2^Exponent, we need to get a = result * 2^-16
+    FLOAT result = 0; 
+    if (Exponent <= -17) return 0; //FLOAT can only store abs (value) >= 1e-16, 
+    Significand |= 0x800000;
+    Significand <<= 7; //now a = (Sign) Significand * 2^(Exponent - 30); result = (Sign) Significand * 2^ (Exponent - 14)
+    if (Exponent > 14) ; //float point overflow
+    result = Significand >> (14 - Exponent);
+    if (result & 1 && Exponent != 14 && (Significand >> (13 - Exponent)) & 1) result += 1;
+    return Sign ? -result : result;
 }
 
 FLOAT Fabs(FLOAT a) {
