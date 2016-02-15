@@ -1,7 +1,7 @@
 # This file will be included by the Makefile under the project directory.
 
 FLOAT_OBJ := $(FLOAT:.a=.o)
-FLOAT_CFLAGS := -c -m32 -fno-builtin
+FLOAT_CFLAGS := -c -m32 -fno-builtin -msoft-float -mno-sse
 
 $(FLOAT): $(FLOAT_OBJ)
 	ar r $(FLOAT) $(FLOAT_OBJ)
