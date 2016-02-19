@@ -8,7 +8,7 @@ static CR3 ucr3;
 extern inline PDE* get_updir() { return updir; }
 extern inline uint32_t get_ucr3() { return ucr3.val; }
 
-PDE* get_kpdir();
+__attribute__ ((gnu_inline)) inline PDE* get_kpdir();
 
 uint32_t brk = 0;
 
