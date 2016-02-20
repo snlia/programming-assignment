@@ -90,7 +90,11 @@ void print_asm_template4(swaddr_t eip, char * S)
 	extern char assembly[];
 	for (i = 0; i < nr_symtab_entry; ++i)
 		if (symtab[i].st_name && symtab[i].st_info == FUNC && symtab[i].st_value == eip)
+        {
 			Assert(snprintf(assembly, 80, "%s %x <%s>", S, eip, strtab + symtab[i].st_name) < 80, "buffer overflow!");
+            return ;
+        }
+    Assert(snprintf(assembly, 80, "%s %x", S, eip) < 80, "buffer overflow!");
 }
 
 void print_asm_template5(swaddr_t eip, char * S)
@@ -100,37 +104,40 @@ void print_asm_template5(swaddr_t eip, char * S)
 	for (i = nr_symtab_entry - 1; ~i; --i)
 		if (symtab[i].st_name && symtab[i].st_info == FUNC && symtab[i].st_value <= eip)
 			if (!~ansp || symtab[ansp].st_value < symtab[i].st_value) ansp = i;
-	Assert(snprintf(assembly, 80, "%s %x <%s+0x%x>", S, eip, strtab + symtab[ansp].st_name, eip - symtab[ansp].st_value) < 80, "buffer overflow!");
+    if (~ansp)
+        Assert(snprintf(assembly, 80, "%s %x <%s+0x%x>", S, eip, strtab + symtab[ansp].st_name, eip - symtab[ansp].st_value) < 80, "buffer overflow!");
+    else
+        Assert(snprintf(assembly, 80, "%s %x", S, eip) < 80, "buffer overflow!");
 }
 
 uint32_t get_value (char *s, char * Flag)
 {
-	int i;
-	*Flag = 0;
-	for (i = 0; i < nr_symtab_entry; ++i)
-		if (symtab[i].st_name && !strcmp (s, strtab + symtab[i].st_name) && (symtab[i].st_info == FUNC || symtab[i].st_info == VARIABLE))
-		{
-			*Flag = 1;
-			return symtab[i].st_value;
-		}
-	return 0;
+    int i;
+    *Flag = 0;
+    for (i = 0; i < nr_symtab_entry; ++i)
+        if (symtab[i].st_name && !strcmp (s, strtab + symtab[i].st_name) && (symtab[i].st_info == FUNC || symtab[i].st_info == VARIABLE))
+        {
+            *Flag = 1;
+            return symtab[i].st_value;
+        }
+    return 0;
 }
 
 char* find_FUNC (swaddr_t eip)
 {
-	int i, ansp = -1;
-	for (i = 0; i < nr_symtab_entry; ++i)
-		if (symtab[i].st_name && symtab[i].st_info == FUNC && symtab[i].st_value <= eip)
-			if (!~ansp || symtab[ansp].st_value < symtab[i].st_value) ansp = i;
-	return strtab + symtab[ansp].st_name;
+    int i, ansp = -1;
+    for (i = 0; i < nr_symtab_entry; ++i)
+        if (symtab[i].st_name && symtab[i].st_info == FUNC && symtab[i].st_value <= eip)
+            if (!~ansp || symtab[ansp].st_value < symtab[i].st_value) ansp = i;
+    return strtab + symtab[ansp].st_name;
 }
 
 void print_elf ()
 {
-	int i;
-	for (i = 0; i < nr_symtab_entry; ++i)
-		if (symtab[i].st_name)
-			printf ("%s %x %x\n", symtab[i].st_name + strtab, symtab[i].st_value, symtab[i].st_info);
+    int i;
+    for (i = 0; i < nr_symtab_entry; ++i)
+        if (symtab[i].st_name)
+            printf ("%s %x %x\n", symtab[i].st_name + strtab, symtab[i].st_value, symtab[i].st_info);
 }
 #undef FUNC 
 #undef VARIABLE 
