@@ -61,6 +61,7 @@ uint32_t loader() {
 #endif
         }
     }
+    panic ("end");
 
     volatile uint32_t entry = elf->e_entry;
 
