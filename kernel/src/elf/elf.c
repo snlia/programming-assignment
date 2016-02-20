@@ -39,6 +39,7 @@ uint32_t loader() {
     Elf32_Off Off = elf->e_phoff;
     uint16_t phnum = elf->e_phnum;
     /* Load each program segment */
+    panic ("begin");
     while (phnum--){
         /* Scan the program header table, load each segment into memory */
         ph = (void *) (buf + Off);
@@ -61,7 +62,6 @@ uint32_t loader() {
 #endif
         }
     }
-    panic ("end");
 
     volatile uint32_t entry = elf->e_entry;
 
