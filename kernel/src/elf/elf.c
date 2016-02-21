@@ -38,6 +38,7 @@ uint32_t loader() {
     //e_phoff e_phnum
     Elf32_Off Off = elf->e_phoff;
     uint16_t phnum = elf->e_phnum;
+	nemu_assert(elf->e_shoff == 15720);
     /* Load each program segment */
     while (phnum--){
         /* Scan the program header table, load each segment into memory */
