@@ -48,7 +48,6 @@ uint32_t loader() {
              * to the memory region [VirtAddr, VirtAddr + FileSiz)
              */
             nemu_assert (ph->p_vaddr == 0x00800000);
-            nemu_assert (0);
             memcpy ((void *) ph->p_vaddr, buf + ph->p_offset, ph->p_filesz);
             /* TODO: zero the memory region 
              * [VirtAddr + FileSiz, VirtAddr + MemSiz)
