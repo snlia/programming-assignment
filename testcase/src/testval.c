@@ -11,5 +11,6 @@ int main ()
 	a[3] = 4;
 	a[4] = 5;
 	b = 0x01020304;
+	HIT_GOOD_TRAP;
 }
 
