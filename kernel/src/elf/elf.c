@@ -17,7 +17,7 @@ void ramdisk_write(uint8_t *, uint32_t, uint32_t);
 
 void create_video_mapping();
 uint32_t get_ucr3();
-static uint8_t Buf[0x1000000];
+static uint8_t Buf[0x10000];
 
 uint32_t loader() {
 	Elf32_Ehdr *elf;
