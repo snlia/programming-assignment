@@ -55,7 +55,8 @@ uint32_t loader() {
 #else
             ramdisk_read(Buf, ELF_OFFSET_IN_DISK + ph->p_offset, ph->p_filesz);
 #endif
-            memcpy ((void *) ph->p_vaddr, buf + ph->p_offset, ph->p_filesz);
+            memcpy ((void *) ph->p_vaddr, Buf, ph->p_filesz);
+//            memcpy ((void *) ph->p_vaddr, buf + ph->p_offset, ph->p_filesz);
             nemu_assert (ph->p_vaddr == 0x00800001);
             /* TODO: zero the memory region 
              * [VirtAddr + FileSiz, VirtAddr + MemSiz)
