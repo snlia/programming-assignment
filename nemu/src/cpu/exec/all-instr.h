@@ -25,6 +25,7 @@
 
 #include "control/call.h"
 #include "control/jcc.h"
+#include "control/cmov.h"
 #include "control/jmp.h"
 #include "control/ret.h"
 

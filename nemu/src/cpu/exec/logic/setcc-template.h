@@ -25,32 +25,32 @@ static void do_execute () {
 #endif 
 	switch (ops_decoded.opcode & 0xff)
     {
-        case 0x97 : flag = (CF==0 && ZF==0);
+        case 0x97 : flag = (!CF && !ZF);
 #ifdef DEBUG
                     strcpy (s, "seta");
 #endif
                     break;
-        case 0x93 : flag = (CF==0);
+        case 0x93 : flag = !CF;
 #ifdef DEBUG
                     strcpy (s, "setae");
 #endif
                     break;
-        case 0x92 : flag = (CF==1);
+        case 0x92 : flag = CF;
 #ifdef DEBUG
                     strcpy (s, "setb");
 #endif
                     break;
-        case 0x96 : flag = (ZF==1);
+        case 0x96 : flag = (CF || ZF);
 #ifdef DEBUG
-                    strcpy (s, "setbe");
+                    strcpy (s, "setna");
 #endif
                     break;
-        case 0x94 : flag = (ZF==1);
+        case 0x94 : flag = ZF;
 #ifdef DEBUG
                     strcpy (s, "sete");
 #endif
                     break;
-        case 0x9F : flag = (ZF==0 && SF==OF);
+        case 0x9F : flag = (!ZF && (SF==OF));
 #ifdef DEBUG
                     strcpy (s, "setg");
 #endif
@@ -65,42 +65,42 @@ static void do_execute () {
                     strcpy (s, "setl");
 #endif
                     break;
-        case 0x9E : flag = (ZF==1 || SF!=OF);
+        case 0x9E : flag = (ZF || (SF!=OF));
 #ifdef DEBUG
                     strcpy (s, "setle");
 #endif
                     break;
-        case 0x95 : flag = (ZF==0);
+        case 0x95 : flag = !ZF;
 #ifdef DEBUG
                     strcpy (s, "setne");
 #endif
                     break;
-        case 0x91 : flag = (OF==0);
+        case 0x91 : flag = !OF;
 #ifdef DEBUG
                     strcpy (s, "setno");
 #endif
                     break;
-        case 0x9B : flag = (PF==0);
+        case 0x9B : flag = !PF;
 #ifdef DEBUG
                     strcpy (s, "setnp");
 #endif
                     break;
-        case 0x99 : flag = (SF==0);
+        case 0x99 : flag = !SF;
 #ifdef DEBUG
                     strcpy (s, "setns");
 #endif
                     break;
-        case 0x90 : flag = (OF==1);
+        case 0x90 : flag = OF;
 #ifdef DEBUG
                     strcpy (s, "seto");
 #endif
                     break;
-        case 0x9A : flag = (PF==1);
+        case 0x9A : flag = PF;
 #ifdef DEBUG
                     strcpy (s, "setp");
 #endif
                     break;
-        case 0x98 : flag = (SF==1);
+        case 0x98 : flag = SF;
 #ifdef DEBUG
                     strcpy (s, "sets");
 #endif
