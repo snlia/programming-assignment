@@ -17,6 +17,7 @@ void ramdisk_write(uint8_t *, uint32_t, uint32_t);
 
 void create_video_mapping();
 uint32_t get_ucr3();
+static uint8_t Buf[0x1000000];
 
 uint32_t loader() {
 	Elf32_Ehdr *elf;
@@ -49,6 +50,11 @@ uint32_t loader() {
              * to the memory region [VirtAddr, VirtAddr + FileSiz)
              */
             nemu_assert (ph->p_vaddr == 0x00800000);
+#ifdef HAS_DEVICE
+            ide_read(Buf, ELF_OFFSET_IN_DISK + ph->p_offset, ph->p_filesz);
+#else
+            ramdisk_read(Buf, ELF_OFFSET_IN_DISK + ph->p_offset, ph->p_filesz);
+#endif
             memcpy ((void *) ph->p_vaddr, buf + ph->p_offset, ph->p_filesz);
             nemu_assert (ph->p_vaddr == 0x00800001);
             /* TODO: zero the memory region 
