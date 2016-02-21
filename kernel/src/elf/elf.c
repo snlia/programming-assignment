@@ -38,7 +38,6 @@ uint32_t loader() {
     //e_phoff e_phnum
     Elf32_Off Off = elf->e_phoff;
     uint16_t phnum = elf->e_phnum;
-	nemu_assert(elf->e_shoff == 158156);
     /* Load each program segment */
     while (phnum--){
         /* Scan the program header table, load each segment into memory */
@@ -48,6 +47,7 @@ uint32_t loader() {
             /* TODO: read the content of the segment from the ELF file 
              * to the memory region [VirtAddr, VirtAddr + FileSiz)
              */
+            nemu_assert(0);
             memcpy ((void *) ph->p_vaddr, buf + ph->p_offset, ph->p_filesz);
             /* TODO: zero the memory region 
              * [VirtAddr + FileSiz, VirtAddr + MemSiz)
