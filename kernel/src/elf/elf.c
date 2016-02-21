@@ -42,7 +42,7 @@ uint32_t loader() {
     while (phnum--){
         /* Scan the program header table, load each segment into memory */
         ph = (void *) (buf + Off);
-        Off += sizeof (ph);
+        Off += PHSIZE;
         if(ph->p_type == PT_LOAD) {
             /* TODO: read the content of the segment from the ELF file 
              * to the memory region [VirtAddr, VirtAddr + FileSiz)
