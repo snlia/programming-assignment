@@ -10,6 +10,7 @@
 void ide_read(uint8_t *, uint32_t, uint32_t);
 #else
 void ramdisk_read(uint8_t *, uint32_t, uint32_t);
+void ramdisk_write(uint8_t *, uint32_t, uint32_t);
 #endif
 
 #define STACK_SIZE (1 << 20)
@@ -48,7 +49,9 @@ uint32_t loader() {
              * to the memory region [VirtAddr, VirtAddr + FileSiz)
              */
             nemu_assert (ph->p_vaddr == 0x00800000);
-            memcpy ((void *) ph->p_vaddr, buf + ph->p_offset, ph->p_filesz);
+     //       memcpy ((void *) ph->p_vaddr, buf + ph->p_offset, ph->p_filesz);
+            ramdisk_write (buf + ph->p_offset, ph->p_vaddr, ph->p_filesz);
+            nemu_assert (ph->p_vaddr == 0x00800001);
             /* TODO: zero the memory region 
              * [VirtAddr + FileSiz, VirtAddr + MemSiz)
              */
