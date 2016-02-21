@@ -4,7 +4,7 @@
 #include <elf.h>
 
 #define ELF_OFFSET_IN_DISK 0
-#define PHSIZE 56
+#define PHSIZE 32
 
 #ifdef HAS_DEVICE
 void ide_read(uint8_t *, uint32_t, uint32_t);
