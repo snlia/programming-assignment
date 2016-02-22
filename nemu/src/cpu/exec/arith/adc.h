@@ -1,9 +1,6 @@
 #ifndef __ADC_H__
 #define __ADC_H__
 
-make_helper(adc_si2rm_w);
-make_helper(adc_si2rm_l);
-
 make_helper(adc_i2a_b);
 make_helper(adc_i2a_w);
 make_helper(adc_i2a_l);
