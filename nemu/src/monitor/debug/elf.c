@@ -3,6 +3,9 @@
 #include <elf.h>
 #define FUNC 0x12
 #define VARIABLE 0x11
+#ifndef ENSIZE
+#define EHSIZE 0x34
+#endif
 
 char *exec_file = NULL;
 
@@ -18,10 +21,10 @@ void load_elf_tables(int argc, char *argv[]) {
 	FILE *fp = fopen(exec_file, "rb");
 	Assert(fp, "Can not open '%s'", exec_file);
 
-	uint8_t buf[4096];
+	uint8_t buf[EHSIZE];
 	/* Read the first 4096 bytes from the exec_file.
 	 * They should contain the ELF header and program headers. */
-	ret = fread(buf, 4096, 1, fp);
+	ret = fread(buf, EHSIZE, 1, fp);
 //	assert(ret == 1);
 
 	/* The first several bytes contain the ELF header. */

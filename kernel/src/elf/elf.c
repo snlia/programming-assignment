@@ -4,7 +4,10 @@
 #include <elf.h>
 
 #define ELF_OFFSET_IN_DISK 0
-#define PHSIZE 32
+#define PHSIZE 0x20
+#ifndef EHSIZE
+#define EHSIZE 0x34
+#endif
 
 #ifdef HAS_DEVICE
 void ide_read(uint8_t *, uint32_t, uint32_t);
@@ -19,30 +22,34 @@ uint32_t get_ucr3();
 static uint8_t Buf[0x10000];
 
 uint32_t loader() {
-	Elf32_Ehdr *elf;
-	Elf32_Phdr *ph = NULL;
+    Elf32_Ehdr *elf;
+    Elf32_Phdr *ph = NULL;
 
-	uint8_t buf[4096];
+    uint8_t buf[EHSIZE];
 
 #ifdef HAS_DEVICE
-	ide_read(buf, ELF_OFFSET_IN_DISK, 4096);
+    ide_read(buf, ELF_OFFSET_IN_DISK, EHSIZE);
 #else
-	ramdisk_read(buf, ELF_OFFSET_IN_DISK, 4096);
+    ramdisk_read(buf, ELF_OFFSET_IN_DISK, EHSIZE);
 #endif
 
-	elf = (void*)buf;
+    elf = (void*)buf;
 
-	/* TODO: fix the magic number with the correct one */
-	const uint32_t elf_magic = 0x464c457f;
-	uint32_t *p_magic = (void *)buf;
-	nemu_assert(*p_magic == elf_magic);
+    /* TODO: fix the magic number with the correct one */
+    const uint32_t elf_magic = 0x464c457f;
+    uint32_t *p_magic = (void *)buf;
+    nemu_assert(*p_magic == elf_magic);
     //e_phoff e_phnum
     Elf32_Off Off = elf->e_phoff;
     uint16_t phnum = elf->e_phnum;
     /* Load each program segment */
     while (phnum--){
         /* Scan the program header table, load each segment into memory */
-        ph = (void *) (buf + Off);
+#ifdef HAS_DEVICE
+        ide_read((uint8_t *) ph, ELF_OFFSET_IN_DISK + Off, PHSIZE);
+#else
+        ramdisk_read((uint8_t *) ph, ELF_OFFSET_IN_DISK + Off, PHSIZE);
+#endif     
         Off += PHSIZE;
         if(ph->p_type == PT_LOAD) {
             /* TODO: read the content of the segment from the ELF file 
@@ -54,7 +61,7 @@ uint32_t loader() {
             ramdisk_read(Buf, ELF_OFFSET_IN_DISK + ph->p_offset, ph->p_filesz);
 #endif
             memcpy ((void *) ph->p_vaddr, Buf, ph->p_filesz);
-//            memcpy ((void *) ph->p_vaddr, buf + ph->p_offset, ph->p_filesz);
+            //            memcpy ((void *) ph->p_vaddr, buf + ph->p_offset, ph->p_filesz);
             /* TODO: zero the memory region 
              * [VirtAddr + FileSiz, VirtAddr + MemSiz)
              */
