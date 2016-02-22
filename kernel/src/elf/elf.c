@@ -5,6 +5,9 @@
 
 #define ELF_OFFSET_IN_DISK 0
 #define PHSIZE 0x20
+#ifndef ENSIZE
+#define EHSIZE 0x34
+#endif
 
 #ifdef HAS_DEVICE
 void ide_read(uint8_t *, uint32_t, uint32_t);
@@ -22,12 +25,13 @@ uint32_t loader() {
 	Elf32_Ehdr *elf;
 	Elf32_Phdr *ph = NULL;
 
-	uint8_t buf[4096];
+	uint8_t buf[EHSIZE];
+	uint8_t buf2[PHSIZE];
 
 #ifdef HAS_DEVICE
-	ide_read(buf, ELF_OFFSET_IN_DISK, 4096);
+	ide_read(buf, ELF_OFFSET_IN_DISK, EHSIZE);
 #else
-	ramdisk_read(buf, ELF_OFFSET_IN_DISK, 4096);
+	ramdisk_read(buf, ELF_OFFSET_IN_DISK, EHSIZE);
 #endif
 
 	elf = (void*)buf;
@@ -42,7 +46,12 @@ uint32_t loader() {
     /* Load each program segment */
     while (phnum--){
         /* Scan the program header table, load each segment into memory */
-        ph = (void *) (buf + Off);
+#ifdef HAS_DEVICE
+        ide_read(buf2, Off + ELF_OFFSET_IN_DISK, PHSIZE);
+#else
+        ramdisk_read(buf2, Off + ELF_OFFSET_IN_DISK, PHSIZE);
+#endif
+        ph = (void *) buf2;
         Off += PHSIZE;
         if(ph->p_type == PT_LOAD) {
             /* TODO: read the content of the segment from the ELF file 
@@ -54,7 +63,6 @@ uint32_t loader() {
             ramdisk_read(Buf, ELF_OFFSET_IN_DISK + ph->p_offset, ph->p_filesz);
 #endif
             memcpy ((void *) ph->p_vaddr, Buf, ph->p_filesz);
-//            memcpy ((void *) ph->p_vaddr, buf + ph->p_offset, ph->p_filesz);
             /* TODO: zero the memory region 
              * [VirtAddr + FileSiz, VirtAddr + MemSiz)
              */
