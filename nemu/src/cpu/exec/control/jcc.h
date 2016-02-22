@@ -2,8 +2,6 @@
 #define __JCC_H__
 
 make_helper(jcc_i_b);
-make_helper(jcc_i_w);
-make_helper(jcc_i_l);
 
 make_helper(jcc_i_v);
 
