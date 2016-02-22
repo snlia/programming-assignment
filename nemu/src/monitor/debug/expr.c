@@ -141,7 +141,7 @@ void init_regex() {
 		ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED | REG_ICASE); // change here : use REG_ICASE option to be case insensitive
 		if(ret != 0) {
 			regerror(ret, &re[i], error_msg, 128);
-			Assert(ret != 0, "regex compilation failed: %s\n%s", error_msg, rules[i].regex);
+			Assert(ret == 0, "regex compilation failed: %s\n%s", error_msg, rules[i].regex);
 		}
 	}
 }
