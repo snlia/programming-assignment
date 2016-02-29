@@ -3,8 +3,7 @@
 
 make_helper (concat (movs_, SUFFIX))
 {
-	DATA_TYPE result = swaddr_read(SRCindex, DATA_BYTE);
-    swaddr_write (DESTindex, DATA_BYTE, result);
+    swaddr_write (DESTindex, DATA_BYTE, swaddr_read(SRCindex, DATA_BYTE));
     if (cpu.DF) 
     {
         SRCindex -= DATA_BYTE;

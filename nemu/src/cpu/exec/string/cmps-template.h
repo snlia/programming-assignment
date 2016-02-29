@@ -7,7 +7,7 @@ make_helper (concat (cmps_, SUFFIX))
     DATA_TYPE dest = swaddr_read(SRCindex, DATA_BYTE);
     DATA_TYPE result = dest + (DATA_TYPE_S) (-src);
     //	cpu.CF = (((uint64_t) (DATA_TYPE) dest + (uint64_t) (DATA_TYPE) (-src))  == result);
-    cpu.CF = (DATA_TYPE_S) dest < (DATA_TYPE_S) src;
+    cpu.CF = (DATA_TYPE) dest < (DATA_TYPE) src;
     uint32_t off = (DATA_BYTE * 8 - 1);
     cpu.SF = (result >> off) & 1;
     cpu.OF = (((src >> off) & 1) ^ ((dest >> off) & 1)) && (cpu.SF ^ ((dest >> off) & 1));
