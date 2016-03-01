@@ -114,7 +114,9 @@ static void do_execute () {
     if (flag)
     {
         OPERAND_W(op_dest, op_src->val);
+#ifdef DEBUG
         Assert(snprintf(assembly, 80, "%s", s) < 80, "buffer overflow!");
+#endif 
     }
     /* TODO: Update EFLAGS. */
     //	panic("please implement me");
