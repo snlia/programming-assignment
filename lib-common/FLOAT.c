@@ -6,7 +6,6 @@ FLOAT F_mul_F(FLOAT a, FLOAT b) {
 }
 
 FLOAT F_div_F(FLOAT a, FLOAT b) {
-  return a / b;
 //    if (b == 1) return a << 16;
     FLOAT res = a / b;
     a %= b;
