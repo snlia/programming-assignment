@@ -5,10 +5,10 @@
 static PDE updir[NR_PDE] align_to_page;
 static CR3 ucr3;
 
-extern inline PDE* get_updir() { return updir; }
-extern inline uint32_t get_ucr3() { return ucr3.val; }
+inline PDE* get_updir() { return updir; }
+inline uint32_t get_ucr3() { return ucr3.val; }
 
- __attribute__ ((gnu_inline)) inline PDE* get_kpdir();
+inline PDE* get_kpdir();
 
 uint32_t brk = 0;
 
