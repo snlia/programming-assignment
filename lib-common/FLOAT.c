@@ -19,6 +19,7 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 }
 
 FLOAT f2F(float a) {
+  return a * 0x10000;
     unsigned int x = *((unsigned int *) &a); // change point type to unsigned int to get the compute code of a
     if (x == 0xc7000000) return 0x80000000; // return if x = -0x8000
     unsigned int Significand = x & 0x7fffff;
