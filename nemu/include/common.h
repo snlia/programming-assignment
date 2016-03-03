@@ -8,7 +8,6 @@
 
 #define DEBUG
 #define LOG_FILE
-volatile static int dummy;
 #include "debug.h"
 #include "macro.h"
 
