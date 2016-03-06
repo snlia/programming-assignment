@@ -3,7 +3,7 @@
 make_helper(exec);
 
 make_helper(rep) {
-    uint32_t INSTR = ops_decoded.opcode;
+//    uint32_t INSTR = ops_decoded.opcode;
     int len;
     int count = 0;
     if(instr_fetch(eip + 1, 1) == 0xc3) {
@@ -25,11 +25,11 @@ make_helper(rep) {
                     || ops_decoded.opcode == 0xae	// scasb
                     || ops_decoded.opcode == 0xaf	// scasw
                   );
-            if (ops_decoded.opcode == 0xa6 || ops_decoded.opcode == 0xa7 || ops_decoded.opcode == 0xae || ops_decoded.opcode == 0xaf)
+/*            if (ops_decoded.opcode == 0xa6 || ops_decoded.opcode == 0xa7 || ops_decoded.opcode == 0xae || ops_decoded.opcode == 0xaf)
             {
                 if (INSTR == 0xf3 && !cpu.ZF) break;
                 if (INSTR == 0xf2 && cpu.ZF) break;
-            }
+            }*/
             /* TODO: Jump out of the while loop if necessary. */
 
         }
