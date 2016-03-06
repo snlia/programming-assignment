@@ -6,6 +6,9 @@
 /* You will define this macro in PA4 */
 //#define HAS_DEVICE
 
+//Comment it to disable cache
+#define CACHE
+
 #define DEBUG
 #define LOG_FILE
 #include "debug.h"
@@ -15,7 +18,6 @@
 #include <assert.h>
 #include <string.h>
 
-volatile static int dummy;
 typedef uint8_t bool;
 typedef uint32_t hwaddr_t;
 typedef uint32_t lnaddr_t;
