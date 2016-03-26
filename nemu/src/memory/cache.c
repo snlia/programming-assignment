@@ -19,8 +19,6 @@ static void flush_L1 (CacheSet_L1 *this) {
 static uint32_t read_L1 (CacheSet_L1 *this, hwaddr_t addr, size_t len) {
     L1_addr temp;
 	temp.addr = addr;
-//    uint32_t off = temp.off;
-//    uint32_t set = temp.set;
     uint32_t tag = temp.tag;
     for (uint8_t i = 0; i < (1 << L1_BLOCK); ++i)
         if (this->block[i].valid && this->block[i].tag == tag)
@@ -51,7 +49,6 @@ uint32_t L1_read (hwaddr_t addr, size_t len) {
 	temp.addr = addr;
     uint32_t off = temp.off;
     uint32_t set = temp.set;
-    //uint32_t tag = temp.tag;
     size_t Len = off + len <= 64 ? len : 64 - off;
     uint32_t result = L1set[set].read (L1set + set, addr, Len);
     if (len - Len)
