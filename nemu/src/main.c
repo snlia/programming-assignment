@@ -16,7 +16,5 @@ int main(int argc, char *argv[]) {
 	/* Receive commands from user. */
 	ui_mainloop();
 
-    char buf [10]; buf[0] = 1;
-    int * a = (int *) buf;
-	return *a;
+	return 0;
 }

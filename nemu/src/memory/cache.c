@@ -36,9 +36,7 @@ static void load_L1 (CacheSet_L1 *this, hwaddr_t addr) {
         memcpy (this->block[i].buf, buf, BlockSize);
         return ;
     }
-//    seed = ((*((uint16_t *) buf) & L1_BMASK * seed) + L1_SEED) & L1_BMASK;
-    //seed = *((uint32_t *) buf);
-    //seed = a;
+    seed = (((buf[0] * seed) & L1_BMASK) + L1_SEED) & L1_BMASK;
     memcpy (this->block[seed].buf, buf, BlockSize);
 }
 
