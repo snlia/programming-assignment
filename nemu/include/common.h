@@ -7,7 +7,7 @@
 //#define HAS_DEVICE
 
 //Comment it to disable cache
-//#define CACHE
+#define CACHE
 
 #define DEBUG
 #define LOG_FILE
