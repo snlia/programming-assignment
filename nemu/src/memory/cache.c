@@ -34,7 +34,7 @@ static uint32_t read_L1 (CacheSet_L1 *this, hwaddr_t addr, size_t len) {
 static void load_L1 (CacheSet_L1 *this, hwaddr_t addr) {
     uint8_t buf [BlockSize];
     for (uint8_t i = 0; i < (BlockSize >> 2); ++i) *((uint32_t *) (buf + (i << 2))) = dram_read (addr + (i << 2), 4);
-    printf ("%x\n", buf[0]);
+    printf ("%x %x\n", addr, buf[0]);
     for (uint8_t i = 0; i < (1 << L1_BLOCK); ++i) if (!this->block[i].valid) {
         memcpy (this->block[i].buf, buf, BlockSize);
         this->block[i].tag = addr >> (OFF_SIZE + L1_SET);
