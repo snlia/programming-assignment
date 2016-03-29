@@ -12,10 +12,10 @@
 #define L2_TAG 22
 #define L2_BLOCK 12
 #define L2_BMASK 0xfff
-#define L2_SEED 0x3b
+#define L2_SEED 0x3fd
 
 typedef struct CacheBlock {
-    bool valid;
+    bool valid, dirty;
     uint32_t tag;
     uint8_t buf [BlockSize];
     uint32_t (* read) (struct CacheBlock *this, hwaddr_t addr, size_t len);
@@ -30,13 +30,13 @@ typedef struct CacheSet_L1 {
     void (* load) (struct CacheSet_L1 *this, hwaddr_t addr);
 } CacheSet_L1;
 
-typedef struct CacheSet_L1 {
-    CacheBlock block [1 << L1_BLOCK];
-    void (* flush) (struct CacheSet_L1 *this);
-    uint32_t (* read) (struct CacheSet_L1 *this, hwaddr_t addr, size_t len);
-    void (* write) (struct CacheSet_L1 *this, hwaddr_t addr, size_t len, uint32_t data);
-    void (* load) (struct CacheSet_L1 *this, hwaddr_t addr);
-} CacheSet_L1;
+typedef struct CacheSet_L2 {
+    CacheBlock block [1 << L2_BLOCK];
+    void (* flush) (struct CacheSet_L2 *this);
+    uint32_t (* read) (struct CacheSet_L2 *this, hwaddr_t addr, size_t len);
+    void (* write) (struct CacheSet_L2 *this, hwaddr_t addr, size_t len, uint32_t data);
+    void (* load) (struct CacheSet_L2 *this, hwaddr_t addr);
+} CacheSet_L2;
 
 typedef union {
 	struct {
@@ -60,5 +60,10 @@ extern uint32_t L1_read (hwaddr_t, size_t );
 extern void L1_write (hwaddr_t, size_t, uint32_t);
 extern void L1_flush ();
 extern void L1_init ();
+
+extern uint32_t L2_read (hwaddr_t, size_t );
+extern void L2_write (hwaddr_t, size_t, uint32_t);
+extern void L2_flush ();
+extern void L2_init ();
 
 #endif

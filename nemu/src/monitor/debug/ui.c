@@ -271,6 +271,7 @@ static int cmd_bt (char *args)
 
 void ui_mainloop() {
     L1_init ();
+    L2_init ();
 	while(1) {
 		char *str = rl_gets();
 		char *str_end = str + strlen(str);
