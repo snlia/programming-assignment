@@ -39,9 +39,6 @@ static void load_L1 (CacheSet_L1 *this, hwaddr_t addr) {
         memcpy (this->block[i].buf, buf, BlockSize);
         this->block[i].tag = addr >> (OFF_SIZE + L1_SET);
         this->block[i].valid = 1;
-        for (int j = 0; j < 0x10; ++j)
-            printf ("%x, ", this->block[i].buf[j]);
-        puts ("");
         return ;
     }
     seed = (((buf[0] * seed) & L1_BMASK) + L1_SEED) & L1_BMASK;
