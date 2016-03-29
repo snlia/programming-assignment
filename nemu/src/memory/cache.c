@@ -36,10 +36,14 @@ static void load_L1 (CacheSet_L1 *this, hwaddr_t addr) {
     for (uint8_t i = 0; i < (BlockSize >> 2); ++i) *((uint32_t *) (buf + (i << 2))) = dram_read (addr + (i << 2), 4);
     for (uint8_t i = 0; i < (1 << L1_BLOCK); ++i) if (!this->block[i].valid) {
         memcpy (this->block[i].buf, buf, BlockSize);
+        this->block[i].tag = addr >> (OFF_SIZE + L1_SET);
+        this->block[i].valid = 1;
         return ;
     }
     seed = (((buf[0] * seed) & L1_BMASK) + L1_SEED) & L1_BMASK;
     memcpy (this->block[seed].buf, buf, BlockSize);
+    this->block[seed].tag = addr >> (OFF_SIZE + L1_SET);
+    this->block[seed].valid = 1;
 }
 
 static void write_L1 (CacheSet_L1 *this, hwaddr_t addr, size_t len, uint32_t data) {
@@ -58,7 +62,6 @@ void L1_flush () {
 }
 
 uint32_t L1_read (hwaddr_t addr, size_t len) {
-    puts ("yeah");
     L1_addr temp;
     temp.addr = addr;
     uint32_t off = temp.off;
