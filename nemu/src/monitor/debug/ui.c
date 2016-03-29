@@ -270,6 +270,7 @@ static int cmd_bt (char *args)
 
 
 void ui_mainloop() {
+    puts ("yeah!");
     L1_init ();
 	while(1) {
 		char *str = rl_gets();
