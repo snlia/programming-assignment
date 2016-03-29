@@ -33,7 +33,8 @@ typedef union {
 	uint32_t addr;
 } L1_addr;
 
-extern uint32_t L1_read (hwaddr_t , size_t );
+extern uint32_t L1_read (hwaddr_t, size_t );
+extern void L1_write (hwaddr_t, size_t, uint32_t);
 extern void L1_flush ();
 extern void L1_init ();
 
