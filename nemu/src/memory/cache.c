@@ -9,6 +9,7 @@ static uint32_t seed;
 static CacheSet_L1 L1set [1 << L1_SET];
 
 static uint32_t read_B (CacheBlock *this, hwaddr_t addr, size_t len) {
+    printf ("%x, %lu\n", addr, len);
     return *((uint32_t *)this->buf + (addr & (BlockSize - 1))) & ((len << 3) - 1);
 }
 
@@ -38,7 +39,6 @@ static void load_L1 (CacheSet_L1 *this, hwaddr_t addr) {
         memcpy (this->block[i].buf, buf, BlockSize);
         this->block[i].tag = addr >> (OFF_SIZE + L1_SET);
         this->block[i].valid = 1;
-        printf ("%x\n", this->block[i].buf[0]);
         return ;
     }
     seed = (((buf[0] * seed) & L1_BMASK) + L1_SEED) & L1_BMASK;
