@@ -270,8 +270,8 @@ static int cmd_bt (char *args)
 
 
 void ui_mainloop() {
-    puts ("yeah!");
     L1_init ();
+    puts ("yeah!");
 	while(1) {
 		char *str = rl_gets();
 		char *str_end = str + strlen(str);
