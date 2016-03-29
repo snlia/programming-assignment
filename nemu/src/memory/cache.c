@@ -75,7 +75,7 @@ uint32_t L1_read (hwaddr_t addr, size_t len) {
 }
 
 void L1_write (hwaddr_t addr, size_t len, uint32_t data) {
-    printf ("%x ", addr);
+    printf ("%x %x, %lu\n", addr, data, len);
     dram_write (addr, len, data);
     L1_addr temp;
     temp.addr = addr;
