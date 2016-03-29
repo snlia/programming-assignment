@@ -10,7 +10,6 @@ static CacheSet_L1 L1set [1 << L1_SET];
 static uint32_t mask_l [5] = {0x0, 0xff, 0xffff, 0xffffff, 0xffffffff};
 
 static uint32_t read_B (CacheBlock *this, hwaddr_t addr, size_t len) {
-    printf ("%x\n", mask_l[len]);
     return *((uint32_t *)(this->buf + (addr & (BlockSize - 1)))) & (mask_l[len]);
 }
 
