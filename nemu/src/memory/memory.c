@@ -18,7 +18,6 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
 #ifdef CACHE 
     L1_write (addr, len, data);
 #endif
-    printf ("%x %x %lu\n", addr, data, len);
 	dram_write(addr, len, data);
 }
 
