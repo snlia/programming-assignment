@@ -22,7 +22,6 @@ static void flush_L1 (CacheSet_L1 *this) {
 
 static uint32_t read_L1 (CacheSet_L1 *this, hwaddr_t addr, size_t len) {
     L1_addr temp;
-    puts ("yeah");
 	temp.addr = addr;
     uint32_t tag = temp.tag;
     for (uint8_t i = 0; i < (1 << L1_BLOCK); ++i)

@@ -3,6 +3,7 @@
 #include "monitor/expr.h"
 #include "monitor/elf.h"
 #include "nemu.h"
+#include "memory/cache.h"
 
 #include <stdlib.h>
 #include <readline/readline.h>
@@ -269,6 +270,7 @@ static int cmd_bt (char *args)
 
 
 void ui_mainloop() {
+    L1_init ();
 	while(1) {
 		char *str = rl_gets();
 		char *str_end = str + strlen(str);

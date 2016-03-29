@@ -7,7 +7,6 @@
 #define L1_BLOCK 7
 #define L1_BMASK 0x7f
 #define L1_SEED 0x3d
-#define rand(x) ((seed) % x)
 
 typedef struct CacheBlock {
     bool valid;
@@ -36,5 +35,6 @@ typedef union {
 
 extern uint32_t L1_read (hwaddr_t , size_t );
 extern void L1_flush ();
+extern void L1_init ();
 
 #endif
