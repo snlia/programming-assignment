@@ -7,9 +7,10 @@ void dram_write(hwaddr_t, size_t, uint32_t);
 static uint32_t seed;
 
 static CacheSet_L1 L1set [1 << L1_SET];
+static uint32_t mask_l [4] = {0xff, 0xffff, 0xffffff, 0xffffffff};
 
 static uint32_t read_B (CacheBlock *this, hwaddr_t addr, size_t len) {
-    return *((uint32_t *)(this->buf + (addr & (BlockSize - 1)))) & ((1LL << (len << 3)) - 1);
+    return *((uint32_t *)(this->buf + (addr & (BlockSize - 1)))) & (mask_l[len]);
 }
 
 static void write_B (CacheBlock *this, hwaddr_t addr, size_t len, uint32_t data) {
