@@ -70,9 +70,10 @@ uint32_t L1_read (hwaddr_t addr, size_t len) {
     uint32_t set = temp.set;
     size_t Len = off + len <= 64 ? len : 64 - off;
     uint32_t result = L1set[set].read (L1set + set, addr, Len);
-    if (len - Len)
+    if (len - Len) {
+        printf ("%x\n", result);
         return result + (L1_read (addr + Len, len - Len) << Len);
-    printf ("%x\n", result);
+    }
     return result;
 }
 
