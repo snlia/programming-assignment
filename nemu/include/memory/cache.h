@@ -14,12 +14,14 @@ typedef struct CacheBlock {
     uint32_t tag;
     uint8_t buf [BlockSize];
     uint32_t (* read) (struct CacheBlock *this, hwaddr_t addr, size_t len);
+    void (* write) (struct CacheBlock *this, hwaddr_t addr, size_t len, uint32_t data);
 } CacheBlock;
 
 typedef struct CacheSet_L1 {
     CacheBlock block [1 << L1_BLOCK];
     void (* flush) (struct CacheSet_L1 *this);
     uint32_t (* read) (struct CacheSet_L1 *this, hwaddr_t addr, size_t len);
+    void (* write) (struct CacheSet_L1 *this, hwaddr_t addr, size_t len, uint32_t data);
     void (* load) (struct CacheSet_L1 *this, hwaddr_t addr);
 } CacheSet_L1;
 

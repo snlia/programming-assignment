@@ -11,6 +11,10 @@ static CacheSet_L1 L1set [1 << L1_SET];
 static uint32_t read_B (CacheBlock *this, hwaddr_t addr, size_t len) {
     return *((uint32_t *)this->buf + (addr & (BlockSize - 1))) & ((len << 3) - 1);
 }
+
+static void write_B (CacheBlock *this, hwaddr_t addr, size_t len, uint32_t data) {
+    memcpy ((this->buf + (addr & (BlockSize - 1))), (void *) (&data), len);
+}
 //common function in cache L1
 static void flush_L1 (CacheSet_L1 *this) {
     for (uint8_t i = 0; i < (1 << L1_BLOCK); ++i) this->block[i].valid = 0;
@@ -38,6 +42,15 @@ static void load_L1 (CacheSet_L1 *this, hwaddr_t addr) {
     memcpy (this->block[seed].buf, buf, BlockSize);
 }
 
+static void write_L1 (CacheSet_L1 *this, hwaddr_t addr, size_t len, uint32_t data) {
+    L1_addr temp;
+    temp.addr = addr;
+    uint32_t tag = temp.tag;
+    for (uint8_t i = 0; i < (1 << L1_BLOCK); ++i)
+        if (this->block[i].valid && this->block[i].tag == tag)
+            this->block[i].write (this->block + i, addr, len, data);
+}
+
 //public funciton
 
 void L1_flush () {
@@ -46,7 +59,7 @@ void L1_flush () {
 
 uint32_t L1_read (hwaddr_t addr, size_t len) {
     L1_addr temp;
-	temp.addr = addr;
+    temp.addr = addr;
     uint32_t off = temp.off;
     uint32_t set = temp.set;
     size_t Len = off + len <= 64 ? len : 64 - off;
@@ -56,13 +69,27 @@ uint32_t L1_read (hwaddr_t addr, size_t len) {
     return result;
 }
 
+void L1_write (hwaddr_t addr, size_t len, uint32_t data) {
+    dram_write (addr, len, data);
+    L1_addr temp;
+    temp.addr = addr;
+    uint32_t off = temp.off;
+    uint32_t set = temp.set;
+    size_t Len = off + len <= 64 ? len : 64 - off;
+    L1set[set].write (L1set + set, addr, Len, data);
+    if (len - Len)
+        L1_write (addr + Len, len - Len, data >> Len);
+}
+
 void L1_init () {
     for (uint8_t i = 0; i < (1 << L1_SET); ++i) L1set[i].flush = flush_L1;
     for (uint8_t i = 0; i < (1 << L1_SET); ++i) L1set[i].read = read_L1;
-  //  for (uint8_t i = 0; i < (1 << L1_SET); ++i) L1set[i].write = write_L1;
+    for (uint8_t i = 0; i < (1 << L1_SET); ++i) L1set[i].write = write_L1;
     for (uint8_t i = 0; i < (1 << L1_SET); ++i) L1set[i].load = load_L1;
     for (uint8_t i = 0; i < (1 << L1_SET); ++i)
-        for (uint8_t j = 0; j < (1 << L1_BLOCK); ++j)
+        for (uint8_t j = 0; j < (1 << L1_BLOCK); ++j) {
             L1set[i].block[j].read = read_B;
+            L1set[i].block[j].write = write_B;
+        }
     L1_flush ();
 }
