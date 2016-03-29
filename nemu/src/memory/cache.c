@@ -9,7 +9,7 @@ static uint32_t seed;
 static CacheSet_L1 L1set [1 << L1_SET];
 
 static uint32_t read_B (CacheBlock *this, hwaddr_t addr, size_t len) {
-    printf ("%x %lu\n", addr, len);
+    printf ("%x %x\n", addr, (1 << (len << 3)) - 1);
     return *((uint32_t *)(this->buf + (addr & (BlockSize - 1)))) & ((1 << (len << 3)) - 1);
 }
 
