@@ -98,3 +98,17 @@ void L1_init () {
         }
     L1_flush ();
 }
+
+
+void L2_init () {
+    for (uint8_t i = 0; i < (1 << L2_SET); ++i) L2set[i].flush = flush_L2;
+    for (uint8_t i = 0; i < (1 << L2_SET); ++i) L2set[i].read = read_L2;
+    for (uint8_t i = 0; i < (1 << L2_SET); ++i) L2set[i].write = write_L2;
+    for (uint8_t i = 0; i < (1 << L2_SET); ++i) L2set[i].load = load_L2;
+    for (uint8_t i = 0; i < (1 << L2_SET); ++i)
+        for (uint8_t j = 0; j < (1 << L2_BLOCK); ++j) {
+            L2set[i].block[j].read = read_B;
+            L2set[i].block[j].write = write_B;
+        }
+    L2_flush ();
+}
