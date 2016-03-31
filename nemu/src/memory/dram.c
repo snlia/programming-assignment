@@ -121,7 +121,6 @@ void dram_write(hwaddr_t addr, size_t len, uint32_t data) {
     switch (len) {
         case 1 : unalign_rw (hw_mem + addr, 1) = data; break;
         case 2 : unalign_rw (hw_mem + addr, 2) = data; break;
-        case 3 : unalign_rw (hw_mem + addr, 3) = data; break;
         case 4 : unalign_rw (hw_mem + addr, 4) = data;
     }
 #else
