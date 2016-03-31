@@ -73,7 +73,7 @@ static void ddr3_read(hwaddr_t addr, void *data) {
 
 	/* burst read */
     memcpy (data, hw_mem + (addr & 0x7ffffff), BURST_LEN);
-    printf ("%x %x\n", col, *((uint32_t *)data));
+    printf ("%x %x %x\n", addr, col, *((uint32_t *)data));
 	memcpy(data, rowbufs[rank][bank].buf + col, BURST_LEN);
     printf ("%x\n", *((uint32_t *)data));
 #endif
