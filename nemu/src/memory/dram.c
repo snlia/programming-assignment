@@ -73,11 +73,9 @@ static void ddr3_read(hwaddr_t addr, void *data) {
 }
 #endif
 
+#ifndef O1
 static void ddr3_write(hwaddr_t addr, void *data, uint8_t *mask) {
 	Assert(addr < HW_MEM_SIZE, "physical address %x is outside of the physical memory!", addr);
-#ifdef O2
-    memcpy_with_mask (hw_mem + addr, data, );
-#else
 	dram_addr temp;
 	temp.addr = addr & ~BURST_MASK;
 	uint32_t rank = temp.rank;
@@ -97,8 +95,8 @@ static void ddr3_write(hwaddr_t addr, void *data, uint8_t *mask) {
 
 	/* write back to dram */
 	memcpy(dram[rank][bank][row], rowbufs[rank][bank].buf, NR_COL);
-#endif
 }
+#endif
 
 uint32_t dram_read(hwaddr_t addr, size_t len) {
 #ifdef O1
@@ -119,6 +117,14 @@ uint32_t dram_read(hwaddr_t addr, size_t len) {
 }
 
 void dram_write(hwaddr_t addr, size_t len, uint32_t data) {
+#ifdef O1
+    switch (len) {
+        case 1 : unalign_rw (hw_mem + addr, 1) = data; break;
+        case 2 : unalign_rw (hw_mem + addr, 2) = data; break;
+        case 3 : unalign_rw (hw_mem + addr, 3) = data; break;
+        case 4 : unalign_rw (hw_mem + addr, 4) = data;
+    }
+#else
 	uint32_t offset = addr & BURST_MASK;
 	uint8_t temp[2 * BURST_LEN];
 	uint8_t mask[2 * BURST_LEN];
@@ -133,4 +139,5 @@ void dram_write(hwaddr_t addr, size_t len, uint32_t data) {
 		/* data cross the burst boundary */
 		ddr3_write(addr + BURST_LEN, temp + BURST_LEN, mask + BURST_LEN);
 	}
+#endif
 }
