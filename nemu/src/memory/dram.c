@@ -53,8 +53,7 @@ void init_ddr3() {
 
 static void ddr3_read(hwaddr_t addr, void *data) {
 	Assert(addr < HW_MEM_SIZE, "physical address %x is outside of the physical memory!", addr);
-    printf ("%x ", addr);
-    puts ("");
+    printf ("%x ", *((uint32_t *) dram + addr));
 //    memcpy (data, dram + addr, BURST_LEN);
 	dram_addr temp;
 	temp.addr = addr & ~BURST_MASK;
@@ -72,6 +71,7 @@ static void ddr3_read(hwaddr_t addr, void *data) {
 
 	/* burst read */
 	memcpy(data, rowbufs[rank][bank].buf + col, BURST_LEN);
+    printf ("%x\n", *((uint32_t *) data));
 }
 
 static void ddr3_write(hwaddr_t addr, void *data, uint8_t *mask) {
