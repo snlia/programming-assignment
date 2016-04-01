@@ -5,6 +5,7 @@
 #define instr lgdt
 
 static void do_execute () {
+    printf ("%x\n", op_src->val);
     print_asm_template2 ();
 }
 
