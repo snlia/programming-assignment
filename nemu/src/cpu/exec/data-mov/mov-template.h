@@ -26,7 +26,7 @@ make_helper (mov_rm2cr_l) {
 }
 
 make_helper (mov_cr2rm_l) {
-    size_t len = decode_r2rm_l (eip + 1);
+    size_t len = decode_rm2r_l (eip + 1);
     cpu.CR[op_dest->reg] = op_src->val;
 #ifdef DEBUG
     sprintf(op_dest->str, "%%cr%d", op_dest->reg);
