@@ -9,6 +9,7 @@
 #include "data-mov/cwt.h"
 #include "data-mov/cld.h"
 #include "data-mov/leave.h"
+#include "data-mov/lgdt.h"
 
 #include "arith/dec.h"
 #include "arith/inc.h"
