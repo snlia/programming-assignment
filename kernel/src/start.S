@@ -67,5 +67,8 @@
 		.word   (gdtdesc - gdt - 1)    # limit = sizeof(gdt) - 1
 		.long   va_to_pa(gdt)          # address of GDT
 
+    whathehell:
+		movw    %ax, %ss          # %SS = %AX
+
 # end of IA32_SEG
 #endif
