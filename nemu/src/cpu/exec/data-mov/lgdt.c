@@ -5,7 +5,7 @@
 #define instr lgdt
 
 static void do_execute () {
-    printf ("%x\n", op_dest->val);
+    printf ("%x\n", op_dest->addr);
     print_asm_template2 ();
 }
 
