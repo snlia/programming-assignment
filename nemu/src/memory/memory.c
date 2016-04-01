@@ -44,7 +44,8 @@ uint32_t swaddr_read(swaddr_t addr, size_t len) {
 	assert(len == 1 || len == 2 || len == 4);
 #endif
 #ifndef O1 
-    addr = seg_translate(addr);
+    if (cpu.CR[0] & 1)
+        addr = seg_translate(addr);
 #endif
     return lnaddr_read(addr, len);
 }
@@ -54,7 +55,8 @@ void swaddr_write(swaddr_t addr, size_t len, uint32_t data) {
     assert(len == 1 || len == 2 || len == 4);
 #endif
 #ifndef O1
-    addr = seg_translate(addr);
+    if (cpu.CR[0] & 1)
+        addr = seg_translate(addr);
 #endif
     lnaddr_write(addr, len, data);
 }
