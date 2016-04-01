@@ -1,4 +1,10 @@
 #include "cpu/exec/helper.h"
+
+make_helper (lgdt_i_w) {
+    print_asm ("lgdt");
+    return 5;
+}
+/*
 #include "lgdt.h"
 #define DATA_BYTE 4
 #include "cpu/exec/template-start.h"
@@ -10,3 +16,4 @@ make_instr_helper (i);
 
 #include "cpu/exec/template-end.h"
 #undef DATA_BYTE
+*/
