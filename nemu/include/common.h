@@ -27,6 +27,7 @@ typedef uint32_t lnaddr_t;
 typedef uint32_t swaddr_t;
 
 typedef uint16_t ioaddr_t;
+uint8_t current_sreg;
 
 #pragma pack (1)
 typedef union {
