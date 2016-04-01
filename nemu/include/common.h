@@ -6,9 +6,13 @@
 /* You will define this macro in PA4 */
 //#define HAS_DEVICE
 
-//Comment it to disable cache
-//#define CACHE
-//optimize
+//enable cache
+#define CACHE
+
+//enable seg
+#define IA32_SEG
+
+//enable optimize
 #define O1
 
 //#define DEBUG
