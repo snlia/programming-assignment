@@ -1,14 +1,9 @@
 #include "common.h"
 #include "memory/cache.h"
+#include "cpu/reg.h"
 
 uint32_t dram_read(hwaddr_t, size_t);
 void dram_write(hwaddr_t, size_t, uint32_t);
-
-lnaddr_t seg_translate (swaddr_t swaddr) {
-#ifdef DEBUG
-	assert();
-#endif
-}
 
 /* Memory accessing interfaces */
 
@@ -36,12 +31,20 @@ void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
 	hwaddr_write(addr, len, data);
 }
 
+lnaddr_t seg_translate (swaddr_t swaddr) {
+#ifdef DEBUG
+	assert((cpu.spr[current_sreg].index << 3) < cpu.GDTR_L);
+#endif
+    lnaddr_t base = (cpu.spr[current_sreg].index << 3) + cpu.GDTR_B;
+    return swaddr + ((lnaddr_read (base, 1) << 3) | (lnaddr_read (base + 3, 1) << 2) | (lnaddr_read (base + 4, 2)));
+}
+
 uint32_t swaddr_read(swaddr_t addr, size_t len) {
 #ifdef DEBUG
 	assert(len == 1 || len == 2 || len == 4);
 #endif
 #ifndef O1 
-    lnaddr_t addr = seg_translate(addr);
+    addr = seg_translate(addr);
 #endif
     return lnaddr_read(addr, len);
 }
@@ -51,7 +54,7 @@ void swaddr_write(swaddr_t addr, size_t len, uint32_t data) {
     assert(len == 1 || len == 2 || len == 4);
 #endif
 #ifndef O1
-    lnaddr_t addr = seg_translate(addr);
+    addr = seg_translate(addr);
 #endif
     lnaddr_write(addr, len, data);
 }

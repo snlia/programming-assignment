@@ -65,6 +65,7 @@ typedef struct {
             uint16_t ES, CS, SS, DS;
         };
     };
+
 } CPU_state;
 
 extern CPU_state cpu;
