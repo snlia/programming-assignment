@@ -9,9 +9,6 @@
 //enable cache
 #define CACHE
 
-//enable seg
-#define IA32_SEG
-
 //enable optimize
 #define O1
 
