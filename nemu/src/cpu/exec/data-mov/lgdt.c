@@ -6,6 +6,7 @@
 
 static void do_execute () {
     print_asm_template1 ();
+    printf ("%x", cpu.eip);
 }
 
 make_instr_helper (i);
