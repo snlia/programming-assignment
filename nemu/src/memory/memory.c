@@ -33,7 +33,7 @@ void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
 
 lnaddr_t seg_translate (swaddr_t swaddr) {
 #ifdef DEBUG
-	assert((cpu.spr[current_sreg].index << 3) < cpu.GDTR_L);
+	assert(!(cpu.CR[0] & 1) || (cpu.spr[current_sreg].index << 3) < cpu.GDTR_L);
 #endif
     lnaddr_t base = (cpu.spr[current_sreg].index << 3) + cpu.GDTR_B;
     return swaddr + ((lnaddr_read (base, 1) << 3) | (lnaddr_read (base + 3, 1) << 2) | (lnaddr_read (base + 4, 2)));
