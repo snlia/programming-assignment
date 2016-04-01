@@ -54,7 +54,7 @@ typedef struct {
         uint32_t eflags;
     };
     uint16_t DS, ES, SS, CS, GDTR_L;
-    uint32_t GDTR_B, CR0;
+    uint32_t GDTR_B, CR [4];
 } CPU_state;
 
 extern CPU_state cpu;
