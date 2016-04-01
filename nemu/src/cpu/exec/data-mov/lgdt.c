@@ -5,11 +5,10 @@
 #define instr lgdt
 
 static void do_execute () {
-    print_asm_template1 ();
-    printf ("%x", cpu.eip);
+    print_asm_template2 ();
 }
 
-make_instr_helper (i);
+make_instr_helper (i2rm);
 #include "cpu/exec/template-end.h"
 #undef DATA_BYTE
 
