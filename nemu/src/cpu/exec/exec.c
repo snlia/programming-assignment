@@ -97,7 +97,7 @@ make_group(group6,
 	inv, inv, inv, inv)
 
 make_group(group7,
-	inv, inv, inv, inv, 
+	inv, inv, lgdt_i_l, inv, 
 	inv, inv, inv, inv)
 
 
@@ -153,7 +153,7 @@ helper_fun opcode_table [256] = {
 /* 0xb8 */	mov_i2r_v, mov_i2r_v, mov_i2r_v, mov_i2r_v, 
 /* 0xbc */	mov_i2r_v, mov_i2r_v, mov_i2r_v, mov_i2r_v, 
 /* 0xc0 */	group2_i_b, group2_i_v, ret_i_w, ret,
-/* 0xc4 */	lgdt_i_l, inv, mov_i2rm_b, mov_i2rm_v,
+/* 0xc4 */	inv, inv, mov_i2rm_b, mov_i2rm_v,
 /* 0xc8 */	inv, leave_v, inv, inv,
 /* 0xcc */	int3, inv, inv, inv,
 /* 0xd0 */	group2_1_b, group2_1_v, group2_cl_b, group2_cl_v,
