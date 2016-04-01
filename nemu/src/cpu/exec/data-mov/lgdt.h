@@ -1,6 +1,6 @@
 #ifndef __LGDT_H__
 #define __LGDT_H__
 
-make_helper(lgdt_rm_imm_l);
+make_helper(lgdt_rm_l);
 
 #endif

@@ -8,7 +8,7 @@ static void do_execute () {
     print_asm_template2 ();
 }
 
-make_instr_helper (rm_imm);
+make_instr_helper (rm);
 #include "cpu/exec/template-end.h"
 #undef DATA_BYTE
 
