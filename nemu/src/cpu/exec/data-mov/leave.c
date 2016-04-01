@@ -10,7 +10,7 @@ make_helper (leave_w)
 	DATA_TYPE result = swaddr_read(cpu.esp, DATA_BYTE);
 	cpu.esp += DATA_BYTE;
 	REG(R_BP) = result;
-
+    
 	print_asm("leave");
 
 	return 1;
