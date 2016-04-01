@@ -18,6 +18,9 @@ make_instr_helper(rm2r)
 make_helper (mov_rm2cr_l) {
     size_t len = decode_r2rm_l (eip + 1);
     OPERAND_W (op_dest, cpu.CR[op_src->reg]);
+#ifdef DEBUG
+    sprintf(op_src->str, "%%cr%d", op_src->reg);
+#endif
     print_asm_template2 ();
     return len + 1;
 }
