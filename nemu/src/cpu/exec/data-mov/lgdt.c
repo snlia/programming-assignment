@@ -1,6 +1,6 @@
 #include "cpu/exec/helper.h"
 
-#define DATA_BYTE 4
+#define DATA_BYTE 1
 #include "cpu/exec/template-start.h"
 #define instr lgdt
 
