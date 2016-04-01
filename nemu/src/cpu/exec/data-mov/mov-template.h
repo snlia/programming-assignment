@@ -24,6 +24,16 @@ make_helper (mov_rm2cr_l) {
     print_asm_template2 ();
     return len + 1;
 }
+
+make_helper (mov_cr2rm_l) {
+    size_t len = decode_r2rm_l (eip + 1);
+    cpu.CR[op_dest->reg] = op_src->val;
+#ifdef DEBUG
+    sprintf(op_dest->str, "%%cr%d", op_dest->reg);
+#endif
+    print_asm_template2 ();
+    return len + 1;
+}
 #endif
 
 make_helper(concat(mov_a2moffs_, SUFFIX)) {
