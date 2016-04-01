@@ -5,7 +5,8 @@
 #define instr lgdt
 
 static void do_execute () {
-    printf ("%x\n", op_src->addr);
+    cpu.GDTR_L = lnaddr_read (op_src->addr, 2);
+    cpu.GDTR_B = lnaddr_read (op_src->addr + 2, 4);
     print_asm_template2 ();
 }
 

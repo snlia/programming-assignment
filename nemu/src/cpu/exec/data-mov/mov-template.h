@@ -14,6 +14,13 @@ make_instr_helper(i2rm)
 make_instr_helper(r2rm)
 make_instr_helper(rm2r)
 
+make_helper (concat (mov_rm2cr_, SUFFIX)) {
+    size_t len = concat (decode_rm_, SUFFIX) (eip + 1);
+    OPERAND_W (op_src, cpu.CR0);
+    print_asm_template2 ();
+    return len + 1;
+}
+
 make_helper(concat(mov_a2moffs_, SUFFIX)) {
 	swaddr_t addr = instr_fetch(eip + 1, 4);
 	MEM_W(addr, REG(R_EAX));
