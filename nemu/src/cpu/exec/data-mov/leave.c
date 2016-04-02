@@ -7,6 +7,7 @@
 make_helper (leave_w)
 {
 	cpu.esp = cpu.ebp;
+    current_sreg = 2;
 	DATA_TYPE result = swaddr_read(cpu.esp, DATA_BYTE);
 	cpu.esp += DATA_BYTE;
 	REG(R_BP) = result;
@@ -23,6 +24,7 @@ make_helper (leave_w)
 make_helper (leave_l)
 {
 	cpu.esp = cpu.ebp;
+    current_sreg = 2;
 	DATA_TYPE result = swaddr_read(cpu.esp, DATA_BYTE);
 	cpu.esp += DATA_BYTE;
 	cpu.ebp = result;

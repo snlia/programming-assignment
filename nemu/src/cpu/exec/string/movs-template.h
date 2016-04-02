@@ -3,6 +3,7 @@
 
 make_helper (concat (movs_, SUFFIX))
 {
+    current_sreg = (DESTindex < 0x7000000) + 2;
     swaddr_write (DESTindex, DATA_BYTE, swaddr_read(SRCindex, DATA_BYTE));
     if (cpu.DF) 
     {

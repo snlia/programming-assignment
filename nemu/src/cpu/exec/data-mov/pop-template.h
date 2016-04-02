@@ -3,9 +3,11 @@
 
 static void do_execute () {
 #if DATA_BYTE == 2
+    current_sreg = 2;
 	OPERAND_W(op_src, swaddr_read (cpu.esp, 2));
 	cpu.esp += 2;
 #else
+    current_sreg = 2;
 	OPERAND_W(op_src, swaddr_read (cpu.esp, 4));
 	cpu.esp += 4;
 #endif
