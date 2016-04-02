@@ -28,6 +28,7 @@
 #include "control/jcc.h"
 #include "control/cmov.h"
 #include "control/jmp.h"
+#include "control/ljmp.h"
 #include "control/ret.h"
 
 #include "logic/and.h"
