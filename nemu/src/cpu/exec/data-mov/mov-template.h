@@ -36,6 +36,14 @@ make_helper (mov_cr2rm_l) {
 }
 #endif
 
+#if DATA_BYTE == 2
+make_helper (mov_rm2rs) {
+   size_t len = decode_rm2r_w (eip + 1);
+   cpu.spr[op_dest->reg].val = (DATA_TYPE) op_src->val;
+   return len + 1;
+}
+#endif
+
 make_helper(concat(mov_a2moffs_, SUFFIX)) {
 	swaddr_t addr = instr_fetch(eip + 1, 4);
     current_sreg = (addr < 0x7000000) + 2;

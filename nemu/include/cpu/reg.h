@@ -56,10 +56,13 @@ typedef struct {
     uint16_t GDTR_L;
     uint32_t GDTR_B, CR [4];
     union {
-        struct {
-            uint16_t rpl : 2;
-            uint16_t ti : 1;
-            uint16_t index : 13;
+        union {
+            struct {
+                uint16_t rpl : 2;
+                uint16_t ti : 1;
+                uint16_t index : 13;
+            };
+            uint16_t val;
         } spr [4];
         struct {
             uint16_t ES, CS, SS, DS;
