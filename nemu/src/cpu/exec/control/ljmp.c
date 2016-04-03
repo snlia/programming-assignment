@@ -9,6 +9,6 @@ make_helper (ljmp) {
     uint16_t off = instr_fetch (eip + 5, 2);
     SEG_des seg_d;
     seg_d.val = lnaddr_read (off + cpu.GDTR_B, 4) | ((uint64_t) lnaddr_read (off + cpu.GDTR_B + 4, 4) << 32);
-    printf ("%x",seg_base (seg_d));
+    printf ("%lx\n", seg_d.val);
     return 7;
 }
