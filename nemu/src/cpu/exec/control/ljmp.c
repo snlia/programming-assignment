@@ -11,7 +11,7 @@ make_helper (ljmp) {
     SEG_des seg_d;
     seg_d.val = lnaddr_read (off + cpu.GDTR_B, 4) | ((uint64_t) lnaddr_read (off + cpu.GDTR_B + 4, 4) << 32);
     if (seg_d.TYPE & 4) {
-        cpu.eip = addr;
+        cpu.eip = addr - 7;
         cpu.CS = off;
     }
     else assert (0);
