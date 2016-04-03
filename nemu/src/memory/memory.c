@@ -37,7 +37,7 @@ lnaddr_t seg_translate (swaddr_t swaddr) {
 #endif
     lnaddr_t base = (cpu.spr[current_sreg].index << 3) + cpu.GDTR_B;
     printf ("%x\n", (lnaddr_read (base + 2, 2) | (lnaddr_read (base + 4, 2) << 16) | (lnaddr_read (base + 7, 1) << 24)));
-    return swaddr + (lnaddr_read (base + 2, 2) | (lnaddr_read (base + 4, 2) << 16) | (lnaddr_read (base + 7, 1) << 24));
+    return swaddr + (lnaddr_read (base + 2, 2) | (lnaddr_read (base + 4, 1) << 16) | (lnaddr_read (base + 7, 1) << 24));
 }
 
 uint32_t swaddr_read(swaddr_t addr, size_t len) {
