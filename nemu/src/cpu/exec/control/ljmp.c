@@ -15,5 +15,7 @@ make_helper (ljmp) {
         cpu.CS = off;
     }
     else assert (0);
+	print_asm_template2 ();
+	print_asm("ljmp 0x%x,0x%x", off, addr);
     return 7;
 }
