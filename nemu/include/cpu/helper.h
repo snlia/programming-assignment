@@ -9,6 +9,7 @@
 
 static inline uint32_t instr_fetch(swaddr_t addr, size_t len) {
     current_sreg = 1;
+    printf ("%x %zu\n", addr, len);
 	return swaddr_read(addr, len);
 }
 
