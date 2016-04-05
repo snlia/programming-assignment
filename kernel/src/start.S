@@ -49,6 +49,7 @@
 		movw    $GDT_ENTRY(2), %ax
 		movw    %ax, %ds          # %DS = %AX
 		movw    %ax, %es          # %ES = %AX
+		movw    $GDT_ENTRY(3), %ax
 		movw    %ax, %ss          # %SS = %AX
 
 	# Set up a stack for C code.
