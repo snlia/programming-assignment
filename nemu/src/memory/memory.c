@@ -38,7 +38,6 @@ lnaddr_t seg_translate (swaddr_t swaddr) {
     lnaddr_t base = (cpu.spr[current_sreg].index << 3) + cpu.GDTR_B;
 #ifdef DEBUG
     printf ("%x %x\n", base, lnaddr_read (base, 4));
-    assert (swaddr < (lnaddr_read (base, 2) | ((lnaddr_read (base + 6, 1) & 0xf) << 16)) << 12);
 #endif
     return swaddr + (lnaddr_read (base + 2, 2) | (lnaddr_read (base + 4, 1) << 16) | (lnaddr_read (base + 7, 1) << 24));
 }
