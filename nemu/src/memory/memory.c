@@ -47,6 +47,7 @@ uint32_t swaddr_read(swaddr_t addr, size_t len) {
 	assert(len == 1 || len == 2 || len == 4);
 #endif
 #ifndef O1 
+    printf ("%xppp\n", addr);
     if (cpu.CR[0] & 1)
         addr = seg_translate(addr);
 #endif
