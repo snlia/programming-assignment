@@ -1,6 +1,7 @@
 #include "common.h"
 #include "memory/cache.h"
 #include "cpu/reg.h"
+#include "cpu/seg.h"
 
 uint32_t dram_read(hwaddr_t, size_t);
 void dram_write(hwaddr_t, size_t, uint32_t);
@@ -35,11 +36,8 @@ lnaddr_t seg_translate (swaddr_t swaddr) {
 #ifdef DEBUG
 	assert (!(cpu.CR[0] & 1) || (cpu.spr[current_sreg].index << 3) < cpu.GDTR_L);
 #endif
-    lnaddr_t base = (cpu.spr[current_sreg].index << 3) + cpu.GDTR_B;
-#ifdef DEBUG
-    if (base == 0x100030) puts ("!");
-#endif
-    return swaddr + (lnaddr_read (base + 2, 2) | (lnaddr_read (base + 4, 1) << 16) | (lnaddr_read (base + 7, 1) << 24));
+    assert ((seg_limit (cache_SEG[current_sreg]) << 12) > swaddr);
+    return swaddr + seg_base (cache_SEG[current_sreg]);
 }
 
 uint32_t swaddr_read(swaddr_t addr, size_t len) {

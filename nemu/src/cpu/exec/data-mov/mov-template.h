@@ -40,6 +40,7 @@ make_helper (mov_cr2rm_l) {
 make_helper (mov_rm2rs) {
    size_t len = decode_rm2r_w (eip + 1);
    cpu.spr[op_dest->reg].val = (DATA_TYPE) op_src->val;
+   cache_SEG[op_dest->reg].val = lnaddr_read ((DATA_TYPE) op_src->val+ cpu.GDTR_B, 4) | ((uint64_t) lnaddr_read ((DATA_TYPE) op_src->val+ cpu.GDTR_B + 4, 4) << 32);
    return len + 1;
 }
 #endif

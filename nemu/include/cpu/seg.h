@@ -23,6 +23,8 @@ typedef union {
     uint64_t val;
 } SEG_des;
 
+SEG_des cache_SEG [4];
+
 #define seg_base(x) ((x).base0 | ((x).base1 << 16) | ((x).base2 << 24))
 #define seg_limit(x) ((x).limit0 | ((x).limit1 << 16))
 
