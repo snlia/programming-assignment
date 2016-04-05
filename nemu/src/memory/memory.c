@@ -37,7 +37,6 @@ lnaddr_t seg_translate (swaddr_t swaddr) {
 	assert (!(cpu.CR[0] & 1) || (cpu.spr[current_sreg].index << 3) < cpu.GDTR_L);
 #endif
     printf ("%x\n", swaddr);
-//    printf ("%x %x\n", (seg_limit (cache_SEG[current_sreg]) << 12), swaddr);
     assert ((seg_limit (cache_SEG[current_sreg]) << 12) > swaddr);
     return swaddr + seg_base (cache_SEG[current_sreg]);
 }
