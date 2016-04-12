@@ -308,6 +308,7 @@ void ui_mainloop() {
 		}
 
 		if(i == NR_CMD) { 
+            printf ("%d %s\n", prei, preargs);
             if (prei == -1) printf("Unknown command '%s'\n", cmd); 
             if(cmd_table[prei].handler(preargs) < 0) { return; }
         }
