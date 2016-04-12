@@ -280,7 +280,10 @@ void ui_mainloop() {
 
 		/* extract the first token as the command */
 		char *cmd = strtok(str, " ");
-//		if(cmd == NULL) { continue; }
+		if(cmd == NULL) { 
+            if (prei == -1) continue;
+            if(cmd_table[prei].handler(preargs) < 0) { return; }
+        }
 
 		/* treat the remaining string as the arguments,
 		 * which may need further parsing
@@ -307,9 +310,6 @@ void ui_mainloop() {
 			}
 		}
 
-		if(i == NR_CMD) { 
-            if (prei == -1) printf("Unknown command '%s'\n", cmd); 
-            if(cmd_table[prei].handler(preargs) < 0) { return; }
-        }
+		if(i == NR_CMD) { printf("Unknown command '%s'\n", cmd); }
 	}
 }
