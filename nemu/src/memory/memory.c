@@ -32,7 +32,7 @@ void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
 	hwaddr_write(addr, len, data);
 }
 
-lnaddr_t seg_translate (swaddr_t swaddr) {
+lnaddr_t seg_translate (swaddr_t swaddr, size_t current_sreg) {
 #ifdef DEBUG
 	assert (!(cpu.CR[0] & 1) || (cpu.spr[current_sreg].index << 3) < cpu.GDTR_L);
 #endif
@@ -40,24 +40,24 @@ lnaddr_t seg_translate (swaddr_t swaddr) {
     return swaddr + seg_base (cache_SEG[current_sreg]);
 }
 
-uint32_t swaddr_read(swaddr_t addr, size_t len) {
+uint32_t swaddr_read(swaddr_t addr, size_t len, size_t current_sreg) {
 #ifdef DEBUG
 	assert(len == 1 || len == 2 || len == 4);
 #endif
 #ifndef O1 
     if (cpu.CR[0] & 1)
-        addr = seg_translate(addr);
+        addr = seg_translate(addr, current_sreg);
 #endif
     return lnaddr_read(addr, len);
 }
 
-void swaddr_write(swaddr_t addr, size_t len, uint32_t data) {
+void swaddr_write(swaddr_t addr, size_t len, uint32_t data, size_t current_sreg) {
 #ifdef DEBUG
     assert(len == 1 || len == 2 || len == 4);
 #endif
 #ifndef O1
     if (cpu.CR[0] & 1)
-        addr = seg_translate(addr);
+        addr = seg_translate(addr, current_sreg);
 #endif
     lnaddr_write(addr, len, data);
 }
