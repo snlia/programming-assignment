@@ -47,8 +47,7 @@ make_helper (mov_rm2rs) {
 
 make_helper(concat(mov_a2moffs_, SUFFIX)) {
 	swaddr_t addr = instr_fetch(eip + 1, 4);
-    current_sreg = (addr < 0x7000000) + 2;
-	MEM_W(addr, REG(R_EAX));
+	MEM_W(addr, REG(R_EAX), SR_DS);
 
 	print_asm("mov" str(SUFFIX) " %%%s,0x%x", REG_NAME(R_EAX), addr);
 	return 5;
@@ -56,8 +55,7 @@ make_helper(concat(mov_a2moffs_, SUFFIX)) {
 
 make_helper(concat(mov_moffs2a_, SUFFIX)) {
 	swaddr_t addr = instr_fetch(eip + 1, 4);
-    current_sreg = (addr < 0x7000000) + 2;
-	REG(R_EAX) = MEM_R(addr);
+	REG(R_EAX) = MEM_R(addr, SR_DS);
 
 	print_asm("mov" str(SUFFIX) " 0x%x,%%%s", addr, REG_NAME(R_EAX));
 	return 5;

@@ -193,7 +193,7 @@ static int cmd_x (char *args)
 	for (j = head; j < tail; j += 4)
 	{
 		if (!((j - head) & 0xf)) printf ("0x%08x :", j);
-		printf ("0x%08x	", swaddr_read (j, 4));
+		printf ("0x%08x	", swaddr_read (j, 4, SR_DS));
 		if (!((j - head + 4) & 0xf)) puts ("");
 	}
 	if ((tail - head) & 0xf) puts ("");
@@ -261,9 +261,9 @@ static int cmd_bt (char *args)
 	swaddr_t Eip = cpu.eip;
 	while (Ebp)
 	{
-		printf ("#%d 0x%08x in %s (%x %x %x %x)\n", now++, Eip, find_FUNC (Eip), swaddr_read (Ebp + 8, 4), swaddr_read (Ebp + 12, 4), swaddr_read (Ebp + 16, 4), swaddr_read (Ebp + 20, 4));
-		Eip = swaddr_read (Ebp + 4, 4);
-		Ebp = swaddr_read (Ebp, 4);
+		printf ("#%d 0x%08x in %s (%x %x %x %x)\n", now++, Eip, find_FUNC (Eip), swaddr_read (Ebp + 8, 4, SR_SS), swaddr_read (Ebp + 12, 4, SR_SS), swaddr_read (Ebp + 16, 4, SR_SS), swaddr_read (Ebp + 20, 4, SR_SS));
+		Eip = swaddr_read (Ebp + 4, 4, SR_SS);
+		Ebp = swaddr_read (Ebp, 4, SR_SS);
 	}
 	return 0;
 }

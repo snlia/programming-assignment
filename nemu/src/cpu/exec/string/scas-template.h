@@ -3,8 +3,7 @@
 make_helper (concat (scas_, SUFFIX))
 {
     DATA_TYPE dest = REG (R_EAX);
-    current_sreg = (DESTindex < 0x7000000) + 2;
-    DATA_TYPE src = swaddr_read(DESTindex, DATA_BYTE);
+    DATA_TYPE src = swaddr_read(DESTindex, DATA_BYTE, SR_ES);
     DATA_TYPE result = dest + (DATA_TYPE_S) (-src);
     //	cpu.CF = (((uint64_t) (DATA_TYPE) dest + (uint64_t) (DATA_TYPE) (-src))  == result);
     cpu.CF = (DATA_TYPE) dest < (DATA_TYPE) src;

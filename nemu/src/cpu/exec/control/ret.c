@@ -9,7 +9,7 @@
 #include "cpu/exec/template-start.h"
 make_helper (ret)
 {
-	DATA_TYPE result = swaddr_read(cpu.esp, DATA_BYTE);
+	DATA_TYPE result = swaddr_read(cpu.esp, DATA_BYTE, SR_SS);
 	cpu.esp += DATA_BYTE;
 	cpu.eip = result - 1;
 

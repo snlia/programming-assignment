@@ -286,7 +286,7 @@ uint32_t eval (int p, int q, bool *success)
 				case '!': return !val2;
 				case PRE_PLUS : return val2;
 				case PRE_SUBTRACT : return -val2;
-				case PRE_MUL : return swaddr_read(val2, 4);
+				case PRE_MUL : return swaddr_read(val2, 4, SR_DS);
 				default : *success = false; puts ("Error : you may miss a number."); return 0;
 			}
 		}

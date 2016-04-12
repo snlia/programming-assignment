@@ -5,12 +5,10 @@
 static void do_execute () {
 #if DATA_BYTE == 2
 	cpu.esp -= 2;
-    current_sreg = 2;
-	swaddr_write(cpu.esp, 2, (DATA_TYPE) op_src->val);
+	swaddr_write(cpu.esp, 2, (DATA_TYPE) op_src->val, SR_SS);
 #else
 	cpu.esp -= 4;
-    current_sreg = 2;
-	swaddr_write(cpu.esp, 4, (DATA_TYPE) op_src->val);
+	swaddr_write(cpu.esp, 4, (DATA_TYPE) op_src->val, SR_SS);
 #endif
 	/* TODO: Update EFLAGS. */
 //	panic("please implement me");

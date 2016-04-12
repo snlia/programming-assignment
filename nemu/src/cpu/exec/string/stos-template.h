@@ -2,8 +2,7 @@
 
 make_helper (concat (stos_, SUFFIX))
 {
-    current_sreg = (DESTREG < 0x7000000) + 2;
-    swaddr_write (DESTREG, DATA_BYTE, REG (R_EAX));
+    swaddr_write (DESTREG, DATA_BYTE, REG (R_EAX), SR_ES);
     if (cpu.DF) 
         DESTREG -= DATA_BYTE;
     else
