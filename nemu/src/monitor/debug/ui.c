@@ -272,6 +272,8 @@ static int cmd_bt (char *args)
 void ui_mainloop() {
     L1_init ();
     L2_init ();
+    int prei = -1;
+    char preargs [255];
 	while(1) {
 		char *str = rl_gets();
 		char *str_end = str + strlen(str);
@@ -296,11 +298,16 @@ void ui_mainloop() {
 		int i;
 		for(i = 0; i < NR_CMD; i ++) {
 			if(strcmp(cmd, cmd_table[i].name) == 0) {
+                strcpy (preargs, args);
+                prei = i;
 				if(cmd_table[i].handler(args) < 0) { return; }
 				break;
 			}
 		}
 
-		if(i == NR_CMD) { printf("Unknown command '%s'\n", cmd); }
+		if(i == NR_CMD) { 
+            if (prei == -1) printf("Unknown command '%s'\n", cmd); 
+            if(cmd_table[prei].handler(preargs) < 0) { return; }
+        }
 	}
 }
