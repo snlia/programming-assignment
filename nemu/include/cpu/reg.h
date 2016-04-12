@@ -6,7 +6,7 @@
 enum { R_EAX, R_ECX, R_EDX, R_EBX, R_ESP, R_EBP, R_ESI, R_EDI };
 enum { R_AX, R_CX, R_DX, R_BX, R_SP, R_BP, R_SI, R_DI };
 enum { R_AL, R_CL, R_DL, R_BL, R_AH, R_CH, R_DH, R_BH };
-enum { SR_ES, SR_CS, SR_SS, SR_DS};
+enum { SR_ES, SR_CS, SR_SS, SR_DS };
 
 /* TODO: Re-organize the `CPU_state' structure to match the register
  * encoding scheme in i386 instruction format. For example, if we
@@ -55,7 +55,38 @@ typedef struct {
         uint32_t eflags;
     };
     uint16_t GDTR_L;
-    uint32_t GDTR_B, CR [4];
+    uint32_t GDTR_B;
+    union {
+        struct {
+            uint32_t protect_enable      : 1;
+            uint32_t monitor_coprocessor : 1;
+            uint32_t emulation           : 1;
+            uint32_t task_switched       : 1;
+            uint32_t extension_type      : 1;
+            uint32_t numeric_error       : 1;
+            uint32_t pad0                : 10;
+            uint32_t write_protect       : 1; 
+            uint32_t pad1                : 1; 
+            uint32_t alignment_mask      : 1;
+            uint32_t pad2                : 10;
+            uint32_t no_write_through    : 1;
+            uint32_t cache_disable       : 1;
+            uint32_t paging              : 1;
+        };
+        uint32_t val;
+    } CR0;
+
+    union {
+        struct {
+            uint32_t pad0                : 3;
+            uint32_t page_write_through  : 1;
+            uint32_t page_cache_disable  : 1;
+            uint32_t pad1                : 7;
+            uint32_t page_directory_base : 20;
+        };
+        uint32_t val;
+    } CR3;
+
     union {
         union {
             struct {

@@ -17,7 +17,11 @@ make_instr_helper(rm2r)
 #if DATA_BYTE == 4
 make_helper (mov_rm2cr_l) {
     size_t len = decode_r2rm_l (eip + 1);
-    OPERAND_W (op_dest, cpu.CR[op_src->reg]);
+    uint32_t src;
+    if (op_dest->reg == 0) src = cpu.CR0.val;
+    else if (op_dest->reg == 3) src = cpu.CR3.val;
+    else assert (0);
+    OPERAND_W (op_dest, src);
 #ifdef DEBUG
     sprintf(op_src->str, "%%cr%d", op_src->reg);
 #endif
@@ -27,7 +31,11 @@ make_helper (mov_rm2cr_l) {
 
 make_helper (mov_cr2rm_l) {
     size_t len = decode_rm2r_l (eip + 1);
-    cpu.CR[op_dest->reg] = op_src->val;
+    if (op_dest->reg == 0)
+        cpu.CR0.val = op_src->val;
+    else if (op_dest->reg == 3)
+        cpu.CR3.val = op_src->val;
+    else assert (0);
 #ifdef DEBUG
     sprintf(op_dest->str, "%%cr%d", op_dest->reg);
 #endif
