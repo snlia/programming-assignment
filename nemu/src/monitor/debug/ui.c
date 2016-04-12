@@ -276,7 +276,6 @@ void ui_mainloop() {
     char preargs [255];
 	while(1) {
 		char *str = rl_gets();
-        printf ("!!!%s\n", str);
 		char *str_end = str + strlen(str);
 
 		/* extract the first token as the command */
@@ -299,8 +298,10 @@ void ui_mainloop() {
 		int i;
 		for(i = 0; i < NR_CMD; i ++) {
 			if(strcmp(cmd, cmd_table[i].name) == 0) {
-          //      strcpy (preargs, args);
-          //      prei = i;
+                if (args != NULL)
+                    strcpy (preargs, args);
+                else preargs[0] = 0;
+                prei = i;
 				if(cmd_table[i].handler(args) < 0) { return; }
 				break;
 			}
