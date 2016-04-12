@@ -24,8 +24,6 @@ char* rl_gets() {
 
 	line_read = readline("(nemu) ");
 
-    printf ("%s\n", line_read);
-
 	if (line_read && *line_read) {
 		add_history(line_read);
 	}
@@ -282,7 +280,7 @@ void ui_mainloop() {
 
 		/* extract the first token as the command */
 		char *cmd = strtok(str, " ");
-		if(cmd == NULL) { continue; }
+//		if(cmd == NULL) { continue; }
 
 		/* treat the remaining string as the arguments,
 		 * which may need further parsing
