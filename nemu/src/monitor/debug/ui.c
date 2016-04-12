@@ -283,6 +283,7 @@ void ui_mainloop() {
 		if(cmd == NULL) { 
             if (prei == -1) continue;
             if(cmd_table[prei].handler(preargs) < 0) { return; }
+            continue;
         }
 
 		/* treat the remaining string as the arguments,
