@@ -282,6 +282,9 @@ void ui_mainloop() {
 		char *cmd = strtok(str, " ");
 		if(cmd == NULL) { 
             if (prei == -1) continue;
+            printf ("%s ", cmd_table[prei].name);
+            if (preargs != NULL) printf ("%s", preargs);
+            puts ("");
             if(cmd_table[prei].handler(preargs) < 0) { return; }
             continue;
         }
