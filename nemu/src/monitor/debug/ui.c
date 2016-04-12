@@ -298,6 +298,7 @@ void ui_mainloop() {
 		int i;
 		for(i = 0; i < NR_CMD; i ++) {
 			if(strcmp(cmd, cmd_table[i].name) == 0) {
+                printf ("%zd\n", strlen (args));
           //      strcpy (preargs, args);
           //      prei = i;
 				if(cmd_table[i].handler(args) < 0) { return; }
