@@ -57,15 +57,20 @@ uint32_t loader() {
             /* TODO: read the content of the segment from the ELF file 
              * to the memory region [VirtAddr, VirtAddr + FileSiz)
              */
+            uint32_t va_off = 0;
+#ifdef IA32_PAGE
+            va_off = mm_malloc (ph->p_vaddr, ph->p_memsz) - ph->p_vaddr;
+#endif
 #ifdef HAS_DEVICE
-            ide_read((void *) ph->p_vaddr, ELF_OFFSET_IN_DISK + ph->p_offset, ph->p_filesz);
+            ide_read((void *) (ph->p_vaddr +  va_off), ELF_OFFSET_IN_DISK + ph->p_offset, ph->p_filesz);
+#endif
 #else
-            ramdisk_read((void *) ph->p_vaddr, ELF_OFFSET_IN_DISK + ph->p_offset, ph->p_filesz);
+            ramdisk_read((void *) (ph->p_vaddr + va_off), ELF_OFFSET_IN_DISK + ph->p_offset, ph->p_filesz);
 #endif
             /* TODO: zero the memory region 
              * [VirtAddr + FileSiz, VirtAddr + MemSiz)
              */
-            memset ((void *) (ph->p_vaddr + ph->p_filesz), 0, ph->p_memsz - ph->p_filesz);
+            memset ((void *) (ph->p_vaddr + ph->p_filesz + va_off), 0, ph->p_memsz - ph->p_filesz);
 
 #ifdef IA32_PAGE
             /* Record the program break for future use. */
