@@ -25,6 +25,7 @@ void raise_intr(uint8_t NO) {
     cpu.CS = tmp.segment;
     cache_SEG[SR_CS].val = lnaddr_read ((tmp.segment & 0xfff8) + cpu.GDTR_B, 4) | ((uint64_t) lnaddr_read ((tmp.segment & 0xfff8) + cpu.GDTR_B + 4, 4) << 32);
     cpu.eip = tmp.offset_15_0 | (tmp.offset_31_16 << 16);
+    printf ("%x\n", cpu.eip);
     /* Jump back to cpu_exec() */
     longjmp(jbuf, 1);
 }
