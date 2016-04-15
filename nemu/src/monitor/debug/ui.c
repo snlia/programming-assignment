@@ -153,6 +153,12 @@ static int cmd_info (char *args)
 		printf ("AF : %x\n", cpu.AF);
 		printf ("PF : %x\n", cpu.PF);
 		printf ("CF : %x\n", cpu.CF);
+		printf ("CR0 : %x\n", cpu.CR0.val);
+		printf ("CR3 : %x\n", cpu.CR3.val);
+		printf ("GDTR_B : %x\n", cpu.GDTR_B);
+		printf ("GDTR_L : %x\n", cpu.GDTR_L);
+		printf ("IDTR_B : %x\n", cpu.IDTR_B);
+		printf ("IDTR_L : %x\n", cpu.IDTR_L);
 
 	}
 	else if (!strcmp (arg, "w")) 
