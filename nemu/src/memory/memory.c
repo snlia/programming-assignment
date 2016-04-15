@@ -58,13 +58,13 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
 hwaddr_t page_translate (lnaddr_t addr) {
     if (!cpu.CR0.protect_enable || !cpu.CR0.paging) return addr;
     PDE pde;
-    pde.val = hwaddr_read (((addr >> 20) & 0xffc) + cpu.CR3.page_directory_base, 4);
-    printf ("%x!!!\n", cpu.CR3.page_directory_base);
+    pde.val = hwaddr_read (((addr >> 20) & 0xffc) | (cpu.CR3.page_directory_base) << 12, 4);
+    printf ("%x!!!\n", ((addr >> 20) & 0xffc) + (cpu.CR3.page_directory_base << 12));
     if (!pde.present) assert (0);
     PTE pte;
-    pte.val = hwaddr_read (((addr >> 10) & 0xffc) + pde.page_frame, 4);
+    pte.val = hwaddr_read (((addr >> 10) & 0xffc) | (pde.page_frame << 12), 4);
     if (!pte.present) assert (0);
-    return (addr & 0xfff) + (pte.page_frame << 12);
+    return (addr & 0xfff) | (pte.page_frame << 12);
 }
 
 uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
