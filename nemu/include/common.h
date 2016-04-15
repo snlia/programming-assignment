@@ -7,13 +7,13 @@
 //#define HAS_DEVICE
 
 //enable cache
-#define CACHE
+//#define CACHE
 
 //enable optimize
-//#define O1
+#define O1
 
-#define DEBUG
-#define LOG_FILE
+//#define DEBUG
+//#define LOG_FILE
 #include "debug.h"
 #include "macro.h"
 
