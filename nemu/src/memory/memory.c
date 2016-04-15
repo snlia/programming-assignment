@@ -59,7 +59,6 @@ hwaddr_t page_translate (lnaddr_t addr) {
     if (!cpu.CR0.protect_enable || !cpu.CR0.paging) return addr;
     PDE pde;
     pde.val = hwaddr_read (((addr >> 20) & 0xffc) | (cpu.CR3.page_directory_base) << 12, 4);
-    printf ("%x!!!\n", ((addr >> 20) & 0xffc) + (cpu.CR3.page_directory_base << 12));
     if (!pde.present) assert (0);
     PTE pte;
     pte.val = hwaddr_read (((addr >> 10) & 0xffc) | (pde.page_frame << 12), 4);
