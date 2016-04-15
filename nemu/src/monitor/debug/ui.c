@@ -12,6 +12,7 @@
 #define min(a,b) ((a) < (b) ? (a) : (b))
 
 void cpu_exec(uint32_t);//exec x instructions given in the first argument
+void TLB_flush ();
 
 /* We use the ``readline'' library to provide more flexibility to read from stdin. */
 char* rl_gets() {
@@ -272,6 +273,7 @@ static int cmd_bt (char *args)
 void ui_mainloop() {
     L1_init ();
     L2_init ();
+    TLB_flush ();
     int prei = -1;
     char preargs [255];
 	while(1) {
