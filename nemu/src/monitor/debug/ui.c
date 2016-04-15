@@ -155,6 +155,10 @@ static int cmd_info (char *args)
 		printf ("CF : %x\n", cpu.CF);
 		printf ("CR0 : %x\n", cpu.CR0.val);
 		printf ("CR3 : %x\n", cpu.CR3.val);
+		printf ("ES : %x\n", cpu.ES);
+		printf ("CS : %x\n", cpu.CS);
+		printf ("SS : %x\n", cpu.SS);
+		printf ("DS : %x\n", cpu.DS);
 		printf ("GDTR_B : %x\n", cpu.GDTR_B);
 		printf ("GDTR_L : %x\n", cpu.GDTR_L);
 		printf ("IDTR_B : %x\n", cpu.IDTR_B);
