@@ -63,7 +63,6 @@ uint32_t loader() {
 #endif
 #ifdef HAS_DEVICE
             ide_read((void *) (ph->p_vaddr +  va_off), ELF_OFFSET_IN_DISK + ph->p_offset, ph->p_filesz);
-#endif
 #else
             ramdisk_read((void *) (ph->p_vaddr + va_off), ELF_OFFSET_IN_DISK + ph->p_offset, ph->p_filesz);
 #endif
