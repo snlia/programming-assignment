@@ -3,6 +3,11 @@
 #include "cpu/reg.h"
 #include "cpu/seg.h"
 
+uint32_t dram_read(hwaddr_t, size_t);
+void dram_write(hwaddr_t, size_t, uint32_t);
+
+/* Memory accessing interfaces */
+
 typedef union PageTableEntry {
 	struct {
 		uint32_t present             : 1;
@@ -20,24 +25,7 @@ typedef union PageTableEntry {
 	uint32_t val;
 } PTE;
 
-typedef union PageDirectoryEntry {
-	struct {
-		uint32_t present             : 1;
-		uint32_t read_write          : 1; 
-		uint32_t user_supervisor     : 1;
-		uint32_t page_write_through  : 1;
-		uint32_t page_cache_disable  : 1;
-		uint32_t accessed            : 1;
-		uint32_t pad0                : 6;
-		uint32_t page_frame          : 20;
-	};
-	uint32_t val;
-} PDE;
-
-uint32_t dram_read(hwaddr_t, size_t);
-void dram_write(hwaddr_t, size_t, uint32_t);
-
-/* Memory accessing interfaces */
+extern PTE TLB_read (lnaddr_t addr); 
 
 uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
 #ifdef CACHE 
@@ -57,12 +45,7 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
 
 hwaddr_t page_translate (lnaddr_t addr) {
     if (!cpu.CR0.protect_enable || !cpu.CR0.paging) return addr;
-    PDE pde;
-    pde.val = hwaddr_read (((addr >> 20) & 0xffc) | (cpu.CR3.page_directory_base) << 12, 4);
-    if (!pde.present) assert (0);
-    PTE pte;
-    pte.val = hwaddr_read (((addr >> 10) & 0xffc) | (pde.page_frame << 12), 4);
-    if (!pte.present) assert (0);
+    PTE pte = TLB_read (addr);
     return (addr & 0xfff) | (pte.page_frame << 12);
 }
 
