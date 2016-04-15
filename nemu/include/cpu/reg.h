@@ -56,6 +56,8 @@ typedef struct {
     };
     uint16_t GDTR_L;
     uint32_t GDTR_B;
+    uint16_t IDTR_L;
+    uint32_t IDTR_B;
     union {
         struct {
             uint32_t protect_enable      : 1;
