@@ -14,6 +14,6 @@ make_helper (int_imm) {
     cpu.eip += 2;
     raise_intr (NO);
     return 0;
-}
+    }
 
 #undef instr

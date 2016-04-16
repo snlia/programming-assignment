@@ -22,7 +22,6 @@ make_helper(inv) {
 * Every line of untested code is always wrong!\33[0m\n\n", logo);
     nemu_state = STOP;
     return 0;
-//	assert(0);
 }
 
 make_helper(nemu_trap) {
