@@ -15,7 +15,7 @@ int nemu_state = STOP;
 int exec(swaddr_t);
 
 char assembly[80];
-char asm_buf[128];
+char asm_buf[127];
 
 /* Used with exception handling. */
 jmp_buf jbuf;
