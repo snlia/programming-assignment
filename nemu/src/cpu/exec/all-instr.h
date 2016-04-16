@@ -8,6 +8,7 @@
 #include "data-mov/pop.h"
 #include "data-mov/cwt.h"
 #include "data-mov/cld.h"
+#include "data-mov/cli.h"
 #include "data-mov/std.h"
 #include "data-mov/leave.h"
 #include "data-mov/lgdt.h"
@@ -55,5 +56,8 @@
 #include "misc/misc.h"
 
 #include "int/int.h"
+#include "int/popa.h"
+#include "int/pusha.h"
+#include "int/iret.h"
 
 #include "special/special.h"
