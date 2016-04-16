@@ -21,6 +21,7 @@ make_helper(inv) {
 * The machine is always right!\n\
 * Every line of untested code is always wrong!\33[0m\n\n", logo);
 
+    return 0;
 	assert(0);
 }
 
