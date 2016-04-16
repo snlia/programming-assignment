@@ -46,8 +46,8 @@ void raise_intr(uint8_t NO) {
     cpu.eip = tmp.offset_15_0 | (tmp.offset_31_16 << 16);
 
     //Push(ErrorCode); //if any
-    cpu.esp -= 1;
-    swaddr_write(cpu.esp, 1, NO, SR_SS);
+    cpu.esp -= 4;
+    swaddr_write(cpu.esp, 4, NO, SR_SS);
 
     if (tmp.type == 0xe) cpu.IF = 0; //interrupt flag is set to 0: disabled
     cpu.TF = 0;
