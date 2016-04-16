@@ -13,6 +13,7 @@ make_helper (int_imm) {
     cpu.eip += 2;
     if (setjmp (jbuf) == 0)
         raise_intr (NO);
+    print_asm ("int");
     return 0;
 }
 
