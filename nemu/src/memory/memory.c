@@ -45,7 +45,6 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
 
 hwaddr_t page_translate (lnaddr_t addr) {
     if (!cpu.CR0.protect_enable || !cpu.CR0.paging) return addr;
-    printf ("%x\n", addr);
     PTE pte = TLB_read (addr);
     return (addr & 0xfff) | (pte.page_frame << 12);
 }
