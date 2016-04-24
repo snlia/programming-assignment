@@ -6,7 +6,9 @@
 
 static void do_execute () {
     cpu.GDTR_L = lnaddr_read (op_src->addr, 2);
+    printf ("%x\n", cpu.GDTR_L);
     cpu.GDTR_B = lnaddr_read (op_src->addr + 2, 4);
+    printf ("%x\n", cpu.GDTR_B);
     print_asm_template2 ();
 }
 
