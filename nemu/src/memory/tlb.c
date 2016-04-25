@@ -61,10 +61,10 @@ PTE TLB_read (lnaddr_t addr) {
     for (int i = 0; i < SET_SIZE; ++i) if (TLBset[i].valid && TLBset[i].tag == tmp.tag)
         return TLBset[i].val;
     PDE pde;
-    pde.val = hwaddr_read (((addr >> 20) & 0xffc) | (cpu.CR3.page_directory_base) << 12, 4);
+    pde.val = hwaddr_read (((addr >> 20) & 0xffc) + ((cpu.CR3.page_directory_base) << 12), 4);
     if (!pde.present) assert (0);
     PTE pte;
-    pte.val = hwaddr_read (((addr >> 10) & 0xffc) | (pde.page_frame << 12), 4);
+    pte.val = hwaddr_read (((addr >> 10) & 0xffc) + (pde.page_frame << 12), 4);
     if (!pte.present) assert (0);
     for (int i = 0; i < SET_SIZE; ++i) if (!TLBset[i].valid) {
         TLBset[i].val = pte;
