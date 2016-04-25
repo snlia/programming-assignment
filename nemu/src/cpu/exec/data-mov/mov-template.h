@@ -2,6 +2,8 @@
 
 #define instr mov
 
+extern void TLB_flush ();
+
 /*do_mov_[bwl]*/
 static void do_execute() {
 	OPERAND_W(op_dest, op_src->val);
@@ -19,7 +21,10 @@ make_helper (mov_rm2cr_l) {
     size_t len = decode_r2rm_l (eip + 1);
     uint32_t src;
     if (op_dest->reg == 0) src = cpu.CR0.val;
-    else if (op_dest->reg == 3) src = cpu.CR3.val;
+    else if (op_dest->reg == 3) {
+        src = cpu.CR3.val;
+        TLB_flush ();
+    }
     else assert (0);
     OPERAND_W (op_dest, src);
 #ifdef DEBUG
