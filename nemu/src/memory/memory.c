@@ -28,7 +28,6 @@ typedef union PageTableEntry {
 extern PTE TLB_read (lnaddr_t addr); 
 
 uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
-    printf ("%x\n", addr);
 #ifdef CACHE 
     return L1_read (addr, len);
 #else
