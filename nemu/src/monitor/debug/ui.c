@@ -206,7 +206,7 @@ static int cmd_x (char *args)
 	for (j = head; j < tail; j += 4)
 	{
 		if (!((j - head) & 0xf)) printf ("0x%08x :", j);
-		printf ("0x%08x	", lnaddr_read (j, 4));//swaddr_read (j, 4, SR_DS));
+		printf ("0x%08x	", hwaddr_read (j, 4));//swaddr_read (j, 4, SR_DS));
 		if (!((j - head + 4) & 0xf)) puts ("");
 	}
 	if ((tail - head) & 0xf) puts ("");
