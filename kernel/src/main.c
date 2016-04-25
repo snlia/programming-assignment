@@ -31,7 +31,6 @@ void init() {
 #endif
 
     /* Jump to init_cond() to continue initialization. */
-    set_bp ();
     asm volatile("jmp *%0" : : "r"(init_cond));
 
     panic("should not reach here");
@@ -68,7 +67,6 @@ void init_cond() {
     /* Initialize the memory manager. */
     init_mm();
 #endif
-set_bp ();
     /* Output a welcome message.
      * Note that the output is actually performed only when
      * the serial port is available in NEMU.
