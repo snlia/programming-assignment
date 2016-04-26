@@ -300,7 +300,8 @@ void ui_mainloop() {
             printf ("%s ", cmd_table[prei].name);
             if (preargs != NULL) printf ("%s", preargs);
             puts ("");
-            if(cmd_table[prei].handler(strtok (preargs, " ")) < 0) { return; }
+            strtok(preargs, " ");
+            if(cmd_table[prei].handler(preargs) < 0) { return; }
             continue;
         }
 
