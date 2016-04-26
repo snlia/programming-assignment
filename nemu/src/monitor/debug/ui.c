@@ -298,12 +298,12 @@ void ui_mainloop() {
         }
         else strcpy (preargs, str);
 
+        printf ("%s\n", str);
         char *cmd = strtok(str, " ");
 
 		/* treat the remaining string as the arguments,
 		 * which may need further parsing
 		 */
-        puts ("ppp");
 		char *args = cmd + strlen(cmd) + 1;
 		if(args >= str_end) {
 			args = NULL;
