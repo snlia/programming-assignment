@@ -293,7 +293,7 @@ void ui_mainloop() {
 
 		/* extract the first token as the command */
         if (!str[0]) {
-            str = preargs;
+            strcpy (str, preargs);
             str_end = str + strlen (str);
         }
         else strcpy (preargs, str);
