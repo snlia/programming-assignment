@@ -298,7 +298,7 @@ void ui_mainloop() {
         }
         else strcpy (preargs, str);
 
-        printf ("%s\n", str);
+        printf ("%s\n", preargs);
         char *cmd = strtok(str, " ");
 
 		/* treat the remaining string as the arguments,
