@@ -113,6 +113,7 @@ static void do_execute () {
 #endif 
     if (flag)
     {
+        puts ("hhhhhhh");
         OPERAND_W(op_dest, op_src->val);
 #ifdef DEBUG
         Assert(snprintf(assembly, 80, "%s", s) < 80, "buffer overflow!");
