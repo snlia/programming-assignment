@@ -286,7 +286,7 @@ void ui_mainloop() {
     L1_init ();
     L2_init ();
     TLB_flush ();
-//    int prei = -1;
+    int prei = -1;
     char preargs [255];
 	while(1) {
 		char *str = rl_gets();
@@ -294,12 +294,7 @@ void ui_mainloop() {
 
 		/* extract the first token as the command */
 		char *cmd = strtok(str, " ");
-        if (cmd == NULL) {
-            str = preargs;
-            str_end = str + strlen(str);
-            cmd = strtok(str, " ");
-        }
-        /*
+
 		if(cmd == NULL) { 
             if (prei == -1) continue;
             printf ("%s ", cmd_table[prei].name);
@@ -308,7 +303,6 @@ void ui_mainloop() {
             if(cmd_table[prei].handler(preargs) < 0) { return; }
             continue;
         }
-        */
 
 		/* treat the remaining string as the arguments,
 		 * which may need further parsing
@@ -329,7 +323,7 @@ void ui_mainloop() {
                 if (args != NULL)
                     strcpy (preargs, args);
                 else preargs[0] = 0;
- //               prei = i;
+                prei = i;
 				if(cmd_table[i].handler(args) < 0) { return; }
 				break;
 			}
