@@ -7,6 +7,7 @@ make_helper (iret) {
     //Same privilege level
     //PE=1, VM=0 in flags image, RPL=CPL
     //EIP = Pop();
+    cpu.esp += 4;
     cpu.eip = swaddr_read (cpu.esp, 4, SR_SS);
     printf ("%x\n", cpu.eip);
     cpu.esp += 4;
