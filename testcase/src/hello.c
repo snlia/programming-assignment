@@ -19,6 +19,7 @@ int read(int fd, char *buf, int len) {
 }
 
 int write(int fd, char *buf, int len) {
+    set_bp ();
 	return syscall(__NR_write, fd, buf, len); 
 }
 
