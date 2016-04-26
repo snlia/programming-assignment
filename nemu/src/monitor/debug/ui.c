@@ -297,7 +297,7 @@ void ui_mainloop() {
 
 		if(cmd == NULL) { 
             if (prei == -1) continue;
-            printf ("%s ", cmd_table[prei].name);
+//            printf ("%s ", cmd_table[prei].name);
             if (preargs != NULL) printf ("%s", preargs);
             puts ("");
             strtok(preargs, " ");
@@ -323,7 +323,8 @@ void ui_mainloop() {
 			if(strcmp(cmd, cmd_table[i].name) == 0) {
                 if (args != NULL) {
                     strcpy (preargs, cmd);
-                    strcpy (preargs +  strlen (cmd), args);
+                    preargs[strlen (cmd)] = ' ';
+                    strcpy (preargs +  strlen (cmd) + 1, args);
                 }
                 else preargs[0] = 0;
                 prei = i;
