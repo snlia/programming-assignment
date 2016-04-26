@@ -293,6 +293,7 @@ void ui_mainloop() {
 
 		/* extract the first token as the command */
         if (strcmp (str, "\n")) {
+            puts ("jjj");
             str = preargs;
             str_end = str + strlen (str);
         }
