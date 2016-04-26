@@ -25,7 +25,7 @@ static void do_execute () {
     memset (s, 0, sizeof (s));
 #endif 
     printf ("%x\n", ops_decoded.opcode);
-    switch (ops_decoded.opcode)
+    switch (ops_decoded.opcode & 0xff)
     {
         case 0x40 : flag = OF;
 #ifdef DEBUG
