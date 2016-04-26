@@ -24,6 +24,7 @@ static void do_execute () {
     char s [8];
     memset (s, 0, sizeof (s));
 #endif 
+    if (ops_decoded.opcode > 0xff) printf ("= =? %x\n", instr_fetch (cpu.eip, 1));
     switch (ops_decoded.opcode & 0xff)
     {
         case 0x40 : flag = OF;
