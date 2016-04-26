@@ -299,7 +299,6 @@ void ui_mainloop() {
         else strcpy (preargs, str);
 
         char *cmd = strtok(str, " ");
-        puts ("ppp");
 
 		/* treat the remaining string as the arguments,
 		 * which may need further parsing
@@ -309,6 +308,7 @@ void ui_mainloop() {
 			args = NULL;
 		}
 
+        puts ("ppp");
 #ifdef HAS_DEVICE
 		extern void sdl_clear_event_queue(void);
 		sdl_clear_event_queue();
