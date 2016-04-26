@@ -50,6 +50,7 @@ void raise_intr(uint8_t NO) {
     swaddr_write(cpu.esp, 4, NO, SR_SS);
 
     if (tmp.type == 0xe) cpu.IF = 0; //interrupt flag is set to 0: disabled
+    else cpu.IF = 1;
     cpu.TF = 0;
     cpu.NT = 0;
     cpu.VM = 0;
