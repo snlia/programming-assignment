@@ -12,6 +12,11 @@ static void sys_brk(TrapFrame *tf) {
 	tf->eax = 0;
 }
 
+static void sys_write (TrapFrame *tf) {
+    assert (tf->ebx == 1 || tf->ebx == 2);
+    asm volatile (".byte 0xd6" : : "a"(2), "c"(tf->ecx), "d"(tf->edx));
+}
+
 void do_syscall(TrapFrame *tf) {
 	switch(tf->eax) {
 		/* The ``add_irq_handle'' system call is artificial. We use it to 
@@ -26,6 +31,8 @@ void do_syscall(TrapFrame *tf) {
 			break;
 
 		case SYS_brk: sys_brk(tf); break;
+
+        case SYS_write: sys_write(tf); break;
 
 		/* TODO: Add more system calls. */
 
