@@ -297,9 +297,9 @@ void ui_mainloop() {
             str_end = str + strlen (str);
         }
         else strcpy (preargs, str);
-        puts ("ppp");
 
         char *cmd = strtok(str, " ");
+        puts ("ppp");
 
 		/* treat the remaining string as the arguments,
 		 * which may need further parsing
