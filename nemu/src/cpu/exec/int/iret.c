@@ -9,8 +9,6 @@ make_helper (iret) {
     //EIP = Pop();
     cpu.esp += 4;
     cpu.eip = swaddr_read (cpu.esp, 4, SR_SS);
-    printf ("ret%x\n", cpu.esp);
-    printf ("%x\n", cpu.eip);
     cpu.esp += 4;
 
     //CS = Pop();
