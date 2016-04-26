@@ -15,7 +15,7 @@ static void do_execute () {
             cpu.eip = (DATA_TYPE) op_src->val;
             break;
         default :
-            assert (1);
+            assert (0);
     }
 #if DATA_BYTE == 2
 	cpu.eip &= 0x0000ffff;

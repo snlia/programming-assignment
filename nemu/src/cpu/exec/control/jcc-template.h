@@ -117,7 +117,7 @@ static void do_execute () {
 					strcpy (s, "jcxz");
 #endif
 					break;
-		default : Assert (1, "missing instr");
+		default : Assert (0, "missing instr");
 	}
 #ifdef DEBUG
 	print_asm_template5(cpu.eip + (DATA_TYPE_S) op_src->val, s);

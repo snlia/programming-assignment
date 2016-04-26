@@ -24,7 +24,6 @@ static void do_execute () {
     char s [8];
     memset (s, 0, sizeof (s));
 #endif 
-    if (ops_decoded.opcode > 0xff) printf ("= =? %x\n", instr_fetch (cpu.eip, 1));
     switch (ops_decoded.opcode & 0xff)
     {
         case 0x40 : flag = OF;
@@ -107,7 +106,7 @@ static void do_execute () {
                     strcpy (s, "cmovg");
 #endif
                     break;
-        default : Assert (1, "missing instr");
+        default : Assert (0, "missing instr");
     }
 #ifdef DEBUG
 //    print_asm_template5(cpu.eip + (DATA_TYPE_S) op_src->val, s);
