@@ -303,8 +303,8 @@ void ui_mainloop() {
 		/* treat the remaining string as the arguments,
 		 * which may need further parsing
 		 */
-        puts ("ppp");
 		char *args = cmd + strlen(cmd) + 1;
+        puts ("ppp");
 		if(args >= str_end) {
 			args = NULL;
 		}
