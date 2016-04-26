@@ -14,6 +14,7 @@ static void sys_brk(TrapFrame *tf) {
 
 static void sys_write (TrapFrame *tf) {
     assert (tf->ebx == 1 || tf->ebx == 2);
+    tf->eax = tf->edx;
     asm volatile (".byte 0xd6" : : "a"(2), "c"(tf->ecx), "d"(tf->edx));
 }
 
