@@ -54,7 +54,6 @@ void raise_intr(uint8_t NO) {
     cpu.NT = 0;
     cpu.VM = 0;
     cpu.RF = 0;
-    printf ("%x\n", cpu.eip);
     /* Jump back to cpu_exec() */
     longjmp(jbuf, 1);
 }
