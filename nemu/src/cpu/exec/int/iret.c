@@ -12,6 +12,7 @@ make_helper (iret) {
 
     //CS = Pop();
     cpu.CS = (uint16_t) swaddr_read (cpu.esp, 4, SR_SS);
+    printf ("%d\n", cpu.CS);
     cpu.esp += 4;
 
     //EFLAGS = Pop();
