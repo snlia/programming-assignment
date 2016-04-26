@@ -11,6 +11,9 @@
 #define MAX_INSTR_TO_PRINT 10
 
 int nemu_state = STOP;
+#ifdef DEBUG
+int decode_len;
+#endif
 
 int exec(swaddr_t);
 
@@ -60,12 +63,15 @@ void cpu_exec(volatile uint32_t n) {
 
 		/* Execute one instruction, including instruction fetch,
 		 * instruction decode, and the actual execution. */
+#ifdef DEBUG
+        decode_len = 0;
+#endif
 		int instr_len = exec(cpu.eip);
 
 		cpu.eip += instr_len;
 
 #ifdef DEBUG
-		print_bin_instr(eip_temp, instr_len);
+		print_bin_instr(eip_temp, instr_len + decode_len);
 		strcat(asm_buf, assembly);
 		Log_write("%s\n", asm_buf);
 		if(n_temp < MAX_INSTR_TO_PRINT) {

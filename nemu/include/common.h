@@ -26,6 +26,8 @@ typedef uint32_t hwaddr_t;
 typedef uint32_t lnaddr_t;
 typedef uint32_t swaddr_t;
 
+extern int decode_len;
+
 typedef uint16_t ioaddr_t;
 
 #pragma pack (1)
