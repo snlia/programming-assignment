@@ -292,8 +292,8 @@ void ui_mainloop() {
 		char *str_end = str + strlen(str);
 
 		/* extract the first token as the command */
+        printf ("!!!!!!!%s!!!!!!\n", str);
         if (!strcmp (str, "\n")) {
-            puts ("jjj");
             str = preargs;
             str_end = str + strlen (str);
         }
