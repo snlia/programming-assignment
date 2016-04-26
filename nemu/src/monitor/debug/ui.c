@@ -115,6 +115,7 @@ static int cmd_elf (char *args)
 
 static int cmd_si (char *args)
 {
+    printf ("%s\n", args);
 	/* extract the first argument */
 	char *arg = strtok(NULL, " ");
 	uint32_t i;
