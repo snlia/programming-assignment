@@ -24,6 +24,7 @@ static void do_execute () {
     char s [8];
     memset (s, 0, sizeof (s));
 #endif 
+    printf ("%x\n", ops_decoded.opcode);
     switch (ops_decoded.opcode)
     {
         case 0x40 : flag = OF;
@@ -113,7 +114,6 @@ static void do_execute () {
 #endif 
     if (flag)
     {
-        puts ("hhhhhhh");
         OPERAND_W(op_dest, op_src->val);
 #ifdef DEBUG
         Assert(snprintf(assembly, 80, "%s", s) < 80, "buffer overflow!");
