@@ -292,7 +292,7 @@ void ui_mainloop() {
 		char *str_end = str + strlen(str);
 
 		/* extract the first token as the command */
-            puts ("= =");
+        printf ("%s\n", str);
         if (str == NULL) {
             str = preargs;
             str_end = str + strlen (str);
