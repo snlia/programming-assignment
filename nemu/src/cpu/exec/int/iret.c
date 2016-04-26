@@ -14,6 +14,7 @@ make_helper (iret) {
 
     //CS = Pop();
     cpu.CS = (uint16_t) swaddr_read (cpu.esp, 4, SR_SS);
+    cache_SEG[SR_CS].val = lnaddr_read ((cpu.CS & 0xfff8) + cpu.GDTR_B, 4) | ((uint64_t) lnaddr_read ((cpu.CS & 0xfff8) + cpu.GDTR_B + 4, 4) << 32);
     printf ("%x\n", cpu.CS);
     cpu.esp += 4;
 
