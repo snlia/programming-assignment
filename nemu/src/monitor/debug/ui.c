@@ -297,6 +297,7 @@ void ui_mainloop() {
             str_end = str + strlen (str);
         }
         else strcpy (preargs, str);
+        printf ("%s\n", preargs);
 
         char *cmd = strtok(str, " ");
 
