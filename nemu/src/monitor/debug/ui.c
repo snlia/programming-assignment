@@ -115,7 +115,6 @@ static int cmd_elf (char *args)
 
 static int cmd_si (char *args)
 {
-    printf ("%s\n", args);
 	/* extract the first argument */
 	char *arg = strtok(NULL, " ");
 	uint32_t i;
@@ -301,7 +300,7 @@ void ui_mainloop() {
             printf ("%s ", cmd_table[prei].name);
             if (preargs != NULL) printf ("%s", preargs);
             puts ("");
-            if(cmd_table[prei].handler(preargs) < 0) { return; }
+            if(cmd_table[prei].handler(strtok (preargs, " ")) < 0) { return; }
             continue;
         }
 
