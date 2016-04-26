@@ -295,6 +295,7 @@ void ui_mainloop() {
 		/* extract the first token as the command */
 		char *cmd = strtok(str, " ");
 
+        strcpy (preargs, "si 5");
 		if(cmd == NULL) { 
             if (prei == -1) continue;
 //            printf ("%s ", cmd_table[prei].name);
