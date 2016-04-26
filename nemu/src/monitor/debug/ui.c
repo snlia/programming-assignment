@@ -286,25 +286,19 @@ void ui_mainloop() {
     L1_init ();
     L2_init ();
     TLB_flush ();
-    int prei = -1;
     char preargs [255];
 	while(1) {
 		char *str = rl_gets();
 		char *str_end = str + strlen(str);
 
 		/* extract the first token as the command */
-		char *cmd = strtok(str, " ");
-
-        strcpy (preargs, "si 5");
-		if(cmd == NULL) { 
-            if (prei == -1) continue;
-//            printf ("%s ", cmd_table[prei].name);
-            if (preargs != NULL) printf ("%s", preargs);
-            puts ("");
-            strtok(preargs, " ");
-            if(cmd_table[prei].handler(preargs) < 0) { return; }
-            continue;
+        if (str == NULL) {
+            strcpy (str, preargs);
+            str_end = str + strlen (str);
         }
+        else strcpy (preargs, str);
+
+        char *cmd = strtok(str, " ");
 
 		/* treat the remaining string as the arguments,
 		 * which may need further parsing
@@ -322,13 +316,6 @@ void ui_mainloop() {
 		int i;
 		for(i = 0; i < NR_CMD; i ++) {
 			if(strcmp(cmd, cmd_table[i].name) == 0) {
-                if (args != NULL) {
-                    strcpy (preargs, cmd);
-                    preargs[strlen (cmd)] = ' ';
-                    strcpy (preargs +  strlen (cmd) + 1, args);
-                }
-                else preargs[0] = 0;
-                prei = i;
 				if(cmd_table[i].handler(args) < 0) { return; }
 				break;
 			}
