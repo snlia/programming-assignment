@@ -25,7 +25,7 @@ make_helper (iret) {
     cpu.esp += 4;
 
     print_asm ("iret");
-    return 1;
+    return 0;
 }
 #undef instr
 
