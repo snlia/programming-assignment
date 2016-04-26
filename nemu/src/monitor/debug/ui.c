@@ -294,11 +294,11 @@ void ui_mainloop() {
 		/* extract the first token as the command */
         if (str == NULL) {
             str = preargs;
+            printf ("%s\n", preargs);
             str_end = str + strlen (str);
         }
         else strcpy (preargs, str);
 
-        printf ("%s\n", preargs);
         char *cmd = strtok(str, " ");
 
 		/* treat the remaining string as the arguments,
