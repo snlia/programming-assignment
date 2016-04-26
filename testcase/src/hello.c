@@ -21,8 +21,8 @@ int read(int fd, char *buf, int len) {
 }
 
 int write(int fd, char *buf, int len) {
-	write_ret = syscall(__NR_write, fd, buf, len); 
     set_bp ();
+	write_ret = syscall(__NR_write, fd, buf, len); 
     return write_ret;
 }
 
