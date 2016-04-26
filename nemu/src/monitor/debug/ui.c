@@ -292,8 +292,8 @@ void ui_mainloop() {
 		char *str_end = str + strlen(str);
 
 		/* extract the first token as the command */
-        if (str == NULL) {
             puts ("= =");
+        if (str == NULL) {
             str = preargs;
             str_end = str + strlen (str);
         }
