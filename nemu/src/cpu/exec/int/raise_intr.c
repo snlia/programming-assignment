@@ -39,6 +39,7 @@ void raise_intr(uint8_t NO) {
     swaddr_write(cpu.esp, 4, cpu.CS, SR_SS);
     cpu.esp -= 4;
     swaddr_write(cpu.esp, 4, cpu.eip, SR_SS);
+    printf ("%x\n", cpu.eip);
 
     //CS:EIP = Gate(CS:EIP); //segment descriptor information also loaded
     cpu.CS = tmp.segment;
