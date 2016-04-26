@@ -8,15 +8,17 @@ make_helper (iret) {
     //PE=1, VM=0 in flags image, RPL=CPL
     //EIP = Pop();
     cpu.eip = swaddr_read (cpu.esp, 4, SR_SS);
+    printf ("%x\n", cpu.eip);
     cpu.esp += 4;
 
     //CS = Pop();
     cpu.CS = (uint16_t) swaddr_read (cpu.esp, 4, SR_SS);
-    printf ("%d\n", cpu.CS);
+    printf ("%x\n", cpu.CS);
     cpu.esp += 4;
 
     //EFLAGS = Pop();
     cpu.eflags = swaddr_read (cpu.esp, 4, SR_SS);
+    printf ("%x\n", cpu.eflags);
     cpu.esp += 4;
 
     print_asm ("iret");
