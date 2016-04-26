@@ -21,7 +21,6 @@ int read(int fd, char *buf, int len) {
 }
 
 int write(int fd, char *buf, int len) {
-    set_bp ();
 	write_ret = syscall(__NR_write, fd, buf, len); 
     return write_ret;
 }
@@ -64,7 +63,7 @@ int isatty(int fd) {
 }
 
 int main() {
-//	printf("%s", "Hello world!\n");
+	printf("%s", "Hello world!\n");
 	printf("%d + %d = %d\n", 1, 1, 2);
 
 	HIT_GOOD_TRAP;
