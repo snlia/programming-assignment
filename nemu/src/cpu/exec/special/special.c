@@ -44,3 +44,15 @@ make_helper(nemu_trap) {
 	return 1;
 }
 
+make_helper (nop_mul) {
+    uint8_t rm = instr_fetch (cpu.eip, 1);
+    switch (rm) {
+        case 0: return 2;
+        case 0x40 : return 3;
+        case 0x44 : return 4;
+        case 0x80 : return 5;
+        case 0x84 : return 6;
+        default : Assert (0, "Missing instr");
+    }
+    return 0;
+}
