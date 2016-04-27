@@ -3,5 +3,6 @@
 
 make_helper(inv);
 make_helper(nemu_trap);
+make_helper(nop_1);
 
 #endif
