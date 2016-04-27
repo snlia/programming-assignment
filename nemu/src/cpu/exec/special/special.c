@@ -45,7 +45,6 @@ make_helper(nemu_trap) {
 }
 
 make_helper (nop_mul) {
-    printf ("%x\n", eip);
     uint8_t rm = instr_fetch (eip + 1, 1);
     switch (rm) {
         case 0: return 2;
