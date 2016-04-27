@@ -46,6 +46,7 @@ make_helper(nemu_trap) {
 
 make_helper (nop_mul) {
     uint8_t rm = instr_fetch (cpu.eip + 1, 1);
+    printf ("%x\n", rm);
     switch (rm) {
         case 0: return 2;
         case 0x40 : return 3;
