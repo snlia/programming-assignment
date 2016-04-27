@@ -3,6 +3,7 @@
 
 make_helper (concat (movs_, SUFFIX))
 {
+    printf ("%x\n", swaddr_read(SRCindex, DATA_BYTE, SR_DS));
     swaddr_write (DESTindex, DATA_BYTE, swaddr_read(SRCindex, DATA_BYTE, SR_DS), SR_ES);
     if (cpu.DF) 
     {
