@@ -56,3 +56,9 @@ make_helper (nop_mul) {
     }
     return 0;
 }
+
+make_helper (hlt) {
+    while (!cpu.INTR || !cpu.eflags.IF);
+    print_asm ("hlt");
+    return 1;
+}
