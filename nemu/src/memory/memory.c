@@ -5,6 +5,9 @@
 
 uint32_t dram_read(hwaddr_t, size_t);
 void dram_write(hwaddr_t, size_t, uint32_t);
+extern int is_mmio (hwaddr_t);
+extern uint32_t mmio_read (hwaddr_t, size_t, int);
+extern void mmio_write (hwaddr_t, size_t, uint32_t, int);
 
 /* Memory accessing interfaces */
 
@@ -28,19 +31,27 @@ typedef union PageTableEntry {
 extern PTE TLB_read (lnaddr_t addr); 
 
 uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
+    int tmp = is_mmio (addr);
+    if (!~tmp) {
 #ifdef CACHE 
     return L1_read (addr, len);
 #else
     return dram_read(addr, len) & (~0u >> ((4 - len) << 3));
 #endif
+    }
+    else return mmio_read (addr, len, tmp) & (~0u >> ((4 - len) << 3));
 }
 
 void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
+    int tmp = is_mmio (addr);
+    if (!~tmp) {
 #ifdef CACHE 
     L1_write (addr, len, data);
 #else
     dram_write(addr, len, data);
 #endif
+    }
+    else mmio_write (addr, len, data, tmp);
 }
 
 hwaddr_t page_translate (lnaddr_t addr) {
