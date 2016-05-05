@@ -102,6 +102,7 @@ typedef struct {
             uint16_t ES, CS, SS, DS;
         };
     };
+    volatile bool INTR;
 
 } CPU_state;
 
