@@ -9,7 +9,7 @@ static void do_execute () {
 
 make_helper (concat (out_, SUFFIX)) {
     pio_write(reg_w (R_DX), DATA_BYTE, (DATA_TYPE) REG(R_EAX));
-	print_asm_template1();
+	print_asm("out %%eax dx");
     return 1;
 }
 

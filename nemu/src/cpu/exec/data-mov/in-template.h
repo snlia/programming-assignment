@@ -9,7 +9,7 @@ static void do_execute () {
 
 make_helper (concat (in_, SUFFIX)) {
     REG(R_EAX) = pio_read(reg_w (R_DX), DATA_BYTE);
-	print_asm("in dx (eax)");
+	print_asm("in dx %%eax");
     return 1;
 }
 
