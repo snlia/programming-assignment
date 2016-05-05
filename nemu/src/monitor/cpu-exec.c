@@ -16,6 +16,9 @@ int decode_len;
 #endif
 
 int exec(swaddr_t);
+extern uint8_t i8259_query_intr ();
+extern void i8259_ack_intr ();
+extern void raise_intr (uint8_t);
 
 char assembly[80];
 char asm_buf[127];
@@ -81,7 +84,7 @@ void cpu_exec(volatile uint32_t n) {
         if (bk) do_int3 ();
 #endif
         if(nemu_state != RUNNING) { return; }
-        if(cpu.INTR & cpu.eflags.IF) {
+        if(cpu.INTR & cpu.IF) {
             uint32_t intr_no = i8259_query_intr();
             i8259_ack_intr();
             raise_intr(intr_no);
