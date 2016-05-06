@@ -18,12 +18,14 @@ void create_video_mapping() {
 	 */
     PDE *updir = get_updir();
 	PTE *ptable = (PTE *)va_to_pa(vptable);
-    updir[0].val = make_pde(vptable);
+    updir[0].val = make_pde(ptable);
+
+    memset (ptable, 0, sizeof (ptable));
 
 	asm volatile ("std;\
 	 1: stosl;\
 		subl %0, %%eax;\
-        cmpl 0xa0000, %%eax;\
+        cmpl $0xa0000, %%eax;\
 		jge 1b" : : 
 		"i"(PAGE_SIZE), "a"((VMEM_ADDR + VMEM_SIZE - PAGE_SIZE) | 0x7), "D"(ptable - 1));
 
