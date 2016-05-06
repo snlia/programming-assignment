@@ -62,6 +62,7 @@ hwaddr_t page_translate (lnaddr_t addr) {
 
 uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
     assert(len == 1 || len == 2 || len == 4);
+    if (addr == 0x080482f2) puts ("go in ln");
     if (0) {
         /* this is a special case, you can handle it later. */
         assert(0);
@@ -88,7 +89,6 @@ lnaddr_t seg_translate (swaddr_t swaddr, uint8_t sreg) {
     if (!cpu.CR0.protect_enable) return swaddr;
     Assert (!(cpu.CR0.protect_enable) || (cpu.spr[sreg].index << 3) < cpu.GDTR_L, "At addr 0x%x, seg : %x, eip : 0x%x\n", swaddr, sreg, cpu.eip);
     Assert ((seg_limit (cache_SEG[sreg]) << 12) > swaddr, "At addr 0x%x, seg : %x, eip : 0x%x\n", swaddr, sreg, cpu.eip);
-    if (swaddr == 0x080482f2) printf ("%x\n", swaddr + seg_base (cache_SEG[sreg]));
     return swaddr + seg_base (cache_SEG[sreg]);
 }
 
