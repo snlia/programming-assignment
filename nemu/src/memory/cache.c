@@ -155,6 +155,7 @@ void L2_flush () {
 }
 
 uint32_t L2_read (hwaddr_t addr, size_t len) {
+    return dram_read (addr, len);
     L2_addr temp;
     temp.addr = addr;
     uint32_t off = temp.off;
@@ -168,6 +169,7 @@ uint32_t L2_read (hwaddr_t addr, size_t len) {
 
 void L2_write (hwaddr_t addr, size_t len, uint32_t data) {
     dram_write (addr, len, data);
+    return ;
     L2_addr temp;
     temp.addr = addr;
     uint32_t off = temp.off;
