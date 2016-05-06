@@ -46,8 +46,7 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
     int tmp = is_mmio (addr);
     if (!~tmp) {
 #ifdef CACHE 
-    dram_write(addr, len, data);
-    //L1_write (addr, len, data);
+    L1_write (addr, len, data);
 #else
     dram_write(addr, len, data);
 #endif
