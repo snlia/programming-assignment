@@ -17,15 +17,15 @@ void create_video_mapping() {
 	 * some page tables to create this mapping.
 	 */
     PDE *updir = get_updir();
-	PTE *vptable = (PTE *)va_to_pa(vptable);
+	PTE *ptable = (PTE *)va_to_pa(vptable);
     updir[0].val = make_pde(vptable);
 
 	asm volatile ("std;\
 	 1: stosl;\
 		subl %0, %%eax;\
-        cmp (VMEM_ADDR) %%eax;\
+        cmpl %0, %%eax;\
 		jge 1b" : : 
-		"i"(PAGE_SIZE), "a"((VMEM_ADDR + VMEM_SIZE - PAGE_SIZE) | 0x7), "D"(vptable - 1));
+		"i"(PAGE_SIZE), "a"((VMEM_ADDR + VMEM_SIZE - PAGE_SIZE) | 0x7), "D"(ptable - 1));
 
 //	panic("please implement me");
 }
