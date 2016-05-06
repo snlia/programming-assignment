@@ -22,6 +22,7 @@ void create_video_mapping() {
 
     memset (ptable, 0, sizeof (ptable));
 
+    set_bp ();
 	asm volatile ("std;\
 	 1: stosl;\
 		subl %0, %%eax;\
