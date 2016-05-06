@@ -12,7 +12,7 @@
 #define L2_TAG 22
 #define L2_BLOCK 12
 #define L2_BMASK 0xfff
-#define L2_SEED 0x3fd
+#define L2_SEED 0x4fd
 
 typedef struct CacheBlock {
     bool valid, dirty;
