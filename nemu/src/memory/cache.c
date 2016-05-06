@@ -64,7 +64,6 @@ void L1_flush () {
 }
 
 uint32_t L1_read (hwaddr_t addr, size_t len) {
-    printf ("%x %zx\n", addr, len);
     return dram_read (addr, len) & (~0u >> ((4 - len) << 3));
     L1_addr temp;
     temp.addr = addr;
