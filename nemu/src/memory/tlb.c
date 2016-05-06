@@ -65,6 +65,7 @@ PTE TLB_read (lnaddr_t addr) {
     if (!pde.present) Assert (0, "PDE no present at addr : 0x%x\n", addr);
     PTE pte;
     pte.val = hwaddr_read (((addr >> 10) & 0xffc) + (pde.page_frame << 12), 4);
+    if (addr == 0x080482f2) puts ("go in ln");
     if (addr == 0x080482f2) {
         printf ("pde : %x\n", pde.val);
         printf ("pte addr : %x\n", ((addr >> 10) & 0xffc) + (pde.page_frame << 12));
