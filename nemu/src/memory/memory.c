@@ -79,6 +79,7 @@ void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
     if ((addr + len - 1) > (addr | 0xfff)) {
         /* this is a special case, you can handle it later. */
         for (int i = 0; i < len; ++i, data >>= 8) lnaddr_write (addr + i, 1, data & 0xff);
+        return ;
     }
     else {
         hwaddr_t hwaddr = page_translate(addr);
