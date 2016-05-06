@@ -10,6 +10,7 @@
 #include "data-mov/cld.h"
 #include "data-mov/cli.h"
 #include "data-mov/std.h"
+#include "data-mov/sti.h"
 #include "data-mov/leave.h"
 #include "data-mov/lgdt.h"
 #include "data-mov/lidt.h"
