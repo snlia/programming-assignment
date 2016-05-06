@@ -23,7 +23,7 @@ void create_video_mapping() {
 	asm volatile ("std;\
 	 1: stosl;\
 		subl %0, %%eax;\
-        cmpl %1, %%eax;\
+        cmpl 0xa0000, %%eax;\
 		jge 1b" : : 
 		"i"(PAGE_SIZE), "a"((VMEM_ADDR + VMEM_SIZE - PAGE_SIZE) | 0x7), "D"(ptable - 1));
 
