@@ -65,10 +65,8 @@ uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
     if ((addr + len - 1) > (addr | 0xfff)) {
         /* this is a special case, you can handle it later. */
         uint32_t result = 0;
-        puts ("hahaha");
         for (int i = 0; i < len; ++i)
             result |= lnaddr_read (addr + i, 1) << (i << 3);
-        printf ("%x\n", result);
         return result;
     }
     else {
@@ -81,7 +79,6 @@ void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
     assert(len == 1 || len == 2 || len == 4);
     if ((addr + len - 1) > (addr | 0xfff)) {
         /* this is a special case, you can handle it later. */
-        puts ("heiheihei");
         for (int i = 0; i < len; ++i, data >>= 8) lnaddr_write (addr + i, 1, data & 0xff);
         return ;
     }
