@@ -6,7 +6,7 @@
 #define L1_TAG 23
 #define L1_BLOCK 7
 #define L1_BMASK 0x7f
-#define L1_SEED 0x3d
+#define L1_SEED 0x4d
 
 #define L2_SET 4
 #define L2_TAG 22

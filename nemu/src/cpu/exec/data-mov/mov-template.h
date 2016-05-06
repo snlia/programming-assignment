@@ -41,8 +41,6 @@ make_helper (mov_cr2rm_l) {
     else if (op_dest->reg == 3) {
         cpu.CR3.val = op_src->val;
         TLB_flush ();
-        L1_flush ();
-        L2_flush ();
     }
     else assert (0);
 #ifdef DEBUG
