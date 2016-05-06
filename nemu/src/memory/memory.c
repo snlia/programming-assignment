@@ -69,6 +69,7 @@ uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
         for (int i = 0; i < len; ++i, result <<= 8) {
             printf ("%x\n", addr + i);
             result |= lnaddr_read (addr + i, 1);
+            puts ("???");
         }
         return result;
     }
