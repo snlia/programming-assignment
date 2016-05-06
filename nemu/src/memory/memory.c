@@ -88,6 +88,7 @@ lnaddr_t seg_translate (swaddr_t swaddr, uint8_t sreg) {
     if (!cpu.CR0.protect_enable) return swaddr;
     Assert (!(cpu.CR0.protect_enable) || (cpu.spr[sreg].index << 3) < cpu.GDTR_L, "At addr 0x%x, seg : %x, eip : 0x%x\n", swaddr, sreg, cpu.eip);
     Assert ((seg_limit (cache_SEG[sreg]) << 12) > swaddr, "At addr 0x%x, seg : %x, eip : 0x%x\n", swaddr, sreg, cpu.eip);
+    if (swaddr == 0x080482f2) printf ("%x\n", swaddr + seg_base (cache_SEG[sreg]));
     return swaddr + seg_base (cache_SEG[sreg]);
 }
 
