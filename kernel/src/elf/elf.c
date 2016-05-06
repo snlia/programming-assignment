@@ -90,7 +90,6 @@ uint32_t loader() {
 #endif
     write_cr3(get_ucr3());
 #endif
-    set_bp ();
 
     return entry;
 }

@@ -65,6 +65,10 @@ PTE TLB_read (lnaddr_t addr) {
     if (!pde.present) Assert (0, "PDE no present at addr : 0x%x\n", addr);
     PTE pte;
     pte.val = hwaddr_read (((addr >> 10) & 0xffc) + (pde.page_frame << 12), 4);
+    if (addr == 0xa0000) {
+        printf ("pte : %x\n", pde.page_frame << 12);
+        printf ("%x\n", ((addr >> 10) & 0xffc) + (pde.page_frame << 12));
+    }
     if (!pte.present) Assert (0, "PTE no present at addr : 0x%x\n", addr);
     for (int i = 0; i < SET_SIZE; ++i) if (!TLBset[i].valid) {
         TLBset[i].val = pte;
