@@ -3,11 +3,12 @@
 #include <string.h>
 
 #define VMEM_ADDR 0xa0000
+#define VMEM_SIZE 0x10000
 #define SCR_SIZE (320 * 200)
 
 /* Use the function to get the start address of user page directory. */
 inline PDE* get_updir();
-static PTE vptable[(VMEM_ADDR + SCR_SIZE) / PAGE_SIZE] align_to_page;		//video page tables
+static PTE vptable[(VMEM_ADDR + VMEM_SIZE) / PAGE_SIZE] align_to_page;		//video page tables
 
 void create_video_mapping() {
 	/* TODO: create an identical mapping from virtual memory area 
@@ -16,16 +17,17 @@ void create_video_mapping() {
 	 * some page tables to create this mapping.
 	 */
     PDE *updir = get_updir();
-	PTE *vptable = (PTE *)va_to_pa(kptable);
+	PTE *vptable = (PTE *)va_to_pa(vptable);
     updir[0].val = make_pde(vptable);
 
 	asm volatile ("std;\
 	 1: stosl;\
 		subl %0, %%eax;\
+        cmp (VMEM_ADDR) %%eax;\
 		jge 1b" : : 
-		"i"(PAGE_SIZE), "a"((VMEM_ADDR + SCR_SIZE - PAGE_SIZE) | 0x7), "D"(vptable - 1));
+		"i"(PAGE_SIZE), "a"((VMEM_ADDR + VMEM_SIZE - PAGE_SIZE) | 0x7), "D"(vptable - 1));
 
-	panic("please implement me");
+//	panic("please implement me");
 }
 
 void video_mapping_write_test() {
