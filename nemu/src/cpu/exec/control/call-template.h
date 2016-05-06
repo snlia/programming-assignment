@@ -4,7 +4,6 @@
 #define instr call
 
 static void do_execute () {
-    puts ("...");
 	cpu.esp -= DATA_BYTE;
 	swaddr_write(cpu.esp, DATA_BYTE, (DATA_TYPE) cpu.eip, SR_SS);
     switch (ops_decoded.opcode & 0xff) 
