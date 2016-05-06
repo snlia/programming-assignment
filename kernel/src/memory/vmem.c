@@ -33,7 +33,7 @@ void create_video_mapping() {
 		subl %0, %%eax;\
         cmpl $0xa0000, %%eax;\
 		jge 1b" : : 
-		"i"(PAGE_SIZE), "a"((VMEM_ADDR + VMEM_SIZE - PAGE_SIZE) | 0x7), "d"(ptable - 1));
+		"i"(PAGE_SIZE), "a"((VMEM_ADDR + VMEM_SIZE - PAGE_SIZE) | 0x7), "D"(ptable - 1));
 
     set_bp ();
 //	panic("please implement me");
