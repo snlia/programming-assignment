@@ -238,10 +238,10 @@ helper_fun _2byte_opcode_table [256] = {
 };
 
 make_helper(exec) {
-    if (eip == 0x080482f2) puts ("heiheihei");
 	ops_decoded.opcode = instr_fetch(eip, 1);
     if (eip == 0x080482f2) 
     {
+        printf ("%x\n", ops_decoded.opcode);
         puts ("ppp");
     }
 	return opcode_table[ ops_decoded.opcode ](eip);
