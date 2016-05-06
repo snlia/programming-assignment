@@ -58,10 +58,7 @@ extern uint32_t hwaddr_read(hwaddr_t , size_t );
 PTE TLB_read (lnaddr_t addr) {
     TLB_addr tmp;
     tmp.val = addr;
-    for (int i = 0; i < SET_SIZE; ++i) if (TLBset[i].valid && TLBset[i].tag == tmp.tag) {
-        if (addr == 0x080482f2) printf ("%x\n", TLBset[i].val.val);
-        return TLBset[i].val;
-    }
+    for (int i = 0; i < SET_SIZE; ++i) if (TLBset[i].valid && TLBset[i].tag == tmp.tag) return TLBset[i].val;
     PDE pde;
     pde.val = hwaddr_read (((addr >> 20) & 0xffc) + ((cpu.CR3.page_directory_base) << 12), 4);
     if (!pde.present) Assert (0, "PDE no present at addr : 0x%x\n", addr);

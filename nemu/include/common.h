@@ -7,7 +7,7 @@
 #define HAS_DEVICE
 
 //enable cache
-#define CACHE
+//#define CACHE
 
 //enable optimize
 //#define O1
