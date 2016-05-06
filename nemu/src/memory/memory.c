@@ -66,11 +66,10 @@ uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
         /* this is a special case, you can handle it later. */
         uint32_t result = 0;
         puts ("hahaha");
-        for (int i = 0; i < len; ++i, result <<= 8) {
-            printf ("%x\n", addr + i);
+        for (int i = len - 1; i + 1; --i, result <<= 8) {
             result |= lnaddr_read (addr + i, 1);
-            puts ("???");
         }
+        printf ("%x\n", result);
         return result;
     }
     else {
