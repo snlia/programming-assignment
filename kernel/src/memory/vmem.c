@@ -22,7 +22,6 @@ void create_video_mapping() {
 
     memset (ptable, 0, sizeof (ptable));
 
-    set_bp ();
 	asm volatile ("std;\
 	 1: stosl;\
 		subl %0, %%eax;\
@@ -30,7 +29,6 @@ void create_video_mapping() {
 		jge 1b" : : 
 		"i"(PAGE_SIZE), "a"((VMEM_ADDR + VMEM_SIZE - PAGE_SIZE) | 0x7), "D"(ptable + (VMEM_ADDR + VMEM_SIZE - PAGE_SIZE) / PAGE_SIZE));
 
-    set_bp ();
 //	panic("please implement me");
 }
 

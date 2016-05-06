@@ -5,6 +5,7 @@
 
 static void do_execute () {
 	cpu.esp -= DATA_BYTE;
+    puts ("???");
 	swaddr_write(cpu.esp, DATA_BYTE, (DATA_TYPE) cpu.eip, SR_SS);
     switch (ops_decoded.opcode & 0xff) 
     {
