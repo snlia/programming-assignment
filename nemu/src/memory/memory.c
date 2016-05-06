@@ -62,9 +62,9 @@ hwaddr_t page_translate (lnaddr_t addr) {
 
 uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
     assert(len == 1 || len == 2 || len == 4);
-    if (0) {
+    if ((addr + len - 1) > (addr | 0xfff)) {
         /* this is a special case, you can handle it later. */
-        assert(0);
+        Assert(0, "addr 0x%x + %zd accoss Page", addr, len);
     }
     else {
         hwaddr_t hwaddr = page_translate(addr);
