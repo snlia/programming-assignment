@@ -46,6 +46,7 @@ void read_L1 (hwaddr_t addr, void *data) {
     for (int i = 0; i < NR_L1_SET; ++i) if (!L1_vaild[tmp.no][i]) {
         for (int j = 0; j < NR_L1_OFF; j += 4) *(L1_cache[tmp.no][i] + j) = dram_read (j | (addr & L1_MASK), 4);
         memcpy (data, L1_cache[tmp.no][i] + tmp.off, 4);
+        printf ("%x\n", *((uint32_t *) data));
         return ;
     }
     seed = ((addr >> 2) + seed) & ~L1_MASK;
