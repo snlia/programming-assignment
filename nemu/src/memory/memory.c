@@ -34,7 +34,7 @@ uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
     int tmp = is_mmio (addr);
     if (!~tmp) {
 #ifdef CACHE 
-    return L1_read (addr, len);
+    return L1_read (addr, len) & (~0u >> ((4 - len) << 3));
 #else
     return dram_read(addr, len) & (~0u >> ((4 - len) << 3));
 #endif
