@@ -15,6 +15,7 @@ extern void TLB_flush ();
 extern uint32_t L1_read (hwaddr_t, size_t);
 extern void L1_write (hwaddr_t, size_t, uint32_t);
 extern void L1_flush ();
+extern void L2_flush ();
 
 /* We use the ``readline'' library to provide more flexibility to read from stdin. */
 char* rl_gets() {
@@ -286,6 +287,7 @@ static int cmd_bt (char *args)
 
 void ui_mainloop() {
     L1_flush ();
+    L2_flush ();
     TLB_flush ();
     char preargs [255];
 	while(1) {

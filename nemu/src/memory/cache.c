@@ -159,7 +159,7 @@ static void read_L1 (hwaddr_t addr, void *data) {
     }
 //miss and empty
     for (int i = 0; i < NR_L1_SET; ++i) if (!L1_vaild[tmp.no][i]) {
-        for (int j = 0; j < NR_L1_OFF; j += 4) *((uint32_t *) (L1_cache[tmp.no][i] + j)) = dram_read (j | (addr & OFF_MASK), 4);
+        for (int j = 0; j < NR_L1_OFF; j += 4) *((uint32_t *) (L1_cache[tmp.no][i] + j)) = L2_read (j | (addr & OFF_MASK), 4);
         memcpy (data, L1_cache[tmp.no][i] + tmp.off, 4);
         L1_vaild[tmp.no][i] = 1;
         L1_tag[tmp.no][i] = tmp.tag;
@@ -168,7 +168,7 @@ static void read_L1 (hwaddr_t addr, void *data) {
 //replace randomly
     seed = ((addr >> 2) + seed) & ~L1_MASK;
     uint32_t i = seed;
-    for (int j = 0; j < NR_L1_OFF; j += 4) *((uint32_t *) (L1_cache[tmp.no][i] + j)) = dram_read (j | (addr & OFF_MASK), 4);
+    for (int j = 0; j < NR_L1_OFF; j += 4) *((uint32_t *) (L1_cache[tmp.no][i] + j)) = L2_read (j | (addr & OFF_MASK), 4);
     memcpy (data, L1_cache[tmp.no][i] + tmp.off, 4);
     L1_vaild[tmp.no][i] = 1;
     L1_tag[tmp.no][i] = tmp.tag;
@@ -194,7 +194,7 @@ static void write_L1 (hwaddr_t addr, void *data, uint8_t *mask) {
 }
 
 void L1_write (hwaddr_t addr, size_t len, uint32_t data) {
-    dram_write (addr, len, data);
+    L2_write (addr, len, data);
 	uint32_t offset = addr & 0x3;
 	uint8_t temp[8];
 	uint8_t mask[8];
