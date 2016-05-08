@@ -12,7 +12,7 @@ extern uint8_t *vmem;
 
 static inline void
 draw_pixel(int x, int y, int color) {
-    Log ("%d %d %zu\n", x, y, color);
+    if (x == 200) set_bp ();
 	assert(x >= 0 && y >= 0 && x < SCR_HEIGHT && y < SCR_WIDTH);
 	vmem[(x << 8) + (x << 6) + y] = color;
 }
