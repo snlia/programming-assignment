@@ -46,24 +46,25 @@ void read_L1 (hwaddr_t addr, void *data) {
     for (int i = 0; i < NR_L1_SET; ++i) if (!L1_vaild[tmp.no][i]) {
         for (int j = 0; j < NR_L1_OFF; j += 4) *((uint32_t *) (L1_cache[tmp.no][i] + j)) = dram_read (j | (addr & L1_MASK), 4);
         memcpy (data, L1_cache[tmp.no][i] + tmp.off, 4);
+        L1_vaild[tmp.no][i] = 1;
+        L1_tag[tmp.no][i] = tmp.tag;
         return ;
     }
     seed = ((addr >> 2) + seed) & ~L1_MASK;
     uint32_t i = seed;
     for (int j = 0; j < NR_L1_OFF; j += 4) *((uint32_t *) (L1_cache[tmp.no][i] + j)) = dram_read (j | (addr & L1_MASK), 4);
     memcpy (data, L1_cache[tmp.no][i] + tmp.off, 4);
+    L1_vaild[tmp.no][i] = 1;
+    L1_tag[tmp.no][i] = tmp.tag;
 }
 
 uint32_t L1_read (hwaddr_t addr, size_t len) {
-    printf ("read : addr %x, len %zu\n", addr, len);
     uint32_t offset = addr & 0x3;
     uint8_t temp [8];
 
     read_L1 (addr, temp);
     if (offset + len > 4) read_L1 (addr + 4, temp + 4);
 
-    printf ("dram %x\n", dram_read (addr, len));
-    printf ("L1_read %x\n", unalign_rw(temp + offset, 4));
     return unalign_rw(temp + offset, 4);
 }
 
