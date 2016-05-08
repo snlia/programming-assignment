@@ -15,9 +15,9 @@ static void sys_brk(TrapFrame *tf) {
 
 static void sys_write (TrapFrame *tf) {
     assert (tf->ebx == 1 || tf->ebx == 2);
-    uint32_t addr = tf->ecx;
+    uint8_t *addr = (uint8_t *)tf->ecx;
     for (int i = 0; i < tf->edx; ++i)
-        serial_printc(*((uint8_t*) (addr + i)));
+        serial_printc(*(addr + i));
     //    asm volatile (".byte 0xd6" : : "a"(2), "c"(tf->ecx), "d"(tf->edx));
     tf->eax = tf->edx;
 }
