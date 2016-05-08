@@ -56,7 +56,7 @@ static void read_L2 (hwaddr_t addr, void *data) {
         return ;
     }
 //replace randomly
-    seed = ((addr >> 2) + seed) & ~L2_MASK;
+    seed = ((addr >> 2) + seed) & L2_MASK;
     uint32_t i = seed;
     for (int j = 0; j < NR_L2_OFF; j += 4) *((uint32_t *) (L2_cache[tmp.no][i] + j)) = dram_read (j | (addr & OFF_MASK), 4);
     memcpy (data, L2_cache[tmp.no][i] + tmp.off, 4);
@@ -95,8 +95,6 @@ static void write_L2 (hwaddr_t addr, void *data, uint8_t *mask) {
     seed = ((addr >> 2) + seed) & L2_MASK;
     uint32_t i = seed;
     hwaddr_t Addr = (L2_tag[tmp.no][i] << (L2_OFF + L2_NO)) | (tmp.no << L2_OFF);
-    printf ("%x %x %x\n", i, L2_tag[tmp.no][i], tmp.no);
-    puts ("check it");
     for (int j = 0; j < NR_L2_OFF; j += 4) {
         dram_write (Addr | j , 4, *((uint32_t *) (L2_cache[tmp.no][i] + j)));
         *((uint32_t *) (L2_cache[tmp.no][i] + j)) = dram_read (j | (addr & OFF_MASK), 4);
@@ -105,7 +103,6 @@ static void write_L2 (hwaddr_t addr, void *data, uint8_t *mask) {
     L2_vaild[tmp.no][i] = 1;
     L2_dirty[tmp.no][i] = 0;
     L2_tag[tmp.no][i] = tmp.tag;
-    puts ("Check it");
 }
 
 void L2_write (hwaddr_t addr, size_t len, uint32_t data) {
