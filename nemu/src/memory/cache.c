@@ -95,6 +95,7 @@ static void write_L2 (hwaddr_t addr, void *data, uint8_t *mask) {
     seed = ((addr >> 2) + seed) & ~L2_MASK;
     uint32_t i = seed;
     hwaddr_t Addr = (L2_tag[tmp.no][i] << (L2_OFF + L2_NO)) | (tmp.no << L2_OFF);
+    puts ("check it");
     for (int j = 0; j < NR_L2_OFF; j += 4) {
         dram_write (Addr | j , 4, *((uint32_t *) (L2_cache[tmp.no][i] + j)));
         *((uint32_t *) (L2_cache[tmp.no][i] + j)) = dram_read (j | (addr & OFF_MASK), 4);
