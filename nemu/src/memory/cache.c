@@ -94,8 +94,9 @@ static void write_L2 (hwaddr_t addr, void *data, uint8_t *mask) {
 //replace randomly
     seed = ((addr >> 2) + seed) & ~L2_MASK;
     uint32_t i = seed;
-    for (int j = 0, addr = (L2_tag[tmp.no][i] << (L2_OFF + L2_NO)) | (tmp.no << L2_OFF); j < NR_L2_OFF; j += 4) {
-        dram_write (addr | j , 4, *((uint32_t *) (L2_cache[tmp.no][i] + j)));
+    hwaddr_t Addr = (L2_tag[tmp.no][i] << (L2_OFF + L2_NO)) | (tmp.no << L2_OFF);
+    for (int j = 0; j < NR_L2_OFF; j += 4) {
+        dram_write (Addr | j , 4, *((uint32_t *) (L2_cache[tmp.no][i] + j)));
         *((uint32_t *) (L2_cache[tmp.no][i] + j)) = dram_read (j | (addr & L2_MASK), 4);
     }
     memcpy_with_mask(L2_cache[tmp.no][i] + tmp.off, data, 4, mask);
