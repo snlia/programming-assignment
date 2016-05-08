@@ -1,4 +1,4 @@
-#include "common.h"
+#include "misc.h"
 
 #define L1_SIZE 0x10000
 #define L1_OFF 0x6
@@ -8,8 +8,8 @@
 #define NR_L1_NO (1 << L1_NO) 
 #define L1_MASK (~(NR_L1_OFF - 1))
 
-uint32_t dram_read(hwaddr_t, size_t);
-void dram_write(hwaddr_t, size_t, uint32_t);
+extern uint32_t dram_read(hwaddr_t, size_t);
+extern void dram_write(hwaddr_t, size_t, uint32_t);
 
 typedef union {
     struct {
@@ -34,7 +34,7 @@ void L1_flush () {
     memset (L1_vaild, 0, sizeof (L1_vaild));
 }
 
-void read_L1 (hwaddr_t addr, void *data) {
+static void read_L1 (hwaddr_t addr, void *data) {
     addr &= ~0x3;
     L1_addr tmp;
     tmp.addr = addr;
@@ -68,7 +68,28 @@ uint32_t L1_read (hwaddr_t addr, size_t len) {
     return unalign_rw(temp + offset, 4);
 }
 
+static void write_L1 (hwaddr_t addr, void *data, uint8_t *mask) {
+	L1_addr tmp;
+    addr &= ~0x3;
+	tmp.addr = addr;
+
+    for (int i = 0; i < NR_L1_SET; ++i) if (L1_vaild[tmp.no][i] && L1_tag[tmp.no][i] == tmp.tag) 
+        memcpy_with_mask(L1_cache[tmp.no][i] + tmp.off, data, 4, mask);
+}
+
 void L1_write (hwaddr_t addr, size_t len, uint32_t data) {
     dram_write (addr, len, data);
+	uint32_t offset = addr & 0x3;
+	uint8_t temp[8];
+	uint8_t mask[8];
+	memset(mask, 0, 8);
+
+	*(uint32_t *)(temp + offset) = data;
+	memset(mask + offset, 1, len);
+
+	write_L1 (addr, temp, mask);
+
+	if(offset + len > 4) 
+		write_L1 (addr + 4, temp + 4, mask + 4);
 }
 
