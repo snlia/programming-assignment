@@ -48,7 +48,7 @@ static void read_L2 (hwaddr_t addr, void *data) {
     }
 //miss and empty
     for (int i = 0; i < NR_L2_SET; ++i) if (!L2_vaild[tmp.no][i]) {
-        for (int j = 0; j < NR_L2_OFF; j += 4) *((uint32_t *) (L2_cache[tmp.no][i] + j)) = dram_read (j | (addr & L2_MASK), 4);
+        for (int j = 0; j < NR_L2_OFF; j += 4) *((uint32_t *) (L2_cache[tmp.no][i] + j)) = dram_read (j | (addr & OFF_MASK), 4);
         memcpy (data, L2_cache[tmp.no][i] + tmp.off, 4);
         L2_vaild[tmp.no][i] = 1;
         L2_dirty[tmp.no][i] = 0;
@@ -58,7 +58,7 @@ static void read_L2 (hwaddr_t addr, void *data) {
 //replace randomly
     seed = ((addr >> 2) + seed) & ~L2_MASK;
     uint32_t i = seed;
-    for (int j = 0; j < NR_L2_OFF; j += 4) *((uint32_t *) (L2_cache[tmp.no][i] + j)) = dram_read (j | (addr & L2_MASK), 4);
+    for (int j = 0; j < NR_L2_OFF; j += 4) *((uint32_t *) (L2_cache[tmp.no][i] + j)) = dram_read (j | (addr & OFF_MASK), 4);
     memcpy (data, L2_cache[tmp.no][i] + tmp.off, 4);
     L2_vaild[tmp.no][i] = 1;
     L2_dirty[tmp.no][i] = 0;
@@ -87,7 +87,7 @@ static void write_L2 (hwaddr_t addr, void *data, uint8_t *mask) {
         memcpy_with_mask(L2_cache[tmp.no][i] + tmp.off, data, 4, mask);
 //miss and empty
     for (int i = 0; i < NR_L2_SET; ++i) if (!L2_vaild[tmp.no][i]) {
-        for (int j = 0; j < NR_L2_OFF; j += 4) *((uint32_t *) (L2_cache[tmp.no][i] + j)) = dram_read (j | (addr & L2_MASK), 4);
+        for (int j = 0; j < NR_L2_OFF; j += 4) *((uint32_t *) (L2_cache[tmp.no][i] + j)) = dram_read (j | (addr & OFF_MASK), 4);
         memcpy_with_mask(L2_cache[tmp.no][i] + tmp.off, data, 4, mask);
         L2_vaild[tmp.no][i] = 1;
         L2_dirty[tmp.no][i] = 0;
@@ -100,7 +100,7 @@ static void write_L2 (hwaddr_t addr, void *data, uint8_t *mask) {
     hwaddr_t Addr = (L2_tag[tmp.no][i] << (L2_OFF + L2_NO)) | (tmp.no << L2_OFF);
     for (int j = 0; j < NR_L2_OFF; j += 4) {
         dram_write (Addr | j , 4, *((uint32_t *) (L2_cache[tmp.no][i] + j)));
-        *((uint32_t *) (L2_cache[tmp.no][i] + j)) = dram_read (j | (addr & L2_MASK), 4);
+        *((uint32_t *) (L2_cache[tmp.no][i] + j)) = dram_read (j | (addr & OFF_MASK), 4);
     }
     memcpy_with_mask(L2_cache[tmp.no][i] + tmp.off, data, 4, mask);
     L2_vaild[tmp.no][i] = 1;
