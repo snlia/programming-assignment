@@ -73,6 +73,8 @@ uint32_t L2_read (hwaddr_t addr, size_t len) {
     read_L2 (addr, temp);
     if (offset + len > 4) read_L2 (addr + 4, temp + 4);
 
+    printf ("dram %x", dram_read (addr, len));
+    printf ("L2 %x", unalign_rw(temp + offset, 4));
     return unalign_rw(temp + offset, 4);
 }
 
