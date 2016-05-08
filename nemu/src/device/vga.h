@@ -14,6 +14,7 @@ extern SDL_Surface *screen;
 extern uint8_t (*pixel_buf) [SCREEN_COL];
 
 static inline void draw_pixel(int x, int y, uint8_t color_idx) {
+    printf ("%d %d %uz\n", x, y, color_idx);
 	assert(x >= 0 && x < SCREEN_COL && y >= 0 && y < SCREEN_ROW);
 	pixel_buf[y][x] = color_idx;
 }

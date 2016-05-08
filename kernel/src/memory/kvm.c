@@ -91,7 +91,6 @@ set_segment(SegDesc *ptr, uint32_t pl, uint32_t type) {
 void
 init_segment(void) {
 	memset(gdt, 0, sizeof(gdt));
-    set_bp ();
 	set_segment(&gdt[SEG_KERNEL_CODE], DPL_KERNEL, SEG_EXECUTABLE | SEG_READABLE);
 	set_segment(&gdt[SEG_KERNEL_DATA], DPL_KERNEL, SEG_WRITABLE );
 
