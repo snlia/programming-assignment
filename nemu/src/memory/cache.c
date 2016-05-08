@@ -100,6 +100,7 @@ static void write_L2 (hwaddr_t addr, void *data, uint8_t *mask) {
         dram_write (Addr | j , 4, *((uint32_t *) (L2_cache[tmp.no][i] + j)));
         *((uint32_t *) (L2_cache[tmp.no][i] + j)) = dram_read (j | (addr & OFF_MASK), 4);
     }
+    puts ("check it");
     memcpy_with_mask(L2_cache[tmp.no][i] + tmp.off, data, 4, mask);
     L2_vaild[tmp.no][i] = 1;
     L2_dirty[tmp.no][i] = 0;
