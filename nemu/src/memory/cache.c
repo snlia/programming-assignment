@@ -66,15 +66,12 @@ static void read_L2 (hwaddr_t addr, void *data) {
 }
 
 uint32_t L2_read (hwaddr_t addr, size_t len) {
-    printf ("%x %zu\n", addr, len);
     uint32_t offset = addr & 0x3;
     uint8_t temp [8];
 
     read_L2 (addr, temp);
     if (offset + len > 4) read_L2 (addr + 4, temp + 4);
 
-    printf ("dram %x\n", dram_read (addr, len));
-    printf ("L2 %x\n", unalign_rw(temp + offset, 4));
     return unalign_rw(temp + offset, 4);
 }
 
