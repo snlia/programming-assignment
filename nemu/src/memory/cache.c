@@ -39,10 +39,10 @@ void read_L1 (hwaddr_t addr, void *data) {
     L1_addr tmp;
     tmp.addr = addr;
 
-    for (int i = 0; i < NR_L1_SET; ++i) if (L1_vaild[tmp.no][i] && L1_tag[tmp.no][i] == tmp.tag) {
+/*    for (int i = 0; i < NR_L1_SET; ++i) if (L1_vaild[tmp.no][i] && L1_tag[tmp.no][i] == tmp.tag) {
         memcpy (data, L1_cache[tmp.no][i] + tmp.off, 4);
         return ;
-    }
+    }*/
     for (int i = 0; i < NR_L1_SET; ++i) if (!L1_vaild[tmp.no][i]) {
         for (int j = 0; j < NR_L1_OFF; j += 4) *((uint32_t *) (L1_cache[tmp.no][i] + j)) = dram_read (j | (addr & L1_MASK), 4);
         memcpy (data, L1_cache[tmp.no][i] + tmp.off, 4);
@@ -59,7 +59,6 @@ void read_L1 (hwaddr_t addr, void *data) {
 }
 
 uint32_t L1_read (hwaddr_t addr, size_t len) {
-    return dram_read (addr, len);
     uint32_t offset = addr & 0x3;
     uint8_t temp [8];
 
