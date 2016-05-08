@@ -59,6 +59,7 @@ void read_L1 (hwaddr_t addr, void *data) {
 }
 
 uint32_t L1_read (hwaddr_t addr, size_t len) {
+    return dram_read (addr, len);
     uint32_t offset = addr & 0x3;
     uint8_t temp [8];
 
