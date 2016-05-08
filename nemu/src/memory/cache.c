@@ -193,8 +193,10 @@ static void write_L1 (hwaddr_t addr, void *data, uint8_t *mask) {
     addr &= ~0x3;
     tmp.addr = addr;
     //only write if hit
-    for (int i = 0; i < NR_L1_SET; ++i) if (L1_vaild[tmp.no][i] && L1_tag[tmp.no][i] == tmp.tag) 
+    for (int i = 0; i < NR_L1_SET; ++i) if (L1_vaild[tmp.no][i] && L1_tag[tmp.no][i] == tmp.tag) {
         memcpy_with_mask(L1_cache[tmp.no][i] + tmp.off, data, 4, mask);
+        return ;
+    }
 }
 
 void L1_write (hwaddr_t addr, size_t len, uint32_t data) {
