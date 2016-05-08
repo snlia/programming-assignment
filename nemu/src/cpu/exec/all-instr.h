@@ -16,6 +16,7 @@
 #include "data-mov/lidt.h"
 #include "data-mov/in.h"
 #include "data-mov/out.h"
+#include "data-mov/bt.h"
 
 #include "arith/dec.h"
 #include "arith/inc.h"
