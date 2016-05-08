@@ -80,14 +80,17 @@ static void write_L2 (hwaddr_t addr, void *data, uint8_t *mask) {
     addr &= ~0x3;
 	tmp.addr = addr;
 //hit
-    for (int i = 0; i < NR_L2_SET; ++i) if (L2_vaild[tmp.no][i] && L2_tag[tmp.no][i] == tmp.tag) 
+    for (int i = 0; i < NR_L2_SET; ++i) if (L2_vaild[tmp.no][i] && L2_tag[tmp.no][i] == tmp.tag) {
         memcpy_with_mask(L2_cache[tmp.no][i] + tmp.off, data, 4, mask);
+        L2_dirty[tmp.no][i] = 1;
+        return ;
+    }
 //miss and empty
     for (int i = 0; i < NR_L2_SET; ++i) if (!L2_vaild[tmp.no][i]) {
         for (int j = 0; j < NR_L2_OFF; j += 4) *((uint32_t *) (L2_cache[tmp.no][i] + j)) = dram_read (j | (addr & OFF_MASK), 4);
         memcpy_with_mask(L2_cache[tmp.no][i] + tmp.off, data, 4, mask);
         L2_vaild[tmp.no][i] = 1;
-        L2_dirty[tmp.no][i] = 0;
+        L2_dirty[tmp.no][i] = 1;
         L2_tag[tmp.no][i] = tmp.tag;
         return ;
     }
@@ -96,29 +99,30 @@ static void write_L2 (hwaddr_t addr, void *data, uint8_t *mask) {
     uint32_t i = seed;
     hwaddr_t Addr = (L2_tag[tmp.no][i] << (L2_OFF + L2_NO)) | (tmp.no << L2_OFF);
     for (int j = 0; j < NR_L2_OFF; j += 4) {
-        dram_write (Addr | j , 4, *((uint32_t *) (L2_cache[tmp.no][i] + j)));
+        if (L2_dirty[tmp.no][i])
+            dram_write (Addr | j , 4, *((uint32_t *) (L2_cache[tmp.no][i] + j)));
         *((uint32_t *) (L2_cache[tmp.no][i] + j)) = dram_read (j | (addr & OFF_MASK), 4);
     }
     memcpy_with_mask(L2_cache[tmp.no][i] + tmp.off, data, 4, mask);
     L2_vaild[tmp.no][i] = 1;
-    L2_dirty[tmp.no][i] = 0;
+    L2_dirty[tmp.no][i] = 1;
     L2_tag[tmp.no][i] = tmp.tag;
 }
 
 void L2_write (hwaddr_t addr, size_t len, uint32_t data) {
     dram_write (addr, len, data);
-	uint32_t offset = addr & 0x3;
-	uint8_t temp[8];
-	uint8_t mask[8];
-	memset(mask, 0, 8);
+    uint32_t offset = addr & 0x3;
+    uint8_t temp[8];
+    uint8_t mask[8];
+    memset(mask, 0, 8);
 
-	*(uint32_t *)(temp + offset) = data;
-	memset(mask + offset, 1, len);
+    *(uint32_t *)(temp + offset) = data;
+    memset(mask + offset, 1, len);
 
-	write_L2 (addr, temp, mask);
+    write_L2 (addr, temp, mask);
 
-	if(offset + len > 4) 
-		write_L2 (addr + 4, temp + 4, mask + 4);
+    if(offset + len > 4) 
+        write_L2 (addr + 4, temp + 4, mask + 4);
 }
 
 //L1 cache
@@ -152,12 +156,12 @@ static void read_L1 (hwaddr_t addr, void *data) {
     addr &= ~0x3;
     L1_addr tmp;
     tmp.addr = addr;
-//hit
+    //hit
     for (int i = 0; i < NR_L1_SET; ++i) if (L1_vaild[tmp.no][i] && L1_tag[tmp.no][i] == tmp.tag) {
         memcpy (data, L1_cache[tmp.no][i] + tmp.off, 4);
         return ;
     }
-//miss and empty
+    //miss and empty
     for (int i = 0; i < NR_L1_SET; ++i) if (!L1_vaild[tmp.no][i]) {
         for (int j = 0; j < NR_L1_OFF; j += 4) *((uint32_t *) (L1_cache[tmp.no][i] + j)) = L2_read (j | (addr & OFF_MASK), 4);
         memcpy (data, L1_cache[tmp.no][i] + tmp.off, 4);
@@ -165,7 +169,7 @@ static void read_L1 (hwaddr_t addr, void *data) {
         L1_tag[tmp.no][i] = tmp.tag;
         return ;
     }
-//replace randomly
+    //replace randomly
     seed = ((addr >> 2) + seed) & L1_MASK;
     uint32_t i = seed;
     for (int j = 0; j < NR_L1_OFF; j += 4) *((uint32_t *) (L1_cache[tmp.no][i] + j)) = L2_read (j | (addr & OFF_MASK), 4);
@@ -185,28 +189,28 @@ uint32_t L1_read (hwaddr_t addr, size_t len) {
 }
 
 static void write_L1 (hwaddr_t addr, void *data, uint8_t *mask) {
-	L1_addr tmp;
+    L1_addr tmp;
     addr &= ~0x3;
-	tmp.addr = addr;
-//only write if hit
+    tmp.addr = addr;
+    //only write if hit
     for (int i = 0; i < NR_L1_SET; ++i) if (L1_vaild[tmp.no][i] && L1_tag[tmp.no][i] == tmp.tag) 
         memcpy_with_mask(L1_cache[tmp.no][i] + tmp.off, data, 4, mask);
 }
 
 void L1_write (hwaddr_t addr, size_t len, uint32_t data) {
     L2_write (addr, len, data);
-	uint32_t offset = addr & 0x3;
-	uint8_t temp[8];
-	uint8_t mask[8];
-	memset(mask, 0, 8);
+    uint32_t offset = addr & 0x3;
+    uint8_t temp[8];
+    uint8_t mask[8];
+    memset(mask, 0, 8);
 
-	*(uint32_t *)(temp + offset) = data;
-	memset(mask + offset, 1, len);
+    *(uint32_t *)(temp + offset) = data;
+    memset(mask + offset, 1, len);
 
-	write_L1 (addr, temp, mask);
+    write_L1 (addr, temp, mask);
 
-	if(offset + len > 4) 
-		write_L1 (addr + 4, temp + 4, mask + 4);
+    if(offset + len > 4) 
+        write_L1 (addr + 4, temp + 4, mask + 4);
 }
 
 
