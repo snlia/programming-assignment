@@ -115,7 +115,6 @@ void L2_write (hwaddr_t addr, size_t len, uint32_t data) {
     uint8_t temp[8];
     uint8_t mask[8];
     memset(mask, 0, 8);
->>>>>>> fix-bug-cache
 
     *(uint32_t *)(temp + offset) = data;
     memset(mask + offset, 1, len);
