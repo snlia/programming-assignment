@@ -15,6 +15,7 @@ press_key(int scan_code) {
 	int i;
 	for (i = 0; i < 26; i ++) {
 		if (letter_code[i] == scan_code) {
+            Log ("%d\n", i);
 			letter_pressed[i] = true;
 		}
 	}
