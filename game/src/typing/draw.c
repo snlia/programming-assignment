@@ -36,17 +36,12 @@ redraw_screen() {
 	}
 
 	/* 绘制命中数、miss数、最后一次按键扫描码和fps */
-    Log ("x1\n");
 	draw_string(itoa(last_key_code()), SCR_HEIGHT - 8, 0, 48);
 	hit = itoa(get_hit());
-    Log ("x2\n");
 	draw_string(hit, 0, SCR_WIDTH - strlen(hit) * 8, 10);
 	miss = itoa(get_miss());
-    Log ("x3\n");
 	draw_string(miss, SCR_HEIGHT - 8, SCR_WIDTH - strlen(miss) * 8, 12);
-    Log ("x4\n");
 	draw_string(itoa(get_fps()), 0, 0, 14);
-    Log ("x5\n");
 	draw_string("FPS", 0, strlen(itoa(get_fps())) * 8, 14);
 
 	display_buffer(); /* 绘制缓冲区 */
