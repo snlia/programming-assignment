@@ -87,7 +87,6 @@ main_loop(void) {
 		if (redraw) { /* 当需要重新绘图时重绘 */
 			num_draw ++;
             time++;
-            if (time == 38) set_bp ();
             Log ("%d\n", time);
 			redraw_screen();
 		}
