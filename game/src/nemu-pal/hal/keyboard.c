@@ -20,12 +20,12 @@ void
 keyboard_event(void) {
 	/* TODO: Fetch the scancode and update the key states. */
 	key_code = in_byte(0x60);
-    bool released = ((key_code & 0x80) >> 7) & 1;
+    bool release = ((key_code & 0x80) >> 7) & 1;
     key_code &= ~0x80;
-    int* i = keycode_array;
-    for (; i < keycode_array + NR_KEYS; ++i)
-        if (key_code == *i) break;
-    if (i == keycode_array + NR_KEYS) return ;
+    int i = 0;
+    for ( ; i < NR_KEYS; ++i)
+        if (key_code == keycode_array[i]) break;
+    if (i == NR_KEYS) return ;
     if (!release && key_state[i] == KEY_STATE_EMPTY) key_state[i] = KEY_STATE_PRESS;
     if (release && key_state[i] == KEY_STATE_WAIT_RELEASE) key_state[i] = KEY_STATE_RELEASE;
 	//assert(0);
@@ -67,13 +67,13 @@ process_keys(void (*key_press_callback)(int), void (*key_release_callback)(int))
 	 */
     for (int i = 0; i < NR_KEYS; ++i)  {
         if (key_state[i] == KEY_STATE_PRESS) {
-            key_press_callback (keycode_array[index]);
+            key_press_callback (keycode_array[i]);
             key_state[i] = KEY_STATE_WAIT_RELEASE;
             sti();
             return true;
         }
         if (key_state[i] == KEY_STATE_RELEASE) {
-            key_release_callback (keycode_array[index]);
+            key_release_callback (keycode_array[i]);
             key_state[i] = KEY_STATE_EMPTY;
             sti();
             return true;
