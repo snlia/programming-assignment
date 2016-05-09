@@ -52,7 +52,6 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
 #endif
     }
     else {
-        printf ("%x %zu %x %x\n", addr, len, data, tmp);
         mmio_write (addr, len, data, tmp);
     }
 }
