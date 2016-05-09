@@ -4,8 +4,37 @@
 
 #include <string.h>
 #include <stdlib.h>
+#define MMAX(a,b) ((a) > (b) ? (a) : (b))
+#define MMIN(a,b) ((a) < (b) ? (a) : (b))
 
 int get_fps();
+
+/*
+ * typedef struct{
+ *          Sint16 x, y;
+ *          Uint16 w, h;
+ *      } SDL_Rect;
+ *
+ * typedef struct SDL_Surface {
+ *             Uint32 flags;                           * Read-only *
+ *             SDL_PixelFormat *format;                * Read-only *
+ *             int w, h;                               * Read-only *
+ *             Uint16 pitch;                           * Read-only *
+ *             void *pixels;                           * Read-write *
+ *
+ *             * clipping information *
+ *             SDL_Rect clip_rect;                     * Read-only *
+ *
+ *             * Reference count -- used when freeing surface *
+ *             int refcount;                           * Read-mostly *
+ *
+ *          * This structure also contains private fields not shown here *
+ *      } SDL_Surface;
+ * */
+
+inline static get_idx (int x, int y, int w, int h) {
+    return y * w + x;
+}
 
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *scrrect, 
 		SDL_Surface *dst, SDL_Rect *dstrect) {
@@ -20,7 +49,31 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *scrrect,
 	 * (``srcrect'' is not modified).
 	 */
 
-	assert(0);
+    int sx = 0, sy = 0, dx = 0, dy = 0, w = src->w, h = src->h;
+    if (srcrect) {
+        sx = srcrect->x;
+        sy = srcrect->y;
+        w = srcrect->w;
+        h = srcrect->h;
+    }
+    if (dstrect) {
+        dx = destrect->x;
+        dy = destrect->y;
+        destrect->w = w;
+        destrect->h = h;
+    }
+
+    w = min (w, dst->w - dx);
+    h = min (h, dst->h - dy);
+
+    w = min (w, src->w - sx);
+    h = min (h, src->h - sy);
+
+    uint8_t* spixel = src->pixels;
+    uint8_t* dpixel = dest->pixels;
+
+    for (int i = 0; i < h; ++i)
+        memcpy (dpixel + get_idx (dx, dy + i, dest->w, dest->h), spixel + get_idx (sx, sy + i, src->w, src->h), w);
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
@@ -31,8 +84,21 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 	 * in surface ``dst'' with color ``color''. If dstrect is
 	 * NULL, fill the whole surface.
 	 */
+    int x = 0, y = 0, w = dst->w, h = dst->h;
+    if (dstrect) {
+        x = dstrect->x;
+        y = dstrect->y;
+        h = dstrect->h; 
+        w = dstrect->w;
+    }
 
-	assert(0);
+    w = min (w, dst->w - x);
+    h = min (h, dst->h - y);
+
+    uint8_t* pixel = screen->pixels;
+    for (int i = 0; i < h; ++i)
+        memset (pixel + get_idx (x, i + y, dst->w, dst->h), color, w);
+
 }
 
 void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h) {
@@ -50,113 +116,119 @@ void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h) {
 	}
 
 	/* TODO: Copy the pixels in the rectangle area to the screen. */
+    w = min (w, 320 - x);
+    h = min (h, 200 - y);
 
-	assert(0);
+    uint8_t* vmem = (uint8_t *) VMEM_ADDR;
+    uint8_t* pixel = screen->pixels;
+    for (int j = 0; j < h; ++j)
+        memcpy (vmem + get_idx (x, y + j, 320, 200), pixel + get_idx (x, y + j, 320, 200), w);
+
 }
 
 void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors, 
-		int firstcolor, int ncolors) {
-	assert(s);
-	assert(s->format);
-	assert(s->format->palette);
-	assert(firstcolor == 0);
+        int firstcolor, int ncolors) {
+    assert(s);
+    assert(s->format);
+    assert(s->format->palette);
+    assert(firstcolor == 0);
 
-	if(s->format->palette->colors == NULL || s->format->palette->ncolors != ncolors) {
-		if(s->format->palette->ncolors != ncolors && s->format->palette->colors != NULL) {
-			/* If the size of the new palette is different 
-			 * from the old one, free the old one.
-			 */
-			free(s->format->palette->colors);
-		}
+    if(s->format->palette->colors == NULL || s->format->palette->ncolors != ncolors) {
+        if(s->format->palette->ncolors != ncolors && s->format->palette->colors != NULL) {
+            /* If the size of the new palette is different 
+             * from the old one, free the old one.
+             */
+            free(s->format->palette->colors);
+        }
 
-		/* Get new memory space to store the new palette. */
-		s->format->palette->colors = malloc(sizeof(SDL_Color) * ncolors);
-		assert(s->format->palette->colors);
-	}
+        /* Get new memory space to store the new palette. */
+        s->format->palette->colors = malloc(sizeof(SDL_Color) * ncolors);
+        assert(s->format->palette->colors);
+    }
 
-	/* Set the new palette. */
-	s->format->palette->ncolors = ncolors;
-	memcpy(s->format->palette->colors, colors, sizeof(SDL_Color) * ncolors);
+    /* Set the new palette. */
+    s->format->palette->ncolors = ncolors;
+    memcpy(s->format->palette->colors, colors, sizeof(SDL_Color) * ncolors);
 
-	if(s->flags & SDL_HWSURFACE) {
-		/* TODO: Set the VGA palette by calling write_palette(). */
-		assert(0);
-	}
+    if(s->flags & SDL_HWSURFACE) {
+        /* TODO: Set the VGA palette by calling write_palette(). */
+        write_palette (colors, ncolors);
+    }
 }
 
 /* ======== The following functions are already implemented. ======== */
 
 void SDL_SoftStretch(SDL_Surface *src, SDL_Rect *scrrect, 
-		SDL_Surface *dst, SDL_Rect *dstrect) {
-	assert(src && dst);
-	int x = (scrrect == NULL ? 0 : scrrect->x);
-	int y = (scrrect == NULL ? 0 : scrrect->y);
-	int w = (scrrect == NULL ? src->w : scrrect->w);
-	int h = (scrrect == NULL ? src->h : scrrect->h);
+        SDL_Surface *dst, SDL_Rect *dstrect) {
+    assert(src && dst);
+    int x = (scrrect == NULL ? 0 : scrrect->x);
+    int y = (scrrect == NULL ? 0 : scrrect->y);
+    int w = (scrrect == NULL ? src->w : scrrect->w);
+    int h = (scrrect == NULL ? src->h : scrrect->h);
 
-	assert(dstrect);
-	if(w == dstrect->w && h == dstrect->h) {
-		/* The source rectangle and the destination rectangle
-		 * are of the same size. If that is the case, there
-		 * is no need to stretch, just copy. */
-		SDL_Rect rect;
-		rect.x = x;
-		rect.y = y;
-		rect.w = w;
-		rect.h = h;
-		SDL_BlitSurface(src, &rect, dst, dstrect);
-	}
-	else {
-		/* No other case occurs in NEMU-PAL. */
-		assert(0);
-	}
+    assert(dstrect);
+    if(w == dstrect->w && h == dstrect->h) {
+        /* The source rectangle and the destination rectangle
+         * are of the same size. If that is the case, there
+         * is no need to stretch, just copy. */
+        SDL_Rect rect;
+        rect.x = x;
+        rect.y = y;
+        rect.w = w;
+        rect.h = h;
+        SDL_BlitSurface(src, &rect, dst, dstrect);
+    }
+    else {
+        /* No other case occurs in NEMU-PAL. */
+        assert(0);
+    }
 }
 
 SDL_Surface* SDL_CreateRGBSurface(uint32_t flags, int width, int height, int depth,
-		uint32_t Rmask, uint32_t Gmask, uint32_t Bmask, uint32_t Amask) {
-	SDL_Surface *s = malloc(sizeof(SDL_Surface));
-	assert(s);
-	s->format = malloc(sizeof(SDL_PixelFormat));
-	assert(s);
-	s->format->palette = malloc(sizeof(SDL_Palette));
-	assert(s->format->palette);
-	s->format->palette->colors = NULL;
+        uint32_t Rmask, uint32_t Gmask, uint32_t Bmask, uint32_t Amask) {
+    SDL_Surface *s = malloc(sizeof(SDL_Surface));
+    assert(s);
+    s->format = malloc(sizeof(SDL_PixelFormat));
+    assert(s);
+    s->format->palette = malloc(sizeof(SDL_Palette));
+    assert(s->format->palette);
+    s->format->palette->colors = NULL;
 
-	s->format->BitsPerPixel = depth;
+    s->format->BitsPerPixel = depth;
 
-	s->flags = flags;
-	s->w = width;
-	s->h = height;
-	s->pitch = (width * depth) >> 3;
-	s->pixels = (flags & SDL_HWSURFACE ? (void *)VMEM_ADDR : malloc(s->pitch * height));
-	assert(s->pixels);
+    s->flags = flags;
+    s->w = width;
+    s->h = height;
+    s->pitch = (width * depth) >> 3;
+    s->pixels = (flags & SDL_HWSURFACE ? (void *)VMEM_ADDR : malloc(s->pitch * height));
+    assert(s->pixels);
 
-	return s;
+    return s;
 }
 
 SDL_Surface* SDL_SetVideoMode(int width, int height, int bpp, uint32_t flags) {
-	return SDL_CreateRGBSurface(flags,  width, height, bpp,
-			0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
+    return SDL_CreateRGBSurface(flags,  width, height, bpp,
+            0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
 }
 
 void SDL_FreeSurface(SDL_Surface *s) {
-	if(s != NULL) {
-		if(s->format != NULL) {
-			if(s->format->palette != NULL) {
-				if(s->format->palette->colors != NULL) {
-					free(s->format->palette->colors);
-				}
-				free(s->format->palette);
-			}
+    if(s != NULL) {
+        if(s->format != NULL) {
+            if(s->format->palette != NULL) {
+                if(s->format->palette->colors != NULL) {
+                    free(s->format->palette->colors);
+                }
+                free(s->format->palette);
+            }
 
-			free(s->format);
-		}
-		
-		if(s->pixels != NULL) {
-			free(s->pixels);
-		}
+            free(s->format);
+        }
 
-		free(s);
-	}
+        if(s->pixels != NULL) {
+            free(s->pixels);
+        }
+
+        free(s);
+    }
 }
 
