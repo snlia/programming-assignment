@@ -40,7 +40,6 @@ bool line_dirty[CTR_ROW];
 
 void vga_vmem_io_handler(hwaddr_t addr, size_t len, bool is_write) {
 	if(is_write) {
-        puts ("hh");
 		int line = (addr - 0xa0000) / CTR_COL;
 		if(line < CTR_ROW) {
 			line_dirty[line] = true;
