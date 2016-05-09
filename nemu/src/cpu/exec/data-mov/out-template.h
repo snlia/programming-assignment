@@ -3,7 +3,7 @@
 #define instr out
 
 static void do_execute () {
-    pio_write(op_src->val, DATA_BYTE, (DATA_TYPE) REG(R_EAX));
+    pio_write((uint8_t)op_src->val, DATA_BYTE, (DATA_TYPE) REG(R_EAX));
 	print_asm_template1();
 }
 
