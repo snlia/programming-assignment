@@ -40,7 +40,6 @@ main_loop(void) {
 	bool redraw;
 
 	while (true) {
-        set_bp ();
 		wait_intr();
 		cli();
 		if (now == tick) {
@@ -87,6 +86,7 @@ main_loop(void) {
 		if (redraw) { /* 当需要重新绘图时重绘 */
 			num_draw ++;
 			redraw_screen();
+            Log ("%d\n", num_draw);
 		}
 	}
 }
