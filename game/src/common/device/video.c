@@ -39,5 +39,4 @@ draw_string(const char *str, int x, int y, int color) {
 			y += 8;
 		}
 	}
-    set_bp ();
 }
