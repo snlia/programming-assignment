@@ -51,7 +51,10 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
     dram_write(addr, len, data);
 #endif
     }
-    else mmio_write (addr, len, data, tmp);
+    else {
+        printf ("%x %zu %x %x\n", addr, len, data, tmp);
+        mmio_write (addr, len, data, tmp);
+    }
 }
 
 hwaddr_t page_translate (lnaddr_t addr) {
