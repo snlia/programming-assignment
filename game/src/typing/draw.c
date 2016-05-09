@@ -45,6 +45,5 @@ redraw_screen() {
 	draw_string("FPS", 0, strlen(itoa(get_fps())) * 8, 14);
 
 	display_buffer(); /* 绘制缓冲区 */
-    set_bp ();
 }
 

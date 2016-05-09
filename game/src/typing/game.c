@@ -40,6 +40,7 @@ main_loop(void) {
 	bool redraw;
 
 	while (true) {
+        set_bp ();
 		wait_intr();
 		cli();
 		if (now == tick) {
