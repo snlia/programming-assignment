@@ -85,8 +85,9 @@ main_loop(void) {
 
 		if (redraw) { /* 当需要重新绘图时重绘 */
 			num_draw ++;
-			redraw_screen();
             Log ("%d\n", num_draw);
+			redraw_screen();
+            Log ("!!!\n");
 		}
 	}
 }
