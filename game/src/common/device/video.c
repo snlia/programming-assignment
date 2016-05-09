@@ -31,7 +31,6 @@ draw_character(char ch, int x, int y, int color) {
 
 void
 draw_string(const char *str, int x, int y, int color) {
-    Log ("%d %d %d\n", x, y, color);
 	while (*str) {
 		draw_character(*str ++, x, y, color);
 		if (y + 8 >= SCR_WIDTH) {
