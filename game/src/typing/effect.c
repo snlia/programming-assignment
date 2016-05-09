@@ -54,6 +54,7 @@ update_letter_pos(void) {
 		fly_t next = it->_next;
 		it->x += it->v; /* 根据速度更新位置 */
 		if (it->x < 0 || it->x + f2F(7.9) > int2F(SCR_HEIGHT)) {
+            set_bp ();
 			if (it->x < 0) hit ++; /* 从上部飞出屏幕 */
 			else miss ++; /* 从下部飞出屏幕 */
 			fly_remove(it);
