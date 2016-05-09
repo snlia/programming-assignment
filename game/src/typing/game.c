@@ -87,7 +87,7 @@ main_loop(void) {
 			num_draw ++;
             Log ("%d\n", num_draw);
 			redraw_screen();
-            Log ("!!!\n");
+            Log ("!!!!\n");
 		}
 	}
 }
