@@ -23,7 +23,7 @@ FLOAT f2F(float a) {
     if (x == 0xc7000000) return 0x80000000; // return if x = -0x8000
     unsigned int Significand = x & 0x7fffff;
     x >>= 23;
-    int Exponent = x & 0xff - 0x7f;
+    int Exponent = (x & 0xff) - 0x7f;
     x >>= 8;
     unsigned int Sign = x & 1;
     //pick up Sign, Exponent and Significand...

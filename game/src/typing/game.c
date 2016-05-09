@@ -37,7 +37,6 @@ void
 main_loop(void) {
 	int now = 0, target;
 	int num_draw = 0;
-    int time = 0;
 	bool redraw;
 
 	while (true) {
@@ -86,8 +85,6 @@ main_loop(void) {
 
 		if (redraw) { /* 当需要重新绘图时重绘 */
 			num_draw ++;
-            time++;
-            Log ("%d\n", time);
 			redraw_screen();
 		}
 	}
