@@ -37,20 +37,58 @@ inline static uint32_t get_idx (int x, int y, int w, int h) {
 }
 
 void SDL_BlitSurface(SDL_Surface *scr, SDL_Rect *scrrect, 
-		SDL_Surface *dst, SDL_Rect *dstrect) {
-//    Log ("start BlitSurface");
-	assert(dst && scr);
+        SDL_Surface *dst, SDL_Rect *dstrect) {
+    //    Log ("start BlitSurface");
+    assert(dst && scr);
 
-	/* TODO: Performs a fast blit from the source surface to the 
-	 * dstination surface. Only the position is used in the
-	 * ``dstrect'' (the width and height are ignored). If either
-	 * ``scrrect'' or ``dstrect'' are NULL, the entire surface 
-	 * (``scr'' or ``dst'') is copied. The final blit rectangle 
-	 * is saved in ``dstrect'' after all clipping is performed
-	 * (``scrrect'' is not modified).
-	 */
+    uint8_t *spixels = scr->pixels;
+    uint8_t *dpixels = dst->pixels;
+    int sx = 0, sy = 0, dx = 0, dy = 0, fw = scr->w, fh = scr->h;
+    if (scrrect) {
+        sx = scrrect->x;
+        sy = scrrect->y;
+        fw = scrrect->w;
+        fh = scrrect->h;
+    }
+    if (dstrect) {
+        dx = dstrect->x;
+        dy = dstrect->y;
+        if (dx < 0) {
+            sx -= dx;
+            fw += dx;
+            dx = 0;
+        }
+        if (dy < 0) {
+            sy -= dy;
+            fh += dy;
+            dy = 0;
+        }
+    }
+    if (dx >= dst->w || dy >= dst->h) return;
+    if (dy + fh > dst->h) fh = dst->h - dy;
+    if (dx + fw > dst->w) fw = dst->w - dx;
 
-    int sx = 0, sy = 0, dx = 0, dy = 0, w = scr->w, h = scr->h;
+    if (fw == dst->w && scr->w == dst->w) {
+        memcpy(dpixels + dy * dst->w, spixels + sy * scr->w, fh * fw);
+        return;
+    }
+
+    for (int i = 0; i < fh; i++) {
+        memcpy(dpixels + (dy + i) * dst->w + dx, spixels + (sy + i) * scr->w + sx, fw);
+    }
+    return ;
+    assert(dst && scr);
+
+    /* TODO: Performs a fast blit from the source surface to the 
+     * dstination surface. Only the position is used in the
+     * ``dstrect'' (the width and height are ignored). If either
+     * ``scrrect'' or ``dstrect'' are NULL, the entire surface 
+     * (``scr'' or ``dst'') is copied. The final blit rectangle 
+     * is saved in ``dstrect'' after all clipping is performed
+     * (``scrrect'' is not modified).
+     */
+
+  /*  int sx = 0, sy = 0, dx = 0, dy = 0, w = scr->w, h = scr->h;
     if (scrrect) {
         sx = scrrect->x;
         sy = scrrect->y;
@@ -71,34 +109,35 @@ void SDL_BlitSurface(SDL_Surface *scr, SDL_Rect *scrrect,
     h = MMIN (h, scr->h - sy);
 
     Log ("start BlitSurface %d %d %d %d %d %d %d %d %d %d\n", sx, sy, scr->w, scr->h, dx, dy, dst->w, dst->h, w, h);
-//    195 7 320 200 0 0 112 34 112 34
+    //    195 7 320 200 0 0 112 34 112 34
 
-    return ;
     uint8_t* spixel = scr->pixels;
     uint8_t* dpixel = dst->pixels;
 
     for (int i = 0; i < h; ++i)
         for (int j = 0; j < w; ++j) {
+            if (sx == 195) Log (i, j);
             *(dpixel + get_idx (dx + j, dy + i, dst->w, dst->h)) = *(spixel + get_idx (sx + j, sy + i, scr->w, scr->h));
         }
-    /*
-    for (int i = 0; i < h; ++i) {
-        memcpy (dpixel + get_idx (dx, dy + i, dst->w, dst->h), spixel + get_idx (sx, sy + i, scr->w, scr->h), w);
-    }*/
+    
+       for (int i = 0; i < h; ++i) {
+       memcpy (dpixel + get_idx (dx, dy + i, dst->w, dst->h), spixel + get_idx (sx, sy + i, scr->w, scr->h), w);
+       }
     dstrect->w = w;
     dstrect->h = h;
     Log ("end BlitSurface");
+*/
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
     //Log ("start FillRect");
-	assert(dst);
-	assert(color <= 0xff);
+    assert(dst);
+    assert(color <= 0xff);
 
-	/* TODO: Fill the rectangle area described by ``dstrect''
-	 * in surface ``dst'' with color ``color''. If dstrect is
-	 * NULL, fill the whole surface.
-	 */
+    /* TODO: Fill the rectangle area described by ``dstrect''
+     * in surface ``dst'' with color ``color''. If dstrect is
+     * NULL, fill the whole surface.
+     */
     int x = 0, y = 0, w = dst->w, h = dst->h;
     if (dstrect) {
         x = dstrect->x;
@@ -119,7 +158,7 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 
 void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h) {
     //Log ("start UpdateRect");
-	assert(screen);
+    assert(screen);
     assert(screen->pitch == 320);
     if(screen->flags & SDL_HWSURFACE) {
         if(x == 0 && y == 0) {
