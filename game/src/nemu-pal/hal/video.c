@@ -112,7 +112,6 @@ void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h) {
 	assert(screen);
     assert(screen->pitch == 320);
     if(screen->flags & SDL_HWSURFACE) {
-        Log ("1 SDL_UpdateRect");
         if(x == 0 && y == 0) {
             /* Draw FPS */
             vmem = VMEM_ADDR;
@@ -120,8 +119,6 @@ void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h) {
             sprintf(buf, "%dFPS", get_fps());
             draw_string(buf, 0, 0, 10);
         }
-        Log ("2 SDL_UpdateRect");
-        return;
     }
 
     /* TODO: Copy the pixels in the rectangle area to the screen. */
