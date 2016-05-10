@@ -32,7 +32,7 @@ int get_fps();
  *      } SDL_Surface;
  * */
 
-inline static int get_idx (int x, int y, int w, int h) {
+inline static uint32_t get_idx (int x, int y, int w, int h) {
     return y * w + x;
 }
 
