@@ -34,14 +34,19 @@ static void sys_read (TrapFrame *tf) {
         panic ("try to read from stdin");
     }
     else {
-        Log ("%d %d %d %d\n", tf->ebx, tf->ecx, tf->edx);
+        Log ("%d %d %d %d\n", tf->eax, tf->ebx, tf->ecx, tf->edx);
         assert (0);
     }
     //    asm volatile (".byte 0xd6" : : "a"(2), "c"(tf->ecx), "d"(tf->edx));
 }
 
+static void sys_open (TrapFrame *tf) {
+    Log ("%d %d %d %d\n", tf->eax, tf->ebx, tf->ecx, tf->edx);
+    assert (0);
+    //    asm volatile (".byte 0xd6" : : "a"(2), "c"(tf->ecx), "d"(tf->edx));
+}
+
 void do_syscall(TrapFrame *tf) {
-    set_bp ();
     switch(tf->eax) {
         /* The ``add_irq_handle'' system call is artificial. We use it to 
          * let user program register its interrupt handlers. But this is 
@@ -59,13 +64,15 @@ void do_syscall(TrapFrame *tf) {
         case SYS_write: sys_write(tf); break;
 
         case SYS_read: sys_read(tf); break;
-/*
-        case SYS_lseek: sys_lseek(tf); break;
 
-        case SYS_close: sys_close(tf); break;
-        */
+        case SYS_open: sys_open(tf); break;
+                       /*
+                          case SYS_lseek: sys_lseek(tf); break;
 
-                        /* TODO: Add more system calls. */
+                          case SYS_close: sys_close(tf); break;
+                          */
+
+                       /* TODO: Add more system calls. */
 
         default: panic("Unhandled system call: id = %d", tf->eax);
     }
