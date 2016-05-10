@@ -12,7 +12,7 @@
 //enable optimize
 #define O1
 
-#define DEBUG
+//#define DEBUG
 //#define LOG_FILE
 #include "debug.h"
 #include "macro.h"
