@@ -36,6 +36,10 @@ volatile static const file_info file_table[] = {
 #define Assert(cond,info) if (!(cond)) panic (info);
 #endif
 
+#ifndef MMIN
+#define MMIN(a,b) ((a) < (b) ? (a) : (b))
+#endif
+
 static Fstate fstate [NR_FILES + 3];
 
 void ide_read(uint8_t *, uint32_t, uint32_t);
@@ -67,6 +71,7 @@ int fs_open(const char *pathname, int flags) {   /* 在我们的实现中可以�
 int fs_read(int fd, void *buf, int len) {
     Assert (fstate[fd].opened, "try to read an unopened file!");
     if (fd < 3) return -1;
+    len = MMIN (file_table[fd - 3].size - fstate[fd].offset, len);
     ide_read (buf, file_table[fd - 3].disk_offset + fstate[fd].offset, len);
     fstate[fd].offset += len;
     return len;
