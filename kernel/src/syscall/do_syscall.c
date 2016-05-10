@@ -30,7 +30,6 @@ static void sys_write (TrapFrame *tf) {
 }
 
 static void sys_read (TrapFrame *tf) {
-    set_bp ();
     if (!tf->ebx) {
         panic ("try to read from stdin");
     }
@@ -42,6 +41,7 @@ static void sys_read (TrapFrame *tf) {
 }
 
 void do_syscall(TrapFrame *tf) {
+    set_bp ();
     switch(tf->eax) {
         /* The ``add_irq_handle'' system call is artificial. We use it to 
          * let user program register its interrupt handlers. But this is 
