@@ -23,11 +23,9 @@ keyboard_event(void) {
     bool release = ((key_code & 0x80) >> 7) & 1;
     key_code &= ~(0x80);
     int i = 0;
-    Log ("%d", key_code);
     for ( ; i < NR_KEYS; ++i)
         if (key_code == keycode_array[i]) break;
     if (i == NR_KEYS) return ;
-    Log ("%d", i);
     if (!release && key_state[i] == KEY_STATE_EMPTY) key_state[i] = KEY_STATE_PRESS;
     if (release && key_state[i] == KEY_STATE_WAIT_RELEASE) key_state[i] = KEY_STATE_RELEASE;
 	//assert(0);
