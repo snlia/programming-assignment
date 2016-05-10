@@ -110,25 +110,26 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h) {
     Log ("start SDL_UpdateRect");
 	assert(screen);
-	assert(screen->pitch == 320);
-	if(screen->flags & SDL_HWSURFACE) {
-		if(x == 0 && y == 0) {
-			/* Draw FPS */
-			vmem = VMEM_ADDR;
-			char buf[80];
-			sprintf(buf, "%dFPS", get_fps());
-			draw_string(buf, 0, 0, 10);
-		}
-		return;
-	}
+    assert(screen->pitch == 320);
+    if(screen->flags & SDL_HWSURFACE) {
+        Log ("1 SDL_UpdateRect");
+        if(x == 0 && y == 0) {
+            /* Draw FPS */
+            vmem = VMEM_ADDR;
+            char buf[80];
+            sprintf(buf, "%dFPS", get_fps());
+            draw_string(buf, 0, 0, 10);
+        }
+        Log ("2 SDL_UpdateRect");
+        return;
+    }
 
-	/* TODO: Copy the pixels in the rectangle area to the screen. */
+    /* TODO: Copy the pixels in the rectangle area to the screen. */
     w = MMIN (w, 320 - x);
     h = MMIN (h, 200 - y);
 
     uint8_t* vmem = (uint8_t *) VMEM_ADDR;
     uint8_t* pixel = screen->pixels;
-    Log ("copy SDL_UpdateRect");
     for (int j = 0; j < h; ++j)
         memcpy (vmem + get_idx (x, y + j, 320, 200), pixel + get_idx (x, y + j, 320, 200), w);
 
