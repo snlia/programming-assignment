@@ -70,6 +70,8 @@ void SDL_BlitSurface(SDL_Surface *scr, SDL_Rect *scrrect,
     w = MMIN (w, scr->w - sx);
     h = MMIN (h, scr->h - sy);
 
+    Log ("start BlitSurface %d %d %d %d %d %d\n", sx, sy, dx, dy, w, h);
+
     uint8_t* spixel = scr->pixels;
     uint8_t* dpixel = dst->pixels;
 
