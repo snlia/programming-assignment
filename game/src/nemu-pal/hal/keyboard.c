@@ -23,6 +23,7 @@ keyboard_event(void) {
     bool release = ((key_code & 0x80) >> 7) & 1;
     key_code &= ~0x80;
     int i = 0;
+    Log ("%d", key_code);
     for ( ; i < NR_KEYS; ++i)
         if (key_code == keycode_array[i]) break;
     if (i == NR_KEYS) return ;
