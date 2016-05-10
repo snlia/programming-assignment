@@ -73,6 +73,7 @@ void SDL_BlitSurface(SDL_Surface *scr, SDL_Rect *scrrect,
     Log ("start BlitSurface %d %d %d %d %d %d %d %d %d %d\n", sx, sy, scr->w, scr->h, dx, dy, dst->w, dst->h, w, h);
 //    195 7 320 200 0 0 112 34 112 34
 
+    return ;
     uint8_t* spixel = scr->pixels;
     uint8_t* dpixel = dst->pixels;
 
@@ -137,7 +138,6 @@ void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h) {
 
     uint8_t* vmem = (uint8_t *) VMEM_ADDR;
     uint8_t* pixel = screen->pixels;
-    return ;
     for (int j = 0; j < h; ++j)
         memcpy (vmem + get_idx (x, y + j, 320, 200), pixel + get_idx (x, y + j, 320, 200), w);
 
