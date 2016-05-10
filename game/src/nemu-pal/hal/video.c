@@ -32,48 +32,48 @@ int get_fps();
  *      } SDL_Surface;
  * */
 
-inline static get_idx (int x, int y, int w, int h) {
+inline static int get_idx (int x, int y, int w, int h) {
     return y * w + x;
 }
 
-void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *scrrect, 
+void SDL_BlitSurface(SDL_Surface *scr, SDL_Rect *scrrect, 
 		SDL_Surface *dst, SDL_Rect *dstrect) {
-	assert(dst && src);
+	assert(dst && scr);
 
 	/* TODO: Performs a fast blit from the source surface to the 
-	 * destination surface. Only the position is used in the
+	 * dstination surface. Only the position is used in the
 	 * ``dstrect'' (the width and height are ignored). If either
-	 * ``srcrect'' or ``dstrect'' are NULL, the entire surface 
-	 * (``src'' or ``dst'') is copied. The final blit rectangle 
+	 * ``scrrect'' or ``dstrect'' are NULL, the entire surface 
+	 * (``scr'' or ``dst'') is copied. The final blit rectangle 
 	 * is saved in ``dstrect'' after all clipping is performed
-	 * (``srcrect'' is not modified).
+	 * (``scrrect'' is not modified).
 	 */
 
-    int sx = 0, sy = 0, dx = 0, dy = 0, w = src->w, h = src->h;
-    if (srcrect) {
-        sx = srcrect->x;
-        sy = srcrect->y;
-        w = srcrect->w;
-        h = srcrect->h;
+    int sx = 0, sy = 0, dx = 0, dy = 0, w = scr->w, h = scr->h;
+    if (scrrect) {
+        sx = scrrect->x;
+        sy = scrrect->y;
+        w = scrrect->w;
+        h = scrrect->h;
     }
     if (dstrect) {
-        dx = destrect->x;
-        dy = destrect->y;
-        destrect->w = w;
-        destrect->h = h;
+        dx = dstrect->x;
+        dy = dstrect->y;
+        dstrect->w = w;
+        dstrect->h = h;
     }
 
-    w = min (w, dst->w - dx);
-    h = min (h, dst->h - dy);
+    w = MMIN (w, dst->w - dx);
+    h = MMIN (h, dst->h - dy);
 
-    w = min (w, src->w - sx);
-    h = min (h, src->h - sy);
+    w = MMIN (w, scr->w - sx);
+    h = MMIN (h, scr->h - sy);
 
-    uint8_t* spixel = src->pixels;
-    uint8_t* dpixel = dest->pixels;
+    uint8_t* spixel = scr->pixels;
+    uint8_t* dpixel = dst->pixels;
 
     for (int i = 0; i < h; ++i)
-        memcpy (dpixel + get_idx (dx, dy + i, dest->w, dest->h), spixel + get_idx (sx, sy + i, src->w, src->h), w);
+        memcpy (dpixel + get_idx (dx, dy + i, dst->w, dst->h), spixel + get_idx (sx, sy + i, scr->w, scr->h), w);
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
@@ -92,10 +92,10 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
         w = dstrect->w;
     }
 
-    w = min (w, dst->w - x);
-    h = min (h, dst->h - y);
+    w = MMIN (w, dst->w - x);
+    h = MMIN (h, dst->h - y);
 
-    uint8_t* pixel = screen->pixels;
+    uint8_t* pixel = dst->pixels;
     for (int i = 0; i < h; ++i)
         memset (pixel + get_idx (x, i + y, dst->w, dst->h), color, w);
 
@@ -116,8 +116,8 @@ void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h) {
 	}
 
 	/* TODO: Copy the pixels in the rectangle area to the screen. */
-    w = min (w, 320 - x);
-    h = min (h, 200 - y);
+    w = MMIN (w, 320 - x);
+    h = MMIN (h, 200 - y);
 
     uint8_t* vmem = (uint8_t *) VMEM_ADDR;
     uint8_t* pixel = screen->pixels;
@@ -158,17 +158,17 @@ void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors,
 
 /* ======== The following functions are already implemented. ======== */
 
-void SDL_SoftStretch(SDL_Surface *src, SDL_Rect *scrrect, 
+void SDL_SoftStretch(SDL_Surface *scr, SDL_Rect *scrrect, 
         SDL_Surface *dst, SDL_Rect *dstrect) {
-    assert(src && dst);
+    assert(scr && dst);
     int x = (scrrect == NULL ? 0 : scrrect->x);
     int y = (scrrect == NULL ? 0 : scrrect->y);
-    int w = (scrrect == NULL ? src->w : scrrect->w);
-    int h = (scrrect == NULL ? src->h : scrrect->h);
+    int w = (scrrect == NULL ? scr->w : scrrect->w);
+    int h = (scrrect == NULL ? scr->h : scrrect->h);
 
     assert(dstrect);
     if(w == dstrect->w && h == dstrect->h) {
-        /* The source rectangle and the destination rectangle
+        /* The source rectangle and the dstination rectangle
          * are of the same size. If that is the case, there
          * is no need to stretch, just copy. */
         SDL_Rect rect;
@@ -176,7 +176,7 @@ void SDL_SoftStretch(SDL_Surface *src, SDL_Rect *scrrect,
         rect.y = y;
         rect.w = w;
         rect.h = h;
-        SDL_BlitSurface(src, &rect, dst, dstrect);
+        SDL_BlitSurface(scr, &rect, dst, dstrect);
     }
     else {
         /* No other case occurs in NEMU-PAL. */
