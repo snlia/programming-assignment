@@ -38,7 +38,6 @@ inline static uint32_t get_idx (int x, int y, int w, int h) {
 
 void SDL_BlitSurface(SDL_Surface *scr, SDL_Rect *scrrect, 
         SDL_Surface *dst, SDL_Rect *dstrect) {
-    //    Log ("start BlitSurface");
     assert(dst && scr);
 
     /* TODO: Performs a fast blit from the source surface to the 
@@ -68,18 +67,8 @@ void SDL_BlitSurface(SDL_Surface *scr, SDL_Rect *scrrect,
     w = MMIN (w, scr->w - sx);
     h = MMIN (h, scr->h - sy);
 
-    Log ("start BlitSurface %d %d %d %d %d %d %d %d %d %d\n", sx, sy, scr->w, scr->h, dx, dy, dst->w, dst->h, w, h);
-    //    195 7 320 200 0 0 112 34 112 34
-
     uint8_t* spixel = scr->pixels;
     uint8_t* dpixel = dst->pixels;
-/*
-    for (int i = 0; i < h; ++i)
-        for (int j = 0; j < w; ++j) {
-            if (sx == 195) Log (i, j);
-            *(dpixel + get_idx (dx + j, dy + i, dst->w, dst->h)) = *(spixel + get_idx (sx + j, sy + i, scr->w, scr->h));
-        }
-*/
     for (int i = 0; i < h; ++i) {
         memcpy (dpixel + get_idx (dx, dy + i, dst->w, dst->h), spixel + get_idx (sx, sy + i, scr->w, scr->h), w);
     }
@@ -87,11 +76,9 @@ void SDL_BlitSurface(SDL_Surface *scr, SDL_Rect *scrrect,
         dstrect->w = w;
         dstrect->h = h;
     }
-    Log ("end BlitSurface");
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
-    //Log ("start FillRect");
     assert(dst);
     assert(color <= 0xff);
 
@@ -114,11 +101,9 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
     for (int i = 0; i < h; ++i)
         memset (pixel + get_idx (x, i + y, dst->w, dst->h), color, w);
 
-    //Log ("end FillRect");
 }
 
 void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h) {
-    //Log ("start UpdateRect");
     assert(screen);
     assert(screen->pitch == 320);
     if(screen->flags & SDL_HWSURFACE) {
@@ -141,12 +126,10 @@ void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h) {
     for (int j = 0; j < h; ++j)
         memcpy (vmem + get_idx (x, y + j, 320, 200), pixel + get_idx (x, y + j, 320, 200), w);
 
-    //Log ("end UpdateRect");
 }
 
 void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors, 
         int firstcolor, int ncolors) {
-    //Log ("start SetPlatte");
     assert(s);
     assert(s->format);
     assert(s->format->palette);
@@ -173,7 +156,6 @@ void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors,
         /* TODO: Set the VGA palette by calling write_palette(). */
         write_palette (colors, ncolors);
     }
-    //Log ("end SetPlatte");
 }
 
 /* ======== The following functions are already implemented. ======== */
