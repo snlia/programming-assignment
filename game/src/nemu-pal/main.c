@@ -153,6 +153,7 @@ PAL_Init(
 #ifdef _DEBUG
    SDL_WM_SetCaption("Pal WIN95 (Debug Build)", NULL);
 #else
+   Log ("get here");
    SDL_WM_SetCaption("Pal WIN95", NULL);
    Log ("get here");
 #endif
