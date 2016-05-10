@@ -30,6 +30,7 @@ static void sys_write (TrapFrame *tf) {
 }
 
 static void sys_read (TrapFrame *tf) {
+    set_bp ();
     if (!tf->ebx) {
         panic ("try to read from stdin");
     }
