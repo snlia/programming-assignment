@@ -91,7 +91,7 @@ void cpu_exec(volatile uint32_t n) {
             i8259_ack_intr();
             raise_intr(intr_no);
         }
-//        device_update();
+        device_update();
 #endif
     }
 
