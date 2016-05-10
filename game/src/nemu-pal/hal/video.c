@@ -119,6 +119,8 @@ void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h) {
             sprintf(buf, "%dFPS", get_fps());
             draw_string(buf, 0, 0, 10);
         }
+        set_bp ();
+        return ;
     }
 
     /* TODO: Copy the pixels in the rectangle area to the screen. */
@@ -130,7 +132,6 @@ void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h) {
     for (int j = 0; j < h; ++j)
         memcpy (vmem + get_idx (x, y + j, 320, 200), pixel + get_idx (x, y + j, 320, 200), w);
 
-    Log ("end SDL_UpdateRect");
 }
 
 void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors, 
