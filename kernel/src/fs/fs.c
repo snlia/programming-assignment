@@ -68,12 +68,14 @@ int fs_read(int fd, void *buf, int len) {
     Assert (fstate[fd].opened, "try to read an unopened file!");
     if (fd < 3) return -1;
     ide_read (buf, file_table[fd - 3].disk_offset + fstate[fd].offset, len);
+    fstate[fd].offset += len;
     return len;
 }
 int fs_write(int fd, void *buf, int len) {
     Assert (fstate[fd].opened, "try to write an unopened file!");
     if (fd < 3) return -1;
     ide_write (buf, file_table[fd - 3].disk_offset + fstate[fd].offset, len);
+    fstate[fd].offset += len;
     return len;
 }
 int fs_lseek(int fd, int offset, int whence) {
