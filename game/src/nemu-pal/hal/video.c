@@ -49,7 +49,7 @@ void SDL_BlitSurface(SDL_Surface *scr, SDL_Rect *scrrect,
 	 * is saved in ``dstrect'' after all clipping is performed
 	 * (``scrrect'' is not modified).
 	 */
-/*
+
     int sx = 0, sy = 0, dx = 0, dy = 0, w = scr->w, h = scr->h;
     if (scrrect) {
         sx = scrrect->x;
@@ -81,42 +81,7 @@ void SDL_BlitSurface(SDL_Surface *scr, SDL_Rect *scrrect,
     }
     dstrect->w = w;
     dstrect->h = h;
-    Log ("end BlitSurface");*/
-    uint8_t *spixels = scr->pixels;
-    uint8_t *dpixels = dst->pixels;
-    int sx = 0, sy = 0, dx = 0, dy = 0, fw = scr->w, fh = scr->h;
-    if (scrrect) {
-        sx = scrrect->x;
-        sy = scrrect->y;
-        fw = scrrect->w;
-        fh = scrrect->h;
-    }
-    if (dstrect) {
-        dx = dstrect->x;
-        dy = dstrect->y;
-        if (dx < 0) {
-            sx -= dx;
-            fw += dx;
-            dx = 0;
-        }
-        if (dy < 0) {
-            sy -= dy;
-            fh += dy;
-            dy = 0;
-        }
-    }
-    if (dx >= dst->w || dy >= dst->h) return;
-    if (dy + fh > dst->h) fh = dst->h - dy;
-    if (dx + fw > dst->w) fw = dst->w - dx;
-
-    if (fw == dst->w && scr->w == dst->w) {
-        memcpy(dpixels + dy * dst->w, spixels + sy * scr->w, fh * fw);
-        return;
-    }
-
-    for (int i = 0; i < fh; i++) {
-        memcpy(dpixels + (dy + i) * dst->w + dx, spixels + (sy + i) * scr->w + sx, fw);
-    }
+    Log ("end BlitSurface");
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
