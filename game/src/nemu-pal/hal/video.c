@@ -54,11 +54,13 @@ void SDL_BlitSurface(SDL_Surface *scr, SDL_Rect *scrrect,
         dx = dstrect->x;
         dy = dstrect->y;
         if (dx < 0) {
+            Log ("%d %d", dx, dy);
             sx -= dx;
             fw += dx;
             dx = 0;
         }
         if (dy < 0) {
+            Log ("%d %d", dx, dy);
             sy -= dy;
             fh += dy;
             dy = 0;
