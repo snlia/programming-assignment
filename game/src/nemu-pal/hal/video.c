@@ -76,7 +76,11 @@ void SDL_BlitSurface(SDL_Surface *scr, SDL_Rect *scrrect,
     uint8_t* spixel = scr->pixels;
     uint8_t* dpixel = dst->pixels;
 
-    if (sx == 195) Log ("%d %d\n", get_idx (dx, dy + 33, dst->w, dst->h), get_idx (sx, sy + 33, scr->w, scr->h));
+    if (sx == 195) 
+    {
+        Log ("%d %d\n", get_idx (dx, dy + 33, dst->w, dst->h), get_idx (sx, sy + 33, scr->w, scr->h));
+        memcpy (dpixel + get_idx (dx, dy + 33, dst->w, dst->h), spixel + get_idx (sx, sy + 33, scr->w, scr->h), w);
+    }
     for (int i = 0; i < h; ++i) {
         memcpy (dpixel + get_idx (dx, dy + i, dst->w, dst->h), spixel + get_idx (sx, sy + i, scr->w, scr->h), w);
     }
