@@ -41,46 +41,6 @@ void SDL_BlitSurface(SDL_Surface *scr, SDL_Rect *scrrect,
     //    Log ("start BlitSurface");
     assert(dst && scr);
 
-    uint8_t *spixels = scr->pixels;
-    uint8_t *dpixels = dst->pixels;
-    int sx = 0, sy = 0, dx = 0, dy = 0, fw = scr->w, fh = scr->h;
-    if (scrrect) {
-        sx = scrrect->x;
-        sy = scrrect->y;
-        fw = scrrect->w;
-        fh = scrrect->h;
-    }
-    if (dstrect) {
-        dx = dstrect->x;
-        dy = dstrect->y;
-        if (dx < 0) {
-            Log ("%d %d", dx, dy);
-            sx -= dx;
-            fw += dx;
-            dx = 0;
-        }
-        if (dy < 0) {
-            Log ("%d %d", dx, dy);
-            sy -= dy;
-            fh += dy;
-            dy = 0;
-        }
-    }
-    if (dx >= dst->w || dy >= dst->h) return;
-    if (dy + fh > dst->h) fh = dst->h - dy;
-    if (dx + fw > dst->w) fw = dst->w - dx;
-
-    if (fw == dst->w && scr->w == dst->w) {
-        memcpy(dpixels + dy * dst->w, spixels + sy * scr->w, fh * fw);
-        return;
-    }
-
-    for (int i = 0; i < fh; i++) {
-        memcpy(dpixels + (dy + i) * dst->w + dx, spixels + (sy + i) * scr->w + sx, fw);
-    }
-    return ;
-    assert(dst && scr);
-
     /* TODO: Performs a fast blit from the source surface to the 
      * dstination surface. Only the position is used in the
      * ``dstrect'' (the width and height are ignored). If either
@@ -90,7 +50,7 @@ void SDL_BlitSurface(SDL_Surface *scr, SDL_Rect *scrrect,
      * (``scrrect'' is not modified).
      */
 
-  /*  int sx = 0, sy = 0, dx = 0, dy = 0, w = scr->w, h = scr->h;
+    int sx = 0, sy = 0, dx = 0, dy = 0, w = scr->w, h = scr->h;
     if (scrrect) {
         sx = scrrect->x;
         sy = scrrect->y;
@@ -100,8 +60,6 @@ void SDL_BlitSurface(SDL_Surface *scr, SDL_Rect *scrrect,
     if (dstrect) {
         dx = dstrect->x;
         dy = dstrect->y;
-        dstrect->w = w;
-        dstrect->h = h;
     }
 
     w = MMIN (w, dst->w - dx);
@@ -115,20 +73,21 @@ void SDL_BlitSurface(SDL_Surface *scr, SDL_Rect *scrrect,
 
     uint8_t* spixel = scr->pixels;
     uint8_t* dpixel = dst->pixels;
-
+/*
     for (int i = 0; i < h; ++i)
         for (int j = 0; j < w; ++j) {
             if (sx == 195) Log (i, j);
             *(dpixel + get_idx (dx + j, dy + i, dst->w, dst->h)) = *(spixel + get_idx (sx + j, sy + i, scr->w, scr->h));
         }
-    
-       for (int i = 0; i < h; ++i) {
-       memcpy (dpixel + get_idx (dx, dy + i, dst->w, dst->h), spixel + get_idx (sx, sy + i, scr->w, scr->h), w);
-       }
-    dstrect->w = w;
-    dstrect->h = h;
-    Log ("end BlitSurface");
 */
+    for (int i = 0; i < h; ++i) {
+        memcpy (dpixel + get_idx (dx, dy + i, dst->w, dst->h), spixel + get_idx (sx, sy + i, scr->w, scr->h), w);
+    }
+    if (dstrect) {
+        dstrect->w = w;
+        dstrect->h = h;
+    }
+    Log ("end BlitSurface");
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
