@@ -13,13 +13,31 @@ static void sys_brk(TrapFrame *tf) {
 	tf->eax = 0;
 }
 
+uint32_t edi, esi, ebp, old_esp, ebx, edx, ecx, eax; //push to stack by pusha
+
 static void sys_write (TrapFrame *tf) {
-    assert (tf->ebx == 1 || tf->ebx == 2);
-    uint8_t *addr = (uint8_t *)tf->ecx;
-    for (int i = 0; i < tf->edx; ++i)
-        serial_printc(*(addr + i));
+    if (tf->ebx == 1 || tf->ebx == 2) {
+        uint8_t *addr = (uint8_t *)tf->ecx;
+        for (int i = 0; i < tf->edx; ++i)
+            serial_printc(*(addr + i));
+        tf->eax = tf->edx;
+    }
+    else {
+        Log ("%d %d %d %d\n", tf->ebx, tf->ecx, tf->edx);
+        assert (0);
+    }
     //    asm volatile (".byte 0xd6" : : "a"(2), "c"(tf->ecx), "d"(tf->edx));
-    tf->eax = tf->edx;
+}
+
+static void sys_write (TrapFrame *tf) {
+    if (!tf->ebx) {
+        panic ("try to read from stdin");
+    }
+    else {
+        Log ("%d %d %d %d\n", tf->ebx, tf->ecx, tf->edx);
+        assert (0);
+    }
+    //    asm volatile (".byte 0xd6" : : "a"(2), "c"(tf->ecx), "d"(tf->edx));
 }
 
 void do_syscall(TrapFrame *tf) {
@@ -38,6 +56,13 @@ void do_syscall(TrapFrame *tf) {
         case SYS_brk: sys_brk(tf); break;
 
         case SYS_write: sys_write(tf); break;
+
+        case SYS_read: sys_read(tf); break;
+/*
+        case SYS_lseek: sys_lseek(tf); break;
+
+        case SYS_close: sys_close(tf); break;
+        */
 
                         /* TODO: Add more system calls. */
 
