@@ -29,7 +29,7 @@ static void sys_write (TrapFrame *tf) {
     //    asm volatile (".byte 0xd6" : : "a"(2), "c"(tf->ecx), "d"(tf->edx));
 }
 
-static void sys_write (TrapFrame *tf) {
+static void sys_read (TrapFrame *tf) {
     if (!tf->ebx) {
         panic ("try to read from stdin");
     }
