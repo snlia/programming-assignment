@@ -67,7 +67,6 @@ int fs_open(const char *pathname, int flags) {   /* 在我们的实现中可以�
 int fs_read(int fd, void *buf, int len) {
     Assert (fstate[fd].opened, "try to read an unopened file!");
     if (fd < 3) return -1;
-    Log ("%d %x %x\n", fd, buf, len);
     ide_read (buf, file_table[fd - 3].disk_offset + fstate[fd].offset, len);
     return len;
 }
