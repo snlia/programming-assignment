@@ -128,6 +128,7 @@ void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h) {
 
     uint8_t* vmem = (uint8_t *) VMEM_ADDR;
     uint8_t* pixel = screen->pixels;
+    Log ("copy SDL_UpdateRect");
     for (int j = 0; j < h; ++j)
         memcpy (vmem + get_idx (x, y + j, 320, 200), pixel + get_idx (x, y + j, 320, 200), w);
 
