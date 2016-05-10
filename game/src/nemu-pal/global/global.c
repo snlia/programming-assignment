@@ -84,9 +84,9 @@ PAL_InitGlobals(
    gpGlobals->f.fpSSS = UTIL_OpenRequiredFile("sss.mkf");
 #ifndef PAL_WIN95
    Log("loading desc.dat");
+   set_bp ();
    gpGlobals->lpObjectDesc = PAL_LoadObjectDesc(va("%s%s", PAL_PREFIX, "desc.dat"));
 #endif
-   Log("loading complete");
    gpGlobals->bCurrentSaveSlot = 1;
 
    return 0;
