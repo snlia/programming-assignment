@@ -119,7 +119,6 @@ void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h) {
             sprintf(buf, "%dFPS", get_fps());
             draw_string(buf, 0, 0, 10);
         }
-        set_bp ();
         return ;
     }
 
