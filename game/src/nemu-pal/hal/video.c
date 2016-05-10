@@ -38,7 +38,7 @@ inline static uint32_t get_idx (int x, int y, int w, int h) {
 
 void SDL_BlitSurface(SDL_Surface *scr, SDL_Rect *scrrect, 
 		SDL_Surface *dst, SDL_Rect *dstrect) {
-    Log ("start BlitSurface");
+//    Log ("start BlitSurface");
 	assert(dst && scr);
 
 	/* TODO: Performs a fast blit from the source surface to the 
