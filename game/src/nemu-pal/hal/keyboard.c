@@ -29,7 +29,7 @@ keyboard_event(void) {
         if (key_code == keycode_array[i]) break;
     if (i == NR_KEYS) return ;
     Log ("get key %d %d", i, release);
-    if (!release && keys_state[i] == KEY_NOW_RELEASE) {
+    if (!release/* && keys_state[i] == KEY_NOW_RELEASE*/) {
         Log ("press %d", i);
         keys_state[i] = KEY_NOW_PRESS;
         key_state[i] = KEY_STATE_PRESS;
