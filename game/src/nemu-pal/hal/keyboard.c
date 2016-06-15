@@ -79,11 +79,13 @@ process_keys(void (*key_press_callback)(int), void (*key_release_callback)(int))
         if (key_state[i] == KEY_STATE_PRESS) {
             key_press_callback (keycode_array[i]);
             release_key (i);
+            Log ("now do press %d", i);
             sti();
             return true;
         }
         if (key_state[i] == KEY_STATE_RELEASE) {
             key_release_callback (keycode_array[i]);
+            Log ("now do release %d", i);
             clear_key (i);
             sti();
             return true;
