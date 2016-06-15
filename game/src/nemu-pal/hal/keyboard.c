@@ -15,34 +15,31 @@ static const int keycode_array[] = {
 static int key_state[NR_KEYS];
 
 static int key_code = 0;
-static int op_kc_arr[256];
+static int key_mapping[256];
 
-static bool inited = false;
+static bool  get_init = false;
 
 static void
 keyboard_init(void) {
-	int i;
-	for (i = 0; i < 255; i++)
-		op_kc_arr[i] = NR_KEYS;
-	for (i = 0; i < NR_KEYS; i++)
-		op_kc_arr[keycode_array[i]] = i;
-	inited = true;
+	for (int i = 0; i < 255; i++)
+		key_mapping[i] = NR_KEYS;
+	for (int i = 0; i < NR_KEYS; i++)
+		key_mapping[keycode_array[i]] = i;
+	get_init = true;
 }
 
 
 void
 keyboard_event(void) {
 	/* TODO: Fetch the scancode and update the key states. */
-	int tmp = in_byte(0x60);
-	if (tmp == key_code) return;
-	key_code = tmp;
-	if (!inited)
-		keyboard_init();
-	Log("%x",key_code);
-	if (key_code < 0x80)
-		key_state[op_kc_arr[key_code]] = KEY_STATE_PRESS;
+	int now_key = in_byte(0x60);
+	if (now_key == key_code) return;
+	key_code = now_key;
+	if (!get_init) keyboard_init();
+	if (key_code & 0x80)
+		key_state[key_mapping[key_code & 0x7f]] = KEY_STATE_RELEASE;
 	else
-		key_state[op_kc_arr[key_code - 0x80]] = KEY_STATE_RELEASE;
+		key_state[key_mapping[key_code]] = KEY_STATE_PRESS;
 }
 
 static inline int
