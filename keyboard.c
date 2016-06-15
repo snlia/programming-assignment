@@ -3,6 +3,7 @@
 #define NR_KEYS 18
 
 enum {KEY_STATE_EMPTY, KEY_STATE_WAIT_RELEASE, KEY_STATE_RELEASE, KEY_STATE_PRESS};
+enum {KEY_NOW_RELEASE, KEY_NOW_PRESS};
 
 /* Only the following keys are used in NEMU-PAL. */
 static const int keycode_array[] = {
@@ -26,9 +27,15 @@ keyboard_event(void) {
     for ( ; i < NR_KEYS; ++i)
         if (key_code == keycode_array[i]) break;
     if (i == NR_KEYS) return ;
-    if (!release && key_state[i] == KEY_STATE_EMPTY) key_state[i] = KEY_STATE_PRESS;
-    if (release && key_state[i] == KEY_STATE_WAIT_RELEASE) key_state[i] = KEY_STATE_RELEASE;
-	//assert(0);
+ //   Log ("get key %d %d", i, release);
+    if (!release/* && keys_state[i] == KEY_NOW_RELEASE*/) {
+ //       Log ("press %d", i);
+        key_state[i] = KEY_STATE_PRESS;
+    }
+    if (release) {
+ //       Log ("release %d", i);
+        key_state[i] = KEY_STATE_RELEASE;
+    }
 }
 
 static inline int
@@ -68,13 +75,15 @@ process_keys(void (*key_press_callback)(int), void (*key_release_callback)(int))
     for (int i = 0; i < NR_KEYS; ++i)  {
         if (key_state[i] == KEY_STATE_PRESS) {
             key_press_callback (keycode_array[i]);
-            key_state[i] = KEY_STATE_WAIT_RELEASE;
+            release_key (i);
+//            Log ("now do press %d", i);
             sti();
             return true;
         }
         if (key_state[i] == KEY_STATE_RELEASE) {
             key_release_callback (keycode_array[i]);
-            key_state[i] = KEY_STATE_EMPTY;
+//            Log ("now do release %d", i);
+            clear_key (i);
             sti();
             return true;
         }
