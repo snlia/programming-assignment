@@ -12,23 +12,35 @@ static const int keycode_array[] = {
 	K_s, K_f, K_p
 };
 
-static int key_state[NR_KEYS];
+static int key_state[NR_KEYS + 1];
+static int op_kc_arr[256];
+static bool inited = false;
+static volatile int key_code;
 
-static int key_code = 0;
+static void
+keyboard_init(void) {
+	int i;
+	for (i = 0; i < 255; i++)
+		op_kc_arr[i] = NR_KEYS;
+	for (i = 0; i < NR_KEYS; i++)
+		op_kc_arr[keycode_array[i]] = i;
+	inited = true;
+}
+
 
 void
 keyboard_event(void) {
 	/* TODO: Fetch the scancode and update the key states. */
-	key_code = in_byte(0x60);
-    bool release = ((key_code & 0x80) >> 7) & 1;
-    key_code &= ~(0x80);
-    int i = 0;
-    for ( ; i < NR_KEYS; ++i)
-        if (key_code == keycode_array[i]) break;
-    if (i == NR_KEYS) return ;
-    if (!release/* && key_state[i] == KEY_STATE_EMPTY*/) key_state[i] = KEY_STATE_PRESS;
-    if (release/* && key_state[i] == KEY_STATE_WAIT_RELEASE*/) key_state[i] = KEY_STATE_RELEASE;
-	//assert(0);
+	int tmp = in_byte(0x60);
+	if (tmp == key_code) return;
+	key_code = tmp;
+	if (!inited)
+		keyboard_init();
+	Log("%x",key_code);
+	if (key_code < 0x80)
+		key_state[op_kc_arr[key_code]] = KEY_STATE_PRESS;
+	else
+		key_state[op_kc_arr[key_code - 0x80]] = KEY_STATE_RELEASE;
 }
 
 static inline int
@@ -45,7 +57,7 @@ query_key(int index) {
 
 static inline void
 release_key(int index) {
-	assert(index >= 0 && index < NR_KEYS);
+	assert(index >= 0 && index <= NR_KEYS);
 	key_state[index] = KEY_STATE_WAIT_RELEASE;
 }
 
@@ -65,21 +77,23 @@ process_keys(void (*key_press_callback)(int), void (*key_release_callback)(int))
 	 * If no such key is found, the function return false.
 	 * Remember to enable interrupts before returning from the function.
 	 */
-    for (int i = 0; i < NR_KEYS; ++i)  {
-        if (key_state[i] == KEY_STATE_PRESS) {
-            key_press_callback (keycode_array[i]);
-            key_state[i] = KEY_STATE_WAIT_RELEASE;
-            sti();
-            return true;
-        }
-        if (key_state[i] == KEY_STATE_RELEASE) {
-            key_release_callback (keycode_array[i]);
-            key_state[i] = KEY_STATE_EMPTY;
-            sti();
-            return true;
-        }
-    }
 
-    sti();
-    return false;
+	int i;
+	for (i = 0; i < NR_KEYS; i++) {
+		int temp = key_state[i];
+		if (temp == KEY_STATE_PRESS) {
+			key_press_callback(get_keycode(i));
+			release_key(i);
+			sti();
+			return true;
+		}
+		if (temp == KEY_STATE_RELEASE) {
+			key_release_callback(get_keycode(i));
+			clear_key(i);
+			sti();
+			return true;
+		}
+	}
+	sti();
+	return false;
 }
