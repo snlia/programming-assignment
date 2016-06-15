@@ -14,7 +14,6 @@ static const int keycode_array[] = {
 };
 
 static int key_state[NR_KEYS];
-static int keys_state[NR_KEYS];
 
 static int key_code = 0;
 
@@ -31,13 +30,11 @@ keyboard_event(void) {
  //   Log ("get key %d %d", i, release);
     if (!release/* && keys_state[i] == KEY_NOW_RELEASE*/) {
  //       Log ("press %d", i);
-        keys_state[i] = KEY_NOW_PRESS;
         key_state[i] = KEY_STATE_PRESS;
     }
     if (release) {
  //       Log ("release %d", i);
         key_state[i] = KEY_STATE_RELEASE;
-        keys_state[i] = KEY_NOW_RELEASE;
     }
 }
 
