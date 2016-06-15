@@ -30,12 +30,12 @@ keyboard_event(void) {
     if (i == NR_KEYS) return ;
     Log ("get key %d %d", i, release);
     if (!release/* && keys_state[i] == KEY_NOW_RELEASE*/) {
-        Log ("press %d", i);
+ //       Log ("press %d", i);
         keys_state[i] = KEY_NOW_PRESS;
         key_state[i] = KEY_STATE_PRESS;
     }
     if (release) {
-        Log ("release %d", i);
+ //       Log ("release %d", i);
         key_state[i] = KEY_STATE_RELEASE;
         keys_state[i] = KEY_NOW_RELEASE;
     }
@@ -79,13 +79,13 @@ process_keys(void (*key_press_callback)(int), void (*key_release_callback)(int))
         if (key_state[i] == KEY_STATE_PRESS) {
             key_press_callback (keycode_array[i]);
             release_key (i);
-            Log ("now do press %d", i);
+//            Log ("now do press %d", i);
             sti();
             return true;
         }
         if (key_state[i] == KEY_STATE_RELEASE) {
             key_release_callback (keycode_array[i]);
-            Log ("now do release %d", i);
+//            Log ("now do release %d", i);
             clear_key (i);
             sti();
             return true;
